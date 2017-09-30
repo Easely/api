@@ -12,10 +12,6 @@ import java.util.Map;
 
 public class EaselProvider implements Provider {
 
-    public EaselProvider() {
-
-    }
-
     @Override
     public Collection<Course> getCourses() {
         return new CourseScraper().getCourses();

@@ -63,7 +63,7 @@ public class AssignmentScraper {
                             int dash = assignmentStringWithoutDate.indexOf("-");
                             name = assignmentStringWithoutDate.substring(dash + 2);
 
-                            Assignment assignment = new Assignment(id, name, dueDate, type);
+                            Assignment assignment = new Assignment(id, name, dueDate, type, course);
                             log.debug(assignment);
                             assignments.add(assignment);
                         }

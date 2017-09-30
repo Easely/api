@@ -15,9 +15,7 @@ public class Main {
 
     public static void main(String args[]) {
         setupProvider();
-        // setupRoutes();
-        provider.getAssignments();
-        provider.getCourses();
+        setupRoutes();
     }
 
     private static void setupProvider() {
