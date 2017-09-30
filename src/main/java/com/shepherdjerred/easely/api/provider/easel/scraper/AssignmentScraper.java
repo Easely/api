@@ -29,39 +29,41 @@ public class AssignmentScraper {
             loginScraper.login();
             Map<String, String> cookies = loginScraper.getCookies();
 
-            // Load the page with homework
-            Connection.Response homeworkPage = Jsoup.connect(BASE_URL + "/cgi-bin/view?class_id=" + course.getId() + "&type=homework")
-                    .cookies(cookies)
-                    .method(Connection.Method.GET)
-                    .execute();
+            for (Assignment.Type type : Assignment.Type.values()) {
+                String typeString = type.toString().toLowerCase();
 
-            Element classList = homeworkPage.parse().select("body > table.box > tbody > tr:nth-child(2) > td > ul").first();
+                Connection.Response assignmentListPage = Jsoup.connect(BASE_URL + "/cgi-bin/view?class_id=" + course.getId() + "&type=" + typeString)
+                        .cookies(cookies)
+                        .method(Connection.Method.GET)
+                        .execute();
 
-            // No assignments
-            if (classList != null) {
+                Element assignmentListElement = assignmentListPage.parse().select("body > table.box > tbody > tr:nth-child(2) > td > ul").first();
 
-                // Parse courses
-                for (Element assignmentElement : classList.children()) {
-                    String assignmentString = assignmentElement.child(0).text();
+                // No assignments
+                if (assignmentListElement != null) {
 
-                    String id;
-                    String name;
-                    LocalDate dueDate;
+                    // Parse courses
+                    for (Element assignmentElement : assignmentListElement.children()) {
+                        String assignmentString = assignmentElement.child(0).text();
 
-                    String link = assignmentElement.child(0).attr("href");
-                    int lastEqualsIndex = link.lastIndexOf("=");
-                    id = link.substring(lastEqualsIndex);
+                        String id;
+                        String name;
+                        LocalDate dueDate;
 
-                    dueDate = LocalDate.parse(assignmentString.substring(1, 11), dateTimeFormatter);
+                        String link = assignmentElement.child(0).attr("href");
+                        int lastEqualsIndex = link.lastIndexOf("=");
+                        id = link.substring(lastEqualsIndex);
 
-                    int dash = assignmentString.lastIndexOf("-");
-                    name = assignmentString.substring(dash + 1);
+                        dueDate = LocalDate.parse(assignmentString.substring(1, 11), dateTimeFormatter);
 
-                    Assignment assignment = new Assignment(id, name, dueDate, Assignment.Type.HOMEWORK);
-                    assignments.add(assignment);
+                        int dash = assignmentString.lastIndexOf("-");
+                        name = assignmentString.substring(dash + 1);
+
+                        Assignment assignment = new Assignment(id, name, dueDate, type);
+                        assignments.add(assignment);
+                    }
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -14,20 +14,20 @@ public class Assignment {
     @Getter
     private final String name;
     @Getter
-    private final LocalDate dueDate;
+    private final LocalDate date;
     @Getter
     private final Type type;
 
-    public Assignment(String id, String name, LocalDate dueDate, Type type) {
+    public Assignment(String id, String name, LocalDate date, Type type) {
         this.id = id;
         this.name = name;
-        this.dueDate = dueDate;
+        this.date = date;
         this.type = type;
     }
 
     public enum Type {
         HOMEWORK,
-        NOTE,
+        NOTES,
         PROJECT,
         EXAM
     }

@@ -34,7 +34,7 @@ public class MockProvider implements Provider {
 
         Assignment intro = new Assignment("1", "Intro to Programming I", LocalDate.now(), Assignment.Type.HOMEWORK);
         Assignment anotherIntro = new Assignment("2", "Intro to Programming II", LocalDate.now(), Assignment.Type.EXAM);
-        Assignment yetAnotherIntro = new Assignment("3", "Intro to Software Development", LocalDate.now(), Assignment.Type.NOTE);
+        Assignment yetAnotherIntro = new Assignment("3", "Intro to Software Development", LocalDate.now(), Assignment.Type.NOTES);
 
         assignmentCourseMap.put(intro, comp150);
         assignmentCourseMap.put(anotherIntro, comp151);
