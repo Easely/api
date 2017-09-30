@@ -8,11 +8,14 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class Course {
     @Getter
+    private final String id;
+    @Getter
     private final String name;
     @Getter
     private final String code;
 
-    public Course(String code, String name) {
+    public Course(String id, String code, String name) {
+        this.id = id;
         this.code = code;
         this.name = name;
     }

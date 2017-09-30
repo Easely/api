@@ -23,17 +23,17 @@ public class MockProvider implements Provider {
     }
 
     private void addMockData() {
-        Course comp150 = new Course("COMP 150", "Programming I");
-        Course comp151 = new Course("COMP 151", "Programming II");
-        Course comp170 = new Course("COMP 170", "Software Development");
+        Course comp150 = new Course("1", "COMP 150", "Programming I");
+        Course comp151 = new Course("2", "COMP 151", "Programming II");
+        Course comp170 = new Course("3", "COMP 170", "Software Development");
 
         courses.add(comp150);
         courses.add(comp151);
         courses.add(comp170);
 
-        Assignment intro = new Assignment("Intro to Programming I", 100, 0, true);
-        Assignment anotherIntro = new Assignment("Intro to Programming II", 100, 50, true);
-        Assignment yetAnotherIntro = new Assignment("Intro to Software Development", 100, 0, false);
+        Assignment intro = new Assignment("1", "Intro to Programming I", 100, 0, true);
+        Assignment anotherIntro = new Assignment("2", "Intro to Programming II", 100, 50, true);
+        Assignment yetAnotherIntro = new Assignment("3", "Intro to Software Development", 100, 0, false);
 
         assignmentCourseMap.put(intro, comp150);
         assignmentCourseMap.put(anotherIntro, comp151);

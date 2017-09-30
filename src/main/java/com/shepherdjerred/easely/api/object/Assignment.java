@@ -8,6 +8,8 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class Assignment {
     @Getter
+    private final String id;
+    @Getter
     private final String name;
     @Getter
     private final int possiblePoints;
@@ -16,7 +18,8 @@ public class Assignment {
     @Getter
     private final boolean isGraded;
 
-    public Assignment(String name, int possiblePoints, int earnedPoints, boolean isGraded) {
+    public Assignment(String id, String name, int possiblePoints, int earnedPoints, boolean isGraded) {
+        this.id = id;
         this.name = name;
         this.possiblePoints = possiblePoints;
         this.earnedPoints = earnedPoints;

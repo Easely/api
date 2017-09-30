@@ -2,8 +2,8 @@ package com.shepherdjerred.easely.api;
 
 import com.shepherdjerred.easely.api.controller.AssignmentController;
 import com.shepherdjerred.easely.api.controller.CourseController;
-import com.shepherdjerred.easely.api.provider.MockProvider;
 import com.shepherdjerred.easely.api.provider.Provider;
+import com.shepherdjerred.easely.api.provider.easel.EaselProvider;
 import lombok.extern.log4j.Log4j2;
 
 import static spark.Spark.port;
@@ -19,7 +19,7 @@ public class Main {
     }
 
     private static void setupProvider() {
-        provider = new MockProvider();
+        provider = new EaselProvider();
     }
 
     private static void setupRoutes() {
