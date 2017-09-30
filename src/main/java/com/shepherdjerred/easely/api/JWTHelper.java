@@ -11,7 +11,7 @@ public class JWTHelper {
 
     public static DecodedJWT decodeJwt(String jwt) throws UnsupportedEncodingException, JWTVerificationException {
         Algorithm algorithm = Algorithm.HMAC256(new ProcessBuilder().environment().get("JWT_SECRET"));
-        String issuer = "http://easely.shepherdjerred.com";
+        String issuer = "https://easely.shepherdjerred.com";
         JWTVerifier verifier = com.auth0.jwt.JWT.require(algorithm)
                 .withIssuer(issuer)
                 .build();

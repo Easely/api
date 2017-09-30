@@ -17,7 +17,6 @@ public class RegisterPayload implements Payload {
     @Setter
     private String easelPassword;
 
-
     @Override
     public boolean isValid() {
         if (password.length() < 8) {

@@ -37,7 +37,7 @@ public class UserController implements Controller {
                 return "";
             }
 
-            UUID userUuid = store.getUserUuid(loginPayload.getUsername());
+            UUID userUuid = store.getUserUuid(loginPayload.getEmail());
             Optional<User> userToAuthTo = store.getUser(userUuid);
 
             if (userToAuthTo.isPresent()) {
@@ -46,8 +46,8 @@ public class UserController implements Controller {
                         ProcessBuilder processBuilder = new ProcessBuilder();
                         Algorithm algorithm = Algorithm.HMAC256(processBuilder.environment().get("JWT_SECRET"));
                         String token = JWT.create()
-                                .withIssuer("http://funsheet.herokuapp.com")
-                                .withClaim("username", loginPayload.getUsername())
+                                .withIssuer("https://easely.herokuapp.com")
+                                .withClaim("username", loginPayload.getEmail())
                                 .withClaim("uuid", String.valueOf(userUuid))
                                 .sign(algorithm);
                         return objectMapper.writeValueAsString(new PostLoginPayload(token));
@@ -74,17 +74,12 @@ public class UserController implements Controller {
                 return "";
             }
 
-            String registerKey = new ProcessBuilder().environment().get("REGISTER_KEY");
-
-            if (!store.getUser(UUID.fromString(registerPayload.getReferrer())).isPresent() && !registerPayload.getReferrer().equals(registerKey)) {
-                response.status(400);
-                return "";
-            }
-
             User user = new User(
                     UUID.randomUUID(),
-                    registerPayload.getUsername(),
-                    BCrypt.hashpw(registerPayload.getPassword(), BCrypt.gensalt())
+                    registerPayload.getEmail(),
+                    BCrypt.hashpw(registerPayload.getPassword(), BCrypt.gensalt()),
+                    registerPayload.getEaselUsername(),
+                    registerPayload.getEaselPassword()
             );
 
             store.addUser(user);
@@ -93,8 +88,8 @@ public class UserController implements Controller {
                 ProcessBuilder processBuilder = new ProcessBuilder();
                 Algorithm algorithm = Algorithm.HMAC256(processBuilder.environment().get("JWT_SECRET"));
                 String token = JWT.create()
-                        .withIssuer("http://funsheet.herokuapp.com")
-                        .withClaim("username", registerPayload.getUsername())
+                        .withIssuer("https://easely.shepherdjerred.com")
+                        .withClaim("email", registerPayload.getEmail())
                         .withClaim("uuid", String.valueOf(user.getUuid()))
                         .sign(algorithm);
                 return objectMapper.writeValueAsString(new PostLoginPayload(token));

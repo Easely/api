@@ -27,7 +27,7 @@ public class User {
     @Setter
     private String hashedPassword;
 
-    public User(UUID uuid, String email, String easelUsername, String easelPassword, String hashedPassword) {
+    public User(UUID uuid, String email, String hashedPassword, String easelUsername, String easelPassword) {
         this.uuid = uuid;
         this.email = email;
         this.easelUsername = easelUsername;

@@ -18,7 +18,7 @@ public class InMemoryStore implements Store {
     }
 
     @Override
-    public boolean isUsernameTaken(String username) {
+    public boolean isEmailTaken(String username) {
         return false;
     }
 

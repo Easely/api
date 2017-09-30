@@ -20,11 +20,11 @@ public class LoginScraper {
         cookies = new HashMap<>();
     }
 
-    public void login() {
+    public void login(String username, String password) {
         try {
             Connection.Response loginResponse = Jsoup.connect(LOGIN_URL)
-                    .data("user", "jshepherd")
-                    .data("passwd", "password")
+                    .data("user", username)
+                    .data("passwd", password)
                     .method(Connection.Method.POST)
                     .execute();
             cookies = loginResponse.cookies();

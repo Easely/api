@@ -1,6 +1,7 @@
 package com.shepherdjerred.easely.api.provider.easel.scraper;
 
 import com.shepherdjerred.easely.api.object.Course;
+import com.shepherdjerred.easely.api.object.User;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -17,13 +18,13 @@ public class CourseScraper {
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final String GRADES_URL = BASE_URL + "/cgi-bin/user";
 
-    public Collection<Course> getCourses() {
+    public Collection<Course> getCourses(User user) {
         Collection<Course> courses = new ArrayList<>();
 
         try {
             // Login to EASEL
             LoginScraper loginScraper = new LoginScraper();
-            loginScraper.login();
+            loginScraper.login(user.getEaselUsername(), user.getEaselPassword());
             Map<String, String> cookies = loginScraper.getCookies();
 
             // Load the page with classes

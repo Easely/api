@@ -9,7 +9,7 @@ public interface Store {
 
     void addUser(User user);
     Optional<User> getUser(UUID uuid);
-    boolean isUsernameTaken(String username);
+    boolean isEmailTaken(String username);
     UUID getUserUuid(String name);
 
 }
