@@ -112,3 +112,4 @@ $RECYCLE.BIN/
 
 *.iml
 .idea/
+dependency-reduced-pom.xml
