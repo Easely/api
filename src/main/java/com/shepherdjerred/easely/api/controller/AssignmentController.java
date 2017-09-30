@@ -24,7 +24,7 @@ public class AssignmentController implements Controller {
         get("/api/assignments", (request, response) -> {
             response.type("application/json");
 
-            Collection<Assignment> assignments = provider.getAssignments();
+            Collection<Assignment> assignments = provider.getAssignments().keySet();
             return objectMapper.writeValueAsString(assignments);
         });
     }

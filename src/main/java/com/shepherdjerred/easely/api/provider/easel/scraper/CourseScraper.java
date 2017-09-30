@@ -15,23 +15,18 @@ import java.util.Map;
 public class CourseScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
-    private static final String LOGIN_URL = BASE_URL + "/cgi-bin/proc_login";
     private static final String GRADES_URL = BASE_URL + "/cgi-bin/user";
-
-    private Map<String, String> cookies;
 
     public Collection<Course> getCourses() {
         Collection<Course> courses = new ArrayList<>();
 
         try {
-            Connection.Response loginResponse = Jsoup.connect(LOGIN_URL)
-                    .data("user", "jshepherd")
-                    .data("passwd", "password")
-                    .method(Connection.Method.POST)
-                    .execute();
+            // Login to EASEL
+            LoginScraper loginScraper = new LoginScraper();
+            loginScraper.login();
+            Map<String, String> cookies = loginScraper.getCookies();
 
-            cookies = loginResponse.cookies();
-
+            // Load the page with classes
             Connection.Response homePage = Jsoup.connect(GRADES_URL)
                     .cookies(cookies)
                     .method(Connection.Method.GET)
@@ -39,6 +34,7 @@ public class CourseScraper {
 
             Element classList = homePage.parse().select("body > div > table:nth-child(2) > tbody > tr:nth-child(2) > td > ul").first();
 
+            // Parse courses
             for (Element easelClass : classList.children()) {
                 String classString = easelClass.child(0).text();
 
@@ -48,7 +44,7 @@ public class CourseScraper {
 
                 String link = easelClass.child(0).attr("href");
                 int lastEqualsIndex = link.lastIndexOf("=");
-                courseId = link.substring(lastEqualsIndex);
+                courseId = link.substring(lastEqualsIndex + 1);
 
                 int lastDashIndex = classString.lastIndexOf("–");
                 courseCode = classString.substring(0, lastDashIndex - 1);

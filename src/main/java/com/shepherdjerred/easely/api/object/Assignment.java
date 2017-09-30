@@ -4,6 +4,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @ToString
 @EqualsAndHashCode
 public class Assignment {
@@ -12,17 +14,21 @@ public class Assignment {
     @Getter
     private final String name;
     @Getter
-    private final int possiblePoints;
+    private final LocalDate dueDate;
     @Getter
-    private final int earnedPoints;
-    @Getter
-    private final boolean isGraded;
+    private final Type type;
 
-    public Assignment(String id, String name, int possiblePoints, int earnedPoints, boolean isGraded) {
+    public Assignment(String id, String name, LocalDate dueDate, Type type) {
         this.id = id;
         this.name = name;
-        this.possiblePoints = possiblePoints;
-        this.earnedPoints = earnedPoints;
-        this.isGraded = isGraded;
+        this.dueDate = dueDate;
+        this.type = type;
+    }
+
+    public enum Type {
+        HOMEWORK,
+        NOTE,
+        PROJECT,
+        EXAM
     }
 }
