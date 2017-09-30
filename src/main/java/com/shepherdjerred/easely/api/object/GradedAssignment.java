@@ -16,8 +16,8 @@ public class GradedAssignment extends Assignment {
     @Getter
     private final boolean isGraded;
 
-    public GradedAssignment(String id, String name, LocalDate dueDate, Type type, int possiblePoints, int earnedPoints, boolean isGraded) {
-        super(id, name, dueDate, type);
+    public GradedAssignment(String id, String name, LocalDate dueDate, Type type, Course course, int possiblePoints, int earnedPoints, boolean isGraded) {
+        super(id, name, dueDate, type, course);
         this.possiblePoints = possiblePoints;
         this.earnedPoints = earnedPoints;
         this.isGraded = isGraded;

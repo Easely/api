@@ -124,6 +124,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.codejargon</groupId>
+            <artifactId>fluentjdbc</artifactId>
+            <version>1.8.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>4.2.0</version>
