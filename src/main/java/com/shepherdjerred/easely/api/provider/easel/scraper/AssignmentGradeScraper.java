@@ -14,8 +14,8 @@ import java.util.Map;
 public class AssignmentGradeScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
-    private static final String ASSIGNMENT_DETAILS_URL = "/cgi-bin/view?id=";
-    private static final String ASSIGNMENT_SUBMIT_URL = "&action=submit";
+    private static final String ASSIGNMENT_INFO_URL = "/cgi-bin/info?id=";
+    private static final String ASSIGNMENT_SUBMIT_URL = "/cgi-bin/submit?id=";
 
     @Getter
     private int possiblePoints;
@@ -31,22 +31,33 @@ public class AssignmentGradeScraper {
             loginScraper.login(user.getEaselUsername(), user.getEaselPassword());
             Map<String, String> cookies = loginScraper.getCookies();
 
-            log.debug("LOADING DETAILS FOR " + assignmentId);
+            log.debug("LOADING INFO FOR " + assignmentId);
 
             // Load the page with classes
-            Connection.Response classDetailsUrl = Jsoup.connect(BASE_URL + ASSIGNMENT_DETAILS_URL + assignmentId + ASSIGNMENT_SUBMIT_URL)
+            Connection.Response classInfoUrl = Jsoup.connect(BASE_URL + ASSIGNMENT_INFO_URL + assignmentId)
                     .cookies(cookies)
                     .method(Connection.Method.GET)
                     .execute();
 
-            Element totalPointsElement = classDetailsUrl.parse().body().select("#points").first();
+            Element totalPointsElement = classInfoUrl.parse().select("#points").first();
             String totalPointsText = totalPointsElement.text().replace(" Points", "");
             possiblePoints = Integer.valueOf(totalPointsText);
 
-            Element earnedPointsElement = classDetailsUrl.parse().body().select("body > div").first();
+            log.debug("LOADING GRADES FOR " + assignmentId);
+
+            Connection.Response classGradesUrl = Jsoup.connect(BASE_URL + ASSIGNMENT_SUBMIT_URL + assignmentId)
+                    .cookies(cookies)
+                    .method(Connection.Method.GET)
+                    .execute();
+
+            Element earnedPointsElement = classGradesUrl.parse().select("body > div").first();
             if (earnedPointsElement != null) {
                 String earnedPointsText = earnedPointsElement.text().replace("Grade: ", "");
-                earnedPoints = Integer.valueOf(earnedPointsText);
+                // todo handle better
+                if (earnedPointsText.equals("Submissions for this assignment are no longer being accepted")) {
+                    return;
+                }
+                earnedPoints = Integer.valueOf(earnedPointsText.replaceAll("\\u00a0", "").replaceAll(" ", ""));
                 isGraded = true;
             } else {
                 earnedPoints = 0;

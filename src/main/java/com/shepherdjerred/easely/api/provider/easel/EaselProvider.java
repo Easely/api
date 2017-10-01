@@ -7,9 +7,8 @@ import com.shepherdjerred.easely.api.provider.Provider;
 import com.shepherdjerred.easely.api.provider.easel.scraper.AssignmentScraper;
 import com.shepherdjerred.easely.api.provider.easel.scraper.CourseScraper;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 public class EaselProvider implements Provider {
 
@@ -19,14 +18,14 @@ public class EaselProvider implements Provider {
     }
 
     @Override
-    public Map<Assignment, Course> getAssignments(User user) {
-        Map<Assignment, Course> assignmentCourseMap = new HashMap<>();
+    public Collection<Assignment> getAssignments(User user) {
+        Collection<Assignment> assignments = new ArrayList<>();
         getCourses(user).forEach(course -> {
             getAssignments(user, course).forEach(assignment -> {
-               assignmentCourseMap.put(assignment, course);
+                assignments.add(assignment);
             });
         });
-        return assignmentCourseMap;
+        return assignments;
     }
 
     @Override

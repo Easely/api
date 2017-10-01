@@ -14,9 +14,8 @@ import org.redisson.config.Config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CachedEaselProvider implements Provider {
 
@@ -68,14 +67,14 @@ public class CachedEaselProvider implements Provider {
     }
 
     @Override
-    public Map<Assignment, Course> getAssignments(User user) {
-        Map<Assignment, Course> assignmentCourseMap = new HashMap<>();
+    public Collection<Assignment> getAssignments(User user) {
+        Collection<Assignment> assignments = new ArrayList<>();
         getCourses(user).forEach(course -> {
             getAssignments(user, course).forEach(assignment -> {
-                assignmentCourseMap.put(assignment, course);
+                assignments.add(assignment);
             });
         });
-        return assignmentCourseMap;
+        return assignments;
     }
 
     @Override

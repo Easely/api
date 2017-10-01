@@ -51,7 +51,8 @@ public class AssignmentController implements Controller {
             Collection<Assignment> assignments = new ArrayList<>();
 
             if (user.isPresent()) {
-                assignments = provider.getAssignments(user.get()).keySet();
+                assignments = provider.getAssignments(user.get());
+                log.debug(assignments.size());
             }
 
             return objectMapper.writeValueAsString(assignments);

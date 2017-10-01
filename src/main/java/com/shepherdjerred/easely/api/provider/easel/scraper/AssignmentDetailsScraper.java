@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.time.LocalTime;
@@ -49,15 +51,16 @@ public class AssignmentDetailsScraper {
 
             dueTime = LocalTime.parse(timeString, dateTimeFormatter);
 
-            Connection.Response assignmentDetailsUrl = Jsoup.connect(BASE_URL + ASSIGNMENT_DETAILS_URL + assignmentId)
-                    .cookies(cookies)
-                    .method(Connection.Method.GET)
-                    .execute();
-
-            log.debug(assignmentDetailsUrl.body());
-
-            Element embedElement = assignmentDetailsUrl.parse().body().select("html > frameset > frame:nth-child(2)").first();
-            attachmentUrl = embedElement.attr("src");
+            try {
+                Connection.Response assignmentDetailsUrl = Jsoup.connect(BASE_URL + ASSIGNMENT_DETAILS_URL + assignmentId)
+                        .cookies(cookies)
+                        .method(Connection.Method.GET)
+                        .execute();
+                Elements embedElement = assignmentDetailsUrl.parse().select("html > frameset > frame:nth-child(2)");
+                attachmentUrl = embedElement.attr("src");
+            } catch (UnsupportedMimeTypeException e) {
+                attachmentUrl = e.getUrl();
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

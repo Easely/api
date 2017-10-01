@@ -48,9 +48,10 @@ public class UserController implements Controller {
                         ProcessBuilder processBuilder = new ProcessBuilder();
                         Algorithm algorithm = Algorithm.HMAC256(processBuilder.environment().get("JWT_SECRET"));
                         String token = JWT.create()
-                                .withIssuer("https://easely.herokuapp.com")
+                                .withIssuer("https://easely.shepherdjerred.com")
                                 .withClaim("email", loginPayload.getEmail())
                                 .withClaim("uuid", String.valueOf(userUuid))
+                                .withClaim("easelUsername", userToAuthTo.get().getEaselUsername())
                                 .sign(algorithm);
                         return objectMapper.writeValueAsString(new PostLoginPayload(token));
                     } catch (UnsupportedEncodingException | JWTCreationException exception) {
@@ -93,6 +94,7 @@ public class UserController implements Controller {
                         .withIssuer("https://easely.shepherdjerred.com")
                         .withClaim("email", registerPayload.getEmail())
                         .withClaim("uuid", String.valueOf(user.getUuid()))
+                        .withClaim("easelUsername", user.getEaselUsername())
                         .sign(algorithm);
                 return objectMapper.writeValueAsString(new PostLoginPayload(token));
             } catch (UnsupportedEncodingException | JWTCreationException exception) {
