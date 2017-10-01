@@ -49,7 +49,7 @@ public class UserController implements Controller {
                         Algorithm algorithm = Algorithm.HMAC256(processBuilder.environment().get("JWT_SECRET"));
                         String token = JWT.create()
                                 .withIssuer("https://easely.herokuapp.com")
-                                .withClaim("username", loginPayload.getEmail())
+                                .withClaim("email", loginPayload.getEmail())
                                 .withClaim("uuid", String.valueOf(userUuid))
                                 .sign(algorithm);
                         return objectMapper.writeValueAsString(new PostLoginPayload(token));
