@@ -5,7 +5,6 @@ import com.shepherdjerred.easely.api.object.Course;
 import com.shepherdjerred.easely.api.object.User;
 import lombok.ToString;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,21 +24,7 @@ public class MockProvider implements Provider {
     }
 
     private void addMockData() {
-        Course comp150 = new Course("1", "COMP 150", "Programming I");
-        Course comp151 = new Course("2", "COMP 151", "Programming II");
-        Course comp170 = new Course("3", "COMP 170", "Software Development");
-
-        courses.add(comp150);
-        courses.add(comp151);
-        courses.add(comp170);
-
-        Assignment intro = new Assignment("1", "Intro to Programming I", LocalDate.now(), Assignment.Type.HOMEWORK, comp150);
-        Assignment anotherIntro = new Assignment("2", "Intro to Programming II", LocalDate.now(), Assignment.Type.EXAM, comp151);
-        Assignment yetAnotherIntro = new Assignment("3", "Intro to Software Development", LocalDate.now(), Assignment.Type.NOTES, comp170);
-
-        assignmentCourseMap.put(intro, comp150);
-        assignmentCourseMap.put(anotherIntro, comp151);
-        assignmentCourseMap.put(yetAnotherIntro, comp170);
+        // TODO
     }
 
     @Override

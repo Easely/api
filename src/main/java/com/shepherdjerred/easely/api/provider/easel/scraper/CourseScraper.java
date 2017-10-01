@@ -16,10 +16,12 @@ import java.util.Map;
 public class CourseScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
-    private static final String GRADES_URL = BASE_URL + "/cgi-bin/user";
+    private static final String CLASS_LIST_URL = BASE_URL + "/cgi-bin/user";
 
     public Collection<Course> getCourses(User user) {
         Collection<Course> courses = new ArrayList<>();
+
+        log.debug("LOADING COURSES");
 
         try {
             // Login to EASEL
@@ -28,7 +30,7 @@ public class CourseScraper {
             Map<String, String> cookies = loginScraper.getCookies();
 
             // Load the page with classes
-            Connection.Response homePage = Jsoup.connect(GRADES_URL)
+            Connection.Response homePage = Jsoup.connect(CLASS_LIST_URL)
                     .cookies(cookies)
                     .method(Connection.Method.GET)
                     .execute();
@@ -37,6 +39,7 @@ public class CourseScraper {
 
             // Parse courses
             for (Element easelClass : classList.children()) {
+
                 String classString = easelClass.child(0).text();
 
                 String courseId;
@@ -51,7 +54,13 @@ public class CourseScraper {
                 courseCode = classString.substring(0, lastDashIndex - 1);
                 courseName = classString.substring(lastDashIndex + 2);
 
-                Course course = new Course(courseId, courseCode, courseName);
+                log.debug("LOADING COURSE FOR " + courseId);
+
+                // Probably not the best way to do this, but it works
+                CourseDetailsScraper courseDetailsScraper = new CourseDetailsScraper();
+                courseDetailsScraper.loadCourseDetails(user, courseId);
+
+                Course course = new Course(courseId, courseCode, courseName, courseDetailsScraper.getTeacher(), courseDetailsScraper.getResources());
                 courses.add(course);
             }
 

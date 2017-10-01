@@ -4,6 +4,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Map;
+
 @ToString
 @EqualsAndHashCode
 public class Course {
@@ -13,10 +15,16 @@ public class Course {
     private final String name;
     @Getter
     private final String code;
+    @Getter
+    private final String teacher;
+    @Getter
+    private final Map<String, String> resources;
 
-    public Course(String id, String code, String name) {
+    public Course(String id, String name, String code, String teacher, Map<String, String> resources) {
         this.id = id;
-        this.code = code;
         this.name = name;
+        this.code = code;
+        this.teacher = teacher;
+        this.resources = resources;
     }
 }
