@@ -4,7 +4,7 @@ import com.shepherdjerred.easely.api.controller.AssignmentController;
 import com.shepherdjerred.easely.api.controller.CourseController;
 import com.shepherdjerred.easely.api.controller.UserController;
 import com.shepherdjerred.easely.api.provider.Provider;
-import com.shepherdjerred.easely.api.provider.easel.EaselProvider;
+import com.shepherdjerred.easely.api.provider.easel.CachedEaselProvider;
 import com.shepherdjerred.easely.api.storage.Store;
 import com.shepherdjerred.easely.api.storage.mysql.Database;
 import com.shepherdjerred.easely.api.storage.mysql.MysqlStore;
@@ -60,7 +60,7 @@ public class Main {
     }
 
     private static void setupProvider() {
-        provider = new EaselProvider();
+        provider = new CachedEaselProvider();
     }
 
     private static void setupRoutes() {

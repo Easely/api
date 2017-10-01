@@ -10,15 +10,18 @@ import java.util.Map;
 @EqualsAndHashCode
 public class Course {
     @Getter
-    private final String id;
+    private String id;
     @Getter
-    private final String name;
+    private String name;
     @Getter
-    private final String code;
+    private String code;
     @Getter
-    private final String teacher;
+    private String teacher;
     @Getter
-    private final Map<String, String> resources;
+    private Map<String, String> resources;
+
+    public Course() {
+    }
 
     public Course(String id, String name, String code, String teacher, Map<String, String> resources) {
         this.id = id;

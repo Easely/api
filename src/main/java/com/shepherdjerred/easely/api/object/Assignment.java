@@ -10,15 +10,18 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 public class Assignment {
     @Getter
-    private final String id;
+    private String id;
     @Getter
-    private final String name;
+    private String name;
     @Getter
-    private final LocalDate date;
+    private LocalDate date;
     @Getter
-    private final Type type;
+    private Type type;
     @Getter
-    private final Course course;
+    private Course course;
+
+    public Assignment() {
+    }
 
     public Assignment(String id, String name, LocalDate date, Type type, Course course) {
         this.id = id;
