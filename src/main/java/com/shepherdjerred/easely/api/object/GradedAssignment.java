@@ -4,20 +4,24 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @ToString
 @EqualsAndHashCode
 public class GradedAssignment extends Assignment {
     @Getter
-    private final int possiblePoints;
+    private int possiblePoints;
     @Getter
-    private final int earnedPoints;
+    private int earnedPoints;
     @Getter
-    private final boolean isGraded;
+    private boolean isGraded;
 
-    public GradedAssignment(String id, String name, LocalDate dueDate, Type type, Course course, int possiblePoints, int earnedPoints, boolean isGraded) {
-        super(id, name, dueDate, type, course);
+    public GradedAssignment() {
+
+    }
+
+    public GradedAssignment(String id, String name, LocalDateTime date, Type type, Course course, String attachment, int possiblePoints, int earnedPoints, boolean isGraded) {
+        super(id, name, date, type, course, attachment);
         this.possiblePoints = possiblePoints;
         this.earnedPoints = earnedPoints;
         this.isGraded = isGraded;

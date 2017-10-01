@@ -2,6 +2,7 @@ package com.shepherdjerred.easely.api.provider.easel.scraper;
 
 import com.shepherdjerred.easely.api.object.Assignment;
 import com.shepherdjerred.easely.api.object.Course;
+import com.shepherdjerred.easely.api.object.GradedAssignment;
 import com.shepherdjerred.easely.api.object.User;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
@@ -11,6 +12,8 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,7 +67,30 @@ public class AssignmentScraper {
                             int dash = assignmentStringWithoutDate.indexOf("-");
                             name = assignmentStringWithoutDate.substring(dash + 2);
 
-                            Assignment assignment = new Assignment(id, name, dueDate, type, course);
+                            Assignment assignment;
+                            AssignmentDetailsScraper assignmentDetailsScraper = new AssignmentDetailsScraper();
+
+                            assignmentDetailsScraper.loadAssignmentDetails(user, id);
+
+                            String attachment = assignmentDetailsScraper.getAttachmentUrl();
+                            LocalTime dueTime = assignmentDetailsScraper.getDueTime();
+
+                            LocalDateTime localDateTime = dueDate.atTime(dueTime);
+
+                            if (type == Assignment.Type.NOTES) {
+                                assignment = new Assignment(id, name, localDateTime, type, course, attachment);
+                            } else {
+                                AssignmentGradeScraper assignmentGradeScraper = new AssignmentGradeScraper();
+
+                                assignmentGradeScraper.loadAssignmentGrade(user, id);
+
+                                int possiblePoints = assignmentGradeScraper.getPossiblePoints();
+                                int earnedPoints = assignmentGradeScraper.getEarnedPoints();
+                                boolean isGraded = assignmentGradeScraper.isGraded();
+
+                                assignment = new GradedAssignment(id, name, localDateTime, type, course, attachment, possiblePoints, earnedPoints, isGraded);
+                            }
+
                             log.debug(assignment);
                             assignments.add(assignment);
                         }

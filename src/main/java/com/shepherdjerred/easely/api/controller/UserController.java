@@ -9,6 +9,7 @@ import com.shepherdjerred.easely.api.controller.payload.PostLoginPayload;
 import com.shepherdjerred.easely.api.controller.payload.RegisterPayload;
 import com.shepherdjerred.easely.api.object.User;
 import com.shepherdjerred.easely.api.storage.Store;
+import lombok.extern.log4j.Log4j2;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.UnsupportedEncodingException;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 import static spark.Spark.post;
 
+@Log4j2
 public class UserController implements Controller {
     private Store store;
     private static ObjectMapper objectMapper = new ObjectMapper();
