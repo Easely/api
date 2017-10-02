@@ -41,7 +41,7 @@ public class CachedEaselProvider implements Provider {
         if (processBuilder.environment().get("REDIS_URL") != null) {
             String redisUrl = processBuilder.environment().get("REDIS_URL");
 
-            String password = redisUrl.substring(redisUrl.indexOf(':', redisUrl.indexOf(':')) + 1, redisUrl.indexOf('@') - 1);
+            String password = redisUrl.substring(redisUrl.indexOf(':', redisUrl.indexOf(':') + 1) + 1, redisUrl.indexOf('@') - 1);
 
             log.debug(redisUrl);
             log.debug(password);
