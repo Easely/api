@@ -44,6 +44,6 @@ public class LiveEaselProvider implements Provider {
     @Override
     public Collection<Assignment> getAssignments(User user, Course course) {
         Map<String, String> cookies = login(user);
-        return new AssignmentScraper().getAssignments(cookies, course);
+        return new AssignmentScraper().getAssignmentsForCourse(cookies, course);
     }
 }

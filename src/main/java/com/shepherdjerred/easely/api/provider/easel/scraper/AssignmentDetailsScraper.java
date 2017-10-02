@@ -1,6 +1,6 @@
 package com.shepherdjerred.easely.api.provider.easel.scraper;
 
-import lombok.Getter;
+import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentDetails;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -21,12 +21,7 @@ public class AssignmentDetailsScraper {
     private static final String ASSIGNMENT_INFO_URL = "/cgi-bin/info?id=";
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("hh:mma");
 
-    @Getter
-    private String attachmentUrl;
-    @Getter
-    private LocalTime dueTime;
-
-    public void loadAssignmentDetails(Map<String, String> cookies, String assignmentId) {
+    public AssignmentDetails loadAssignmentDetails(Map<String, String> cookies, String assignmentId) {
         try {
 
 
@@ -45,7 +40,8 @@ public class AssignmentDetailsScraper {
             String timeString = dateElementText.substring(colonIndex - 2);
             timeString = timeString.replace(" ", "0").toUpperCase();
 
-            dueTime = LocalTime.parse(timeString, dateTimeFormatter);
+            LocalTime dueTime = LocalTime.parse(timeString, dateTimeFormatter);
+            String attachmentUrl;
 
             try {
                 Connection.Response assignmentDetailsUrl = Jsoup.connect(BASE_URL + ASSIGNMENT_DETAILS_URL + assignmentId)
@@ -58,8 +54,11 @@ public class AssignmentDetailsScraper {
                 attachmentUrl = e.getUrl();
             }
 
+            return new AssignmentDetails(dueTime, attachmentUrl);
+
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
 

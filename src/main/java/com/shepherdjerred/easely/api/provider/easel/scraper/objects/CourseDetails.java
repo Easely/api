@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.object;
+package com.shepherdjerred.easely.api.provider.easel.scraper.objects;
 
 import lombok.*;
 
@@ -8,13 +8,7 @@ import java.util.Map;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Course {
-    @Getter
-    private String id;
-    @Getter
-    private String name;
-    @Getter
-    private String code;
+public class CourseDetails {
     @Getter
     private String teacher;
     @Getter

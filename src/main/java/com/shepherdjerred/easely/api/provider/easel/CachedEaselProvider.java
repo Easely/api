@@ -123,7 +123,7 @@ public class CachedEaselProvider implements Provider {
         } else {
             Map<String, String> cookies = login(user);
 
-            assignments = new AssignmentScraper().getAssignments(cookies, course);
+            assignments = new AssignmentScraper().getAssignmentsForCourse(cookies, course);
             assignmentsBucket.set(assignments);
         }
 

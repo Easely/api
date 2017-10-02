@@ -24,7 +24,6 @@ public class CourseScraper {
 
         try {
 
-
             // Load the page with classes
             Connection.Response homePage = Jsoup.connect(CLASS_LIST_URL)
                     .cookies(cookies)

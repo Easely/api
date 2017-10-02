@@ -1,14 +1,15 @@
 package com.shepherdjerred.easely.api.object;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @EqualsAndHashCode
 public class Assignment {
+
     @Getter
     private String id;
     @Getter
@@ -21,18 +22,6 @@ public class Assignment {
     private Course course;
     @Getter
     private String attachment;
-
-    public Assignment() {
-    }
-
-    public Assignment(String id, String name, LocalDateTime date, Type type, Course course, String attachment) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.type = type;
-        this.course = course;
-        this.attachment = attachment;
-    }
 
     public enum Type {
         HOMEWORK,

@@ -20,6 +20,8 @@ public class LoginScraper {
         cookies = new HashMap<>();
     }
 
+    // TODO return cookies
+    // TODO check that login was successful
     public void login(String username, String password) {
         log.debug("Logging into EASEL");
         try {

@@ -3,6 +3,8 @@ package com.shepherdjerred.easely.api.provider.easel.scraper;
 import com.shepherdjerred.easely.api.object.Assignment;
 import com.shepherdjerred.easely.api.object.Course;
 import com.shepherdjerred.easely.api.object.GradedAssignment;
+import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentCore;
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -18,91 +20,106 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+@AllArgsConstructor
 @Log4j2
 public class AssignmentScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public Collection<Assignment> getAssignments(Map<String, String> cookies, Course course) {
+    private Map<String, String> cookies;
+
+    public Collection<Assignment> getAssignmentsForCourse(Course course) {
+        Collection<Assignment> assignments = new ArrayList<>();
+
+        for (Assignment.Type type : Assignment.Type.values()) {
+            Collection<Assignment> assignmentsOfType = getAssignmentsOfTypeForCourse(course, type);
+            assignments.addAll(assignmentsOfType);
+        }
+
+        return assignments;
+    }
+
+    private Collection<Assignment> getAssignmentsOfTypeForCourse(Course course, Assignment.Type type) {
         Collection<Assignment> assignments = new ArrayList<>();
 
         try {
+            String typeString = type.toString().toLowerCase();
+            Connection.Response assignmentListPage = Jsoup.connect(BASE_URL + "/cgi-bin/view?class_id=" + course.getId() + "&type=" + typeString)
+                    .cookies(cookies)
+                    .method(Connection.Method.GET)
+                    .execute();
+
+            Element assignmentListElement = assignmentListPage.parse().select("body > table.box > tbody > tr:nth-child(2) > td > ul").first();
+
+            // Check that there are assignments
+            if (assignmentListElement != null) {
+
+                // Parse assignments
+                for (Element assignmentElement : assignmentListElement.children()) {
+
+                    // Example text: (2017-01-30) Homework #1 - My Assignment
+                    String assignmentElementText = assignmentElement.child(0).text();
+
+                    String assignmentId;
+                    String assignmentName;
+                    LocalDate assignmentDueDate;
+
+                    // Gets the ID of an assignment from its link
+                    // Example link: https://cs.harding.edu/easel/cgi-bin/view?id=12345
+                    String assignmentLink = assignmentElement.child(0).attr("href");
+                    int lastEqualsIndex = assignmentLink.lastIndexOf("=") + 1;
+                    assignmentId = assignmentLink.substring(lastEqualsIndex);
+
+                    // Gets the due date of an assignment from the assignment text
+                    String assignmentDueDateText = assignmentElementText.substring(1, 11);
+                    assignmentDueDate = LocalDate.parse(assignmentDueDateText, dateTimeFormatter);
+
+                    // Get the assignment name
+                    String assignmentStringAfterDate = assignmentElementText.substring(12);
+                    int firstDashAfterDate = assignmentStringAfterDate.indexOf("-");
+                    assignmentName = assignmentStringAfterDate.substring(firstDashAfterDate + 2);
 
 
-            for (Assignment.Type type : Assignment.Type.values()) {
-                String typeString = type.toString().toLowerCase();
+                    AssignmentCore assignmentCore = new AssignmentCore(assignmentId, assignmentName, assignmentDueDate, type, course);
 
-                try {
-                    Connection.Response assignmentListPage = Jsoup.connect(BASE_URL + "/cgi-bin/view?class_id=" + course.getId() + "&type=" + typeString)
-                            .cookies(cookies)
-                            .method(Connection.Method.GET)
-                            .execute();
+                    Assignment assignment;
 
-                    Element assignmentListElement = assignmentListPage.parse().select("body > table.box > tbody > tr:nth-child(2) > td > ul").first();
+                    AssignmentDetailsScraper assignmentDetailsScraper = new AssignmentDetailsScraper();
+                    assignmentDetailsScraper.loadAssignmentDetails(cookies, assignmentId);
 
-                    // No assignments
-                    if (assignmentListElement != null) {
+                    String attachment = assignmentDetailsScraper.getAttachmentUrl();
+                    LocalTime dueTime = assignmentDetailsScraper.getDueTime();
 
-                        // Parse courses
-                        for (Element assignmentElement : assignmentListElement.children()) {
-                            String assignmentString = assignmentElement.child(0).text();
+                    LocalDateTime localDateTime = assignmentDueDate.atTime(dueTime);
 
-                            String id;
-                            String name;
-                            LocalDate dueDate;
+                    if (type == Assignment.Type.NOTES) {
+                        assignment = new Assignment(assignmentId, assignmentName, localDateTime, type, course, attachment);
+                    } else {
+                        AssignmentGradeScraper assignmentGradeScraper = new AssignmentGradeScraper();
 
-                            String link = assignmentElement.child(0).attr("href");
-                            int lastEqualsIndex = link.lastIndexOf("=") + 1;
-                            id = link.substring(lastEqualsIndex);
+                        assignmentGradeScraper.loadAssignmentGrade(cookies, assignmentId);
 
-                            dueDate = LocalDate.parse(assignmentString.substring(1, 11), dateTimeFormatter);
+                        int possiblePoints = assignmentGradeScraper.getPossiblePoints();
+                        int earnedPoints = assignmentGradeScraper.getEarnedPoints();
+                        boolean isGraded = assignmentGradeScraper.isGraded();
 
-                            int endOfDate = assignmentString.indexOf(")");
-                            String assignmentStringWithoutDate = assignmentString.substring(endOfDate);
-                            int dash = assignmentStringWithoutDate.indexOf("-");
-                            name = assignmentStringWithoutDate.substring(dash + 2);
-
-                            Assignment assignment;
-                            AssignmentDetailsScraper assignmentDetailsScraper = new AssignmentDetailsScraper();
-
-                            assignmentDetailsScraper.loadAssignmentDetails(cookies, id);
-
-                            String attachment = assignmentDetailsScraper.getAttachmentUrl();
-                            LocalTime dueTime = assignmentDetailsScraper.getDueTime();
-
-                            LocalDateTime localDateTime = dueDate.atTime(dueTime);
-
-                            if (type == Assignment.Type.NOTES) {
-                                assignment = new Assignment(id, name, localDateTime, type, course, attachment);
-                            } else {
-                                AssignmentGradeScraper assignmentGradeScraper = new AssignmentGradeScraper();
-
-                                assignmentGradeScraper.loadAssignmentGrade(cookies, id);
-
-                                int possiblePoints = assignmentGradeScraper.getPossiblePoints();
-                                int earnedPoints = assignmentGradeScraper.getEarnedPoints();
-                                boolean isGraded = assignmentGradeScraper.isGraded();
-
-                                assignment = new GradedAssignment(id, name, localDateTime, type, course, attachment, possiblePoints, earnedPoints, isGraded);
-                            }
-
-                            log.debug(assignment);
-                            assignments.add(assignment);
-                        }
+                        assignment = new GradedAssignment(assignmentId, assignmentName, localDateTime, type, course, attachment, possiblePoints, earnedPoints, isGraded);
                     }
-                } catch (UnsupportedMimeTypeException e) {
-                    // TODO handle this properly
-                    // This exception has been thrown when there is only one exam in a class. The server won't return a list of assignments like normal
-                    // it will instead give you the file attached to the assignment (ie https://www.harding.edu/fmccown/classes/comp445-f17/review%20for%20exam%201%20fall17.pdf)
-                    // We should still add this assignment somehow
-                    e.printStackTrace();
+
+                    log.debug(assignment);
+                    assignments.add(assignment);
                 }
             }
+        } catch (UnsupportedMimeTypeException e) {
+            // TODO handle this properly
+            // This exception has been thrown when there is only one exam in a class. The server won't return a list of assignments like normal
+            // it will instead give you the file attached to the assignment (ie https://www.harding.edu/fmccown/classes/comp445-f17/review%20for%20exam%201%20fall17.pdf)
+            // We should still add this assignment somehow
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return assignments;
     }
 
