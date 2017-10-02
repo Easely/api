@@ -14,6 +14,8 @@ import org.redisson.config.Config;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -37,9 +39,19 @@ public class CachedEaselProvider implements Provider {
         ProcessBuilder processBuilder = new ProcessBuilder();
         Config config;
         if (processBuilder.environment().get("REDIS_URL") != null) {
-            String serverAddress = processBuilder.environment().get("REDIS_URL");
-            config = new Config();
-            config.useSingleServer().setAddress(serverAddress);
+            try {
+                URL redisUrl = new URL(processBuilder.environment().get("REDIS_URL"));
+
+                String[] userInfo = redisUrl.getUserInfo().split(":");
+                String username = userInfo[0];
+                String password = userInfo[1];
+
+                config = new Config();
+                config.useSingleServer().setAddress(redisUrl.toExternalForm()).setPassword(password);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            }
         } else {
             try {
                 config = Config.fromJSON(new File("redissonConfig.json"));
