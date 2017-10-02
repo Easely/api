@@ -6,6 +6,7 @@ import com.shepherdjerred.easely.api.object.Assignment;
 import com.shepherdjerred.easely.api.object.Course;
 import com.shepherdjerred.easely.api.object.User;
 import com.shepherdjerred.easely.api.provider.Provider;
+import lombok.extern.log4j.Log4j2;
 import org.redisson.Redisson;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
@@ -19,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Log4j2
 public class CachedEaselProvider implements Provider {
 
     private EaselProvider easelProvider;
@@ -46,8 +48,12 @@ public class CachedEaselProvider implements Provider {
                 String username = userInfo[0];
                 String password = userInfo[1];
 
+                log.debug(redisUrl.toExternalForm());
+                log.debug(redisUrl.getProtocol() + redisUrl.getHost() + ":" + redisUrl.getPort());
+                log.debug(password);
+
                 config = new Config();
-                config.useSingleServer().setAddress(redisUrl.toExternalForm()).setPassword(password);
+                config.useSingleServer().setAddress(redisUrl.getProtocol() + redisUrl.getHost() + ":" + redisUrl.getPort()).setPassword(password);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 return null;
