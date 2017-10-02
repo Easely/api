@@ -4,6 +4,7 @@ import com.shepherdjerred.easely.api.object.Assignment;
 import com.shepherdjerred.easely.api.object.Course;
 import com.shepherdjerred.easely.api.object.GradedAssignment;
 import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentCore;
+import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentDetails;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
@@ -83,13 +84,8 @@ public class AssignmentScraper {
 
                     AssignmentCore assignmentCore = new AssignmentCore(assignmentId, assignmentName, assignmentDueDate, type, course);
 
-                    Assignment assignment;
-
                     AssignmentDetailsScraper assignmentDetailsScraper = new AssignmentDetailsScraper();
-                    assignmentDetailsScraper.loadAssignmentDetails(cookies, assignmentId);
-
-                    String attachment = assignmentDetailsScraper.getAttachmentUrl();
-                    LocalTime dueTime = assignmentDetailsScraper.getDueTime();
+                    AssignmentDetails assignmentDetails = assignmentDetailsScraper.loadAssignmentDetails(cookies, assignmentId);
 
                     LocalDateTime localDateTime = assignmentDueDate.atTime(dueTime);
 
@@ -121,6 +117,14 @@ public class AssignmentScraper {
             e.printStackTrace();
         }
         return assignments;
+    }
+
+    private void loadAssignmentDetails() {
+
+    }
+
+    private void loadAssignmentGrades() {
+        
     }
 
 }
