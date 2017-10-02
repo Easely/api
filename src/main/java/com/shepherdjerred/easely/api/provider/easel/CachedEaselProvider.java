@@ -15,8 +15,6 @@ import org.redisson.config.Config;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -41,23 +39,15 @@ public class CachedEaselProvider implements Provider {
         ProcessBuilder processBuilder = new ProcessBuilder();
         Config config;
         if (processBuilder.environment().get("REDIS_URL") != null) {
-            try {
-                URL redisUrl = new URL(processBuilder.environment().get("REDIS_URL"));
+            String redisUrl = processBuilder.environment().get("REDIS_URL");
 
-                String[] userInfo = redisUrl.getUserInfo().split(":");
-                String username = userInfo[0];
-                String password = userInfo[1];
+            String password = redisUrl.substring(redisUrl.indexOf(':') + 1, redisUrl.indexOf('@') - 1);
 
-                log.debug(redisUrl.toExternalForm());
-                log.debug(redisUrl.getProtocol() + redisUrl.getHost() + ":" + redisUrl.getPort());
-                log.debug(password);
+            log.debug(redisUrl);
+            log.debug(password);
 
-                config = new Config();
-                config.useSingleServer().setAddress(redisUrl.getProtocol() + redisUrl.getHost() + ":" + redisUrl.getPort()).setPassword(password);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return null;
-            }
+            config = new Config();
+            config.useSingleServer().setAddress(redisUrl).setPassword(password);
         } else {
             try {
                 config = Config.fromJSON(new File("redissonConfig.json"));
