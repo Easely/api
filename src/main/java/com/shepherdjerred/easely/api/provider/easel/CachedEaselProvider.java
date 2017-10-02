@@ -6,6 +6,9 @@ import com.shepherdjerred.easely.api.object.Assignment;
 import com.shepherdjerred.easely.api.object.Course;
 import com.shepherdjerred.easely.api.object.User;
 import com.shepherdjerred.easely.api.provider.Provider;
+import com.shepherdjerred.easely.api.provider.easel.scraper.AssignmentScraper;
+import com.shepherdjerred.easely.api.provider.easel.scraper.CourseScraper;
+import com.shepherdjerred.easely.api.provider.easel.scraper.LoginScraper;
 import lombok.extern.log4j.Log4j2;
 import org.redisson.Redisson;
 import org.redisson.api.RBucket;
@@ -17,16 +20,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 @Log4j2
 public class CachedEaselProvider implements Provider {
 
-    private EaselProvider easelProvider;
     private RedissonClient redisson;
 
     public CachedEaselProvider() {
-        this.easelProvider = new EaselProvider();
-
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
@@ -59,19 +60,46 @@ public class CachedEaselProvider implements Provider {
         return config;
     }
 
+    private Map<String, String> login(User user) {
+        Map<String, String> cookies;
+        RBucket<Map<String, String>> cookiesBucket = redisson.getBucket("user:" + user.getUuid() + ":cookies");
+
+        if (cookiesBucket.isExists()) {
+            cookies = cookiesBucket.get();
+        } else {
+            LoginScraper loginScraper = new LoginScraper();
+            loginScraper.login(user.getEaselUsername(), user.getEaselPassword());
+            cookies = loginScraper.getCookies();
+            cookiesBucket.set(cookies);
+        }
+
+        return cookies;
+    }
+
     @Override
     public Collection<Course> getCourses(User user) {
         Collection<Course> courses;
-        RBucket<Collection<Course>> coursesBucket = redisson.getBucket("courses:" + user.getUuid());
+        Collection<Course> userCourses;
+        RBucket<Collection<Course>> coursesBucket = redisson.getBucket("courses");
+        RBucket<Collection<Course>> userCoursesBucket = redisson.getBucket("user:" + user.getUuid() + ":courses");
 
         if (coursesBucket.isExists()) {
             courses = coursesBucket.get();
         } else {
-            courses = easelProvider.getCourses(user);
+            Map<String, String> cookies = login(user);
+            courses = new CourseScraper().getCourses(cookies);
             coursesBucket.set(courses);
         }
 
-        return courses;
+        if (userCoursesBucket.isExists()) {
+            userCourses = userCoursesBucket.get();
+        } else {
+            Map<String, String> cookies = login(user);
+            userCourses = new CourseScraper().getCourses(cookies);
+            coursesBucket.set(userCourses);
+        }
+
+        return userCourses;
     }
 
     @Override
@@ -88,12 +116,14 @@ public class CachedEaselProvider implements Provider {
     @Override
     public Collection<Assignment> getAssignments(User user, Course course) {
         Collection<Assignment> assignments;
-        RBucket<Collection<Assignment>> assignmentsBucket = redisson.getBucket("assignments:" + user.getUuid() + ":course:" + course.getId());
+        RBucket<Collection<Assignment>> assignmentsBucket = redisson.getBucket("course:" + course.getId() + ":assignments");
 
         if (assignmentsBucket.isExists()) {
             assignments = assignmentsBucket.get();
         } else {
-            assignments = easelProvider.getAssignments(user, course);
+            Map<String, String> cookies = login(user);
+
+            assignments = new AssignmentScraper().getAssignments(cookies, course);
             assignmentsBucket.set(assignments);
         }
 

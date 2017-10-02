@@ -3,7 +3,6 @@ package com.shepherdjerred.easely.api.provider.easel.scraper;
 import com.shepherdjerred.easely.api.object.Assignment;
 import com.shepherdjerred.easely.api.object.Course;
 import com.shepherdjerred.easely.api.object.GradedAssignment;
-import com.shepherdjerred.easely.api.object.User;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -25,14 +24,11 @@ public class AssignmentScraper {
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public Collection<Assignment> getAssignments(User user, Course course) {
+    public Collection<Assignment> getAssignments(Map<String, String> cookies, Course course) {
         Collection<Assignment> assignments = new ArrayList<>();
 
         try {
-            // Login to EASEL
-            LoginScraper loginScraper = new LoginScraper();
-            loginScraper.login(user.getEaselUsername(), user.getEaselPassword());
-            Map<String, String> cookies = loginScraper.getCookies();
+
 
             for (Assignment.Type type : Assignment.Type.values()) {
                 String typeString = type.toString().toLowerCase();
@@ -70,7 +66,7 @@ public class AssignmentScraper {
                             Assignment assignment;
                             AssignmentDetailsScraper assignmentDetailsScraper = new AssignmentDetailsScraper();
 
-                            assignmentDetailsScraper.loadAssignmentDetails(user, id);
+                            assignmentDetailsScraper.loadAssignmentDetails(cookies, id);
 
                             String attachment = assignmentDetailsScraper.getAttachmentUrl();
                             LocalTime dueTime = assignmentDetailsScraper.getDueTime();
@@ -82,7 +78,7 @@ public class AssignmentScraper {
                             } else {
                                 AssignmentGradeScraper assignmentGradeScraper = new AssignmentGradeScraper();
 
-                                assignmentGradeScraper.loadAssignmentGrade(user, id);
+                                assignmentGradeScraper.loadAssignmentGrade(cookies, id);
 
                                 int possiblePoints = assignmentGradeScraper.getPossiblePoints();
                                 int earnedPoints = assignmentGradeScraper.getEarnedPoints();

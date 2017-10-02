@@ -6,15 +6,28 @@ import com.shepherdjerred.easely.api.object.User;
 import com.shepherdjerred.easely.api.provider.Provider;
 import com.shepherdjerred.easely.api.provider.easel.scraper.AssignmentScraper;
 import com.shepherdjerred.easely.api.provider.easel.scraper.CourseScraper;
+import com.shepherdjerred.easely.api.provider.easel.scraper.LoginScraper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-public class EaselProvider implements Provider {
+public class LiveEaselProvider implements Provider {
+
+    private Map<String, String> login(User user) {
+        Map<String, String> cookies;
+
+        LoginScraper loginScraper = new LoginScraper();
+        loginScraper.login(user.getEaselUsername(), user.getEaselPassword());
+        cookies = loginScraper.getCookies();
+
+        return cookies;
+    }
 
     @Override
     public Collection<Course> getCourses(User user) {
-        return new CourseScraper().getCourses(user);
+        Map<String, String> cookies = login(user);
+        return new CourseScraper().getCourses(cookies);
     }
 
     @Override
@@ -30,6 +43,7 @@ public class EaselProvider implements Provider {
 
     @Override
     public Collection<Assignment> getAssignments(User user, Course course) {
-        return new AssignmentScraper().getAssignments(user, course);
+        Map<String, String> cookies = login(user);
+        return new AssignmentScraper().getAssignments(cookies, course);
     }
 }

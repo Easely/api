@@ -1,7 +1,6 @@
 package com.shepherdjerred.easely.api.provider.easel.scraper;
 
 import com.shepherdjerred.easely.api.object.Course;
-import com.shepherdjerred.easely.api.object.User;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -18,16 +17,13 @@ public class CourseScraper {
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final String CLASS_LIST_URL = BASE_URL + "/cgi-bin/user";
 
-    public Collection<Course> getCourses(User user) {
+    public Collection<Course> getCourses(Map<String, String> cookies) {
         Collection<Course> courses = new ArrayList<>();
 
         log.debug("LOADING COURSES");
 
         try {
-            // Login to EASEL
-            LoginScraper loginScraper = new LoginScraper();
-            loginScraper.login(user.getEaselUsername(), user.getEaselPassword());
-            Map<String, String> cookies = loginScraper.getCookies();
+
 
             // Load the page with classes
             Connection.Response homePage = Jsoup.connect(CLASS_LIST_URL)
@@ -58,7 +54,7 @@ public class CourseScraper {
 
                 // Probably not the best way to do this, but it works
                 CourseDetailsScraper courseDetailsScraper = new CourseDetailsScraper();
-                courseDetailsScraper.loadCourseDetails(user, courseId);
+                courseDetailsScraper.loadCourseDetails(cookies, courseId);
 
                 Course course = new Course(courseId, courseCode, courseName, courseDetailsScraper.getTeacher(), courseDetailsScraper.getResources());
                 courses.add(course);

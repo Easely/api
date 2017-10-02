@@ -1,6 +1,5 @@
 package com.shepherdjerred.easely.api.provider.easel.scraper;
 
-import com.shepherdjerred.easely.api.object.User;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
@@ -27,12 +26,9 @@ public class AssignmentDetailsScraper {
     @Getter
     private LocalTime dueTime;
 
-    public void loadAssignmentDetails(User user, String assignmentId) {
+    public void loadAssignmentDetails(Map<String, String> cookies, String assignmentId) {
         try {
-            // Login to EASEL
-            LoginScraper loginScraper = new LoginScraper();
-            loginScraper.login(user.getEaselUsername(), user.getEaselPassword());
-            Map<String, String> cookies = loginScraper.getCookies();
+
 
             log.debug("LOADING DETAILS FOR " + assignmentId);
 

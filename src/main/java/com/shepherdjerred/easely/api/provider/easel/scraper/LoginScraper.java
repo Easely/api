@@ -21,6 +21,7 @@ public class LoginScraper {
     }
 
     public void login(String username, String password) {
+        log.debug("Logging into EASEL");
         try {
             Connection.Response loginResponse = Jsoup.connect(LOGIN_URL)
                     .data("user", username)
