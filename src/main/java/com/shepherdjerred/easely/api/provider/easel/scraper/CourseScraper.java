@@ -42,10 +42,12 @@ public class CourseScraper {
                 String courseCode;
                 String courseName;
 
+                // Get the course ID
                 String link = easelClass.child(0).attr("href");
                 int lastEqualsIndex = link.lastIndexOf("=");
                 courseId = link.substring(lastEqualsIndex + 1);
 
+                // Get the course name and code
                 int lastDashIndex = classString.lastIndexOf("–");
                 courseCode = classString.substring(0, lastDashIndex - 1);
                 courseName = classString.substring(lastDashIndex + 2);
@@ -56,7 +58,7 @@ public class CourseScraper {
                 CourseDetailsScraper courseDetailsScraper = new CourseDetailsScraper();
                 courseDetailsScraper.loadCourseDetails(cookies, courseId);
 
-                Course course = new Course(courseId, courseCode, courseName, courseDetailsScraper.getTeacher(), courseDetailsScraper.getResources());
+                Course course = new Course(courseId, courseName, courseCode, courseDetailsScraper.getTeacher(), courseDetailsScraper.getResources());
                 courses.add(course);
             }
 
