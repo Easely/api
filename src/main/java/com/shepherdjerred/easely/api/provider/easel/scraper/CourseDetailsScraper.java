@@ -1,6 +1,6 @@
 package com.shepherdjerred.easely.api.provider.easel.scraper;
 
-import lombok.Getter;
+import com.shepherdjerred.easely.api.provider.easel.scraper.objects.CourseDetails;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -16,16 +16,7 @@ public class CourseDetailsScraper {
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final String CLASS_DETAILS_URL = "/cgi-bin/class?id=";
 
-    @Getter
-    private String teacher;
-    @Getter
-    private Map<String, String> resources;
-
-    public CourseDetailsScraper() {
-        resources = new HashMap<>();
-    }
-
-    public void loadCourseDetails(Map<String, String> cookies, String courseId) {
+    public CourseDetails loadCourseDetails(Map<String, String> cookies, String courseId) {
         try {
 
 
@@ -38,10 +29,11 @@ public class CourseDetailsScraper {
                     .execute();
 
             Element teacherElement = classDetailsUrl.parse().body().select("body > div > table.box.classInfo > tbody > tr:nth-child(2) > td > dl > dd:nth-child(12)").first();
-            this.teacher = teacherElement.text();
+            String teacher = teacherElement.text();
 
             Element resourcesElement = classDetailsUrl.parse().body().select("body > div > table.classResources.box > tbody > tr:nth-child(2) > td > ul").first();
 
+            Map<String, String> resources = new HashMap<>();
             // Not all classes have resources, check for null first
             if (resourcesElement != null) {
                 resourcesElement.children().forEach(element -> {
@@ -51,9 +43,12 @@ public class CourseDetailsScraper {
                 });
             }
 
+            return new CourseDetails(teacher, resources);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 }

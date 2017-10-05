@@ -2,20 +2,15 @@ package com.shepherdjerred.easely.api.provider.easel.scraper;
 
 import com.shepherdjerred.easely.api.object.Assignment;
 import com.shepherdjerred.easely.api.object.Course;
-import com.shepherdjerred.easely.api.object.GradedAssignment;
 import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentCore;
-import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentDetails;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,26 +18,26 @@ import java.util.Map;
 
 @AllArgsConstructor
 @Log4j2
-public class AssignmentScraper {
+public class CourseAssignmentScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private Map<String, String> cookies;
 
-    public Collection<Assignment> getAssignmentsForCourse(Course course) {
-        Collection<Assignment> assignments = new ArrayList<>();
+    public Collection<AssignmentCore> getAssignmentsForCourse(Course course) {
+        Collection<AssignmentCore> assignments = new ArrayList<>();
 
         for (Assignment.Type type : Assignment.Type.values()) {
-            Collection<Assignment> assignmentsOfType = getAssignmentsOfTypeForCourse(course, type);
+            Collection<AssignmentCore> assignmentsOfType = getAssignmentsOfTypeForCourse(course, type);
             assignments.addAll(assignmentsOfType);
         }
 
         return assignments;
     }
 
-    private Collection<Assignment> getAssignmentsOfTypeForCourse(Course course, Assignment.Type type) {
-        Collection<Assignment> assignments = new ArrayList<>();
+    private Collection<AssignmentCore> getAssignmentsOfTypeForCourse(Course course, Assignment.Type type) {
+        Collection<AssignmentCore> assignments = new ArrayList<>();
 
         try {
             String typeString = type.toString().toLowerCase();
@@ -81,50 +76,18 @@ public class AssignmentScraper {
                     int firstDashAfterDate = assignmentStringAfterDate.indexOf("-");
                     assignmentName = assignmentStringAfterDate.substring(firstDashAfterDate + 2);
 
-
                     AssignmentCore assignmentCore = new AssignmentCore(assignmentId, assignmentName, assignmentDueDate, type, course);
-
-                    AssignmentDetailsScraper assignmentDetailsScraper = new AssignmentDetailsScraper();
-                    AssignmentDetails assignmentDetails = assignmentDetailsScraper.loadAssignmentDetails(cookies, assignmentId);
-
-                    LocalDateTime localDateTime = assignmentDueDate.atTime(dueTime);
-
-                    if (type == Assignment.Type.NOTES) {
-                        assignment = new Assignment(assignmentId, assignmentName, localDateTime, type, course, attachment);
-                    } else {
-                        AssignmentGradeScraper assignmentGradeScraper = new AssignmentGradeScraper();
-
-                        assignmentGradeScraper.loadAssignmentGrade(cookies, assignmentId);
-
-                        int possiblePoints = assignmentGradeScraper.getPossiblePoints();
-                        int earnedPoints = assignmentGradeScraper.getEarnedPoints();
-                        boolean isGraded = assignmentGradeScraper.isGraded();
-
-                        assignment = new GradedAssignment(assignmentId, assignmentName, localDateTime, type, course, attachment, possiblePoints, earnedPoints, isGraded);
-                    }
-
-                    log.debug(assignment);
-                    assignments.add(assignment);
+                    assignments.add(assignmentCore);
                 }
             }
-        } catch (UnsupportedMimeTypeException e) {
+        } catch (IOException e) {
             // TODO handle this properly
             // This exception has been thrown when there is only one exam in a class. The server won't return a list of assignments like normal
             // it will instead give you the file attached to the assignment (ie https://www.harding.edu/fmccown/classes/comp445-f17/review%20for%20exam%201%20fall17.pdf)
             // We should still add this assignment somehow
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return assignments;
-    }
-
-    private void loadAssignmentDetails() {
-
-    }
-
-    private void loadAssignmentGrades() {
-        
     }
 
 }

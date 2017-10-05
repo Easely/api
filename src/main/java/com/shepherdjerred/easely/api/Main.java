@@ -21,7 +21,7 @@ public class Main {
 
     private static Store store;
     private static Provider provider;
-
+    
     public static void main(String args[]) {
         setupMysqlStorage();
         setupProvider();

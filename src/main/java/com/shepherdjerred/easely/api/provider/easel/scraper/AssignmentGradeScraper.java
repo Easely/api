@@ -1,6 +1,6 @@
 package com.shepherdjerred.easely.api.provider.easel.scraper;
 
-import lombok.Getter;
+import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentGrade;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -16,14 +16,7 @@ public class AssignmentGradeScraper {
     private static final String ASSIGNMENT_INFO_URL = "/cgi-bin/info?id=";
     private static final String ASSIGNMENT_SUBMIT_URL = "/cgi-bin/submit?id=";
 
-    @Getter
-    private int possiblePoints;
-    @Getter
-    private int earnedPoints;
-    @Getter
-    private boolean isGraded;
-
-    public void loadAssignmentGrade(Map<String, String> cookies, String assignmentId) {
+    public AssignmentGrade loadAssignmentGrade(Map<String, String> cookies, String assignmentId) {
         try {
 
 
@@ -37,7 +30,7 @@ public class AssignmentGradeScraper {
 
             Element totalPointsElement = classInfoUrl.parse().select("#points").first();
             String totalPointsText = totalPointsElement.text().replace(" Points", "");
-            possiblePoints = Integer.valueOf(totalPointsText);
+            int possiblePoints = Integer.valueOf(totalPointsText);
 
             log.debug("LOADING GRADES FOR " + assignmentId);
 
@@ -47,11 +40,15 @@ public class AssignmentGradeScraper {
                     .execute();
 
             Element earnedPointsElement = classGradesUrl.parse().select("body > div").first();
+
+            int earnedPoints;
+            boolean isGraded;
             if (earnedPointsElement != null) {
                 String earnedPointsText = earnedPointsElement.text().replace("Grade: ", "");
                 // todo handle better
                 if (earnedPointsText.equals("Submissions for this assignment are no longer being accepted")) {
-                    return;
+                    log.warn("Assignment grade not fetched");
+                    return new AssignmentGrade(0, 0, false);
                 }
                 earnedPoints = Integer.valueOf(earnedPointsText.replaceAll("\\u00a0", "").replaceAll(" ", ""));
                 isGraded = true;
@@ -60,9 +57,12 @@ public class AssignmentGradeScraper {
                 isGraded = false;
             }
 
+            return new AssignmentGrade(possiblePoints, earnedPoints, isGraded);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 }

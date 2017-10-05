@@ -1,6 +1,6 @@
 package com.shepherdjerred.easely.api.provider.easel.scraper;
 
-import com.shepherdjerred.easely.api.object.Course;
+import com.shepherdjerred.easely.api.provider.easel.scraper.objects.CourseCore;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -12,15 +12,15 @@ import java.util.Collection;
 import java.util.Map;
 
 @Log4j2
-public class CourseScraper {
+public class UserCourseScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final String CLASS_LIST_URL = BASE_URL + "/cgi-bin/user";
 
-    public Collection<Course> getCourses(Map<String, String> cookies) {
-        Collection<Course> courses = new ArrayList<>();
+    public Collection<CourseCore> getCourses(Map<String, String> cookies) {
+        Collection<CourseCore> courses = new ArrayList<>();
 
-        log.debug("LOADING COURSES");
+        log.debug("LOADING COURSES FOR USER");
 
         try {
 
@@ -48,16 +48,10 @@ public class CourseScraper {
 
                 // Get the course name and code
                 int lastDashIndex = classString.lastIndexOf("–");
-                courseCode = classString.substring(0, lastDashIndex - 1);
+                courseCode = classString.substring(0, lastDashIndex - 1).toUpperCase();
                 courseName = classString.substring(lastDashIndex + 2);
 
-                log.debug("LOADING COURSE FOR " + courseId);
-
-                // Probably not the best way to do this, but it works
-                CourseDetailsScraper courseDetailsScraper = new CourseDetailsScraper();
-                courseDetailsScraper.loadCourseDetails(cookies, courseId);
-
-                Course course = new Course(courseId, courseName, courseCode, courseDetailsScraper.getTeacher(), courseDetailsScraper.getResources());
+                CourseCore course = new CourseCore(courseId, courseName, courseCode);
                 courses.add(course);
             }
 

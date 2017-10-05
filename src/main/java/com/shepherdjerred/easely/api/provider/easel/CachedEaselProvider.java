@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.shepherdjerred.easely.api.object.Assignment;
 import com.shepherdjerred.easely.api.object.Course;
+import com.shepherdjerred.easely.api.object.GradedAssignment;
 import com.shepherdjerred.easely.api.object.User;
 import com.shepherdjerred.easely.api.provider.Provider;
-import com.shepherdjerred.easely.api.provider.easel.scraper.AssignmentScraper;
-import com.shepherdjerred.easely.api.provider.easel.scraper.CourseScraper;
-import com.shepherdjerred.easely.api.provider.easel.scraper.LoginScraper;
+import com.shepherdjerred.easely.api.provider.easel.scraper.*;
+import com.shepherdjerred.easely.api.provider.easel.scraper.objects.*;
 import lombok.extern.log4j.Log4j2;
 import org.redisson.Redisson;
 import org.redisson.api.RBucket;
@@ -78,28 +78,45 @@ public class CachedEaselProvider implements Provider {
 
     @Override
     public Collection<Course> getCourses(User user) {
-        Collection<Course> courses;
-        Collection<Course> userCourses;
-        RBucket<Collection<Course>> coursesBucket = redisson.getBucket("courses");
-        RBucket<Collection<Course>> userCoursesBucket = redisson.getBucket("user:" + user.getUuid() + ":courses");
+        Collection<CourseCore> userCourses;
+        Collection<Course> courses = new ArrayList<>();
 
-        if (coursesBucket.isExists()) {
-            courses = coursesBucket.get();
-        } else {
-            Map<String, String> cookies = login(user);
-            courses = new CourseScraper().getCourses(cookies);
-            coursesBucket.set(courses);
-        }
+        RBucket<Collection<CourseCore>> userCoursesBucket = redisson.getBucket("user:" + user.getUuid() + ":courses");
 
+        // Find out what courses a user is in
+        // We should only load the CourseCore here
         if (userCoursesBucket.isExists()) {
             userCourses = userCoursesBucket.get();
         } else {
             Map<String, String> cookies = login(user);
-            userCourses = new CourseScraper().getCourses(cookies);
-            coursesBucket.set(userCourses);
+            userCourses = new UserCourseScraper().getCourses(cookies);
+            userCoursesBucket.set(userCourses);
         }
 
-        return userCourses;
+        // TODO Cache the CourseCore?
+        // Why would we do this?
+        // CourseCore is loaded when the user requests their courses
+        // CourseCore is rarely updated, but we have nothing to lose by updating the cache
+
+        // Load details for the courses
+        // Here we get the actual Course object
+        for (CourseCore courseCore : userCourses) {
+            RBucket<CourseDetails> courseDetailsBucket = redisson.getBucket("course:details:" + courseCore.getId());
+            Course course;
+            CourseDetails courseDetails;
+            if (courseDetailsBucket.isExists()) {
+                courseDetails = courseDetailsBucket.get();
+            } else {
+                Map<String, String> cookies = login(user);
+                CourseDetailsScraper courseDetailsScraper = new CourseDetailsScraper();
+                courseDetails = courseDetailsScraper.loadCourseDetails(cookies, courseCore.getId());
+                courseDetailsBucket.set(courseDetails);
+            }
+            course = Course.fromSubObjects(courseCore, courseDetails);
+            courses.add(course);
+        }
+
+        return courses;
     }
 
     @Override
@@ -115,16 +132,53 @@ public class CachedEaselProvider implements Provider {
 
     @Override
     public Collection<Assignment> getAssignments(User user, Course course) {
-        Collection<Assignment> assignments;
-        RBucket<Collection<Assignment>> assignmentsBucket = redisson.getBucket("course:" + course.getId() + ":assignments");
+        Collection<Assignment> assignments = new ArrayList<>();
+        Collection<AssignmentCore> courseAssignments;
+        RBucket<Collection<AssignmentCore>> courseAssignmentsBucket = redisson.getBucket("course:" + course.getId() + ":assignments");
 
-        if (assignmentsBucket.isExists()) {
-            assignments = assignmentsBucket.get();
+        // Find Assignments for Course
+        if (courseAssignmentsBucket.isExists()) {
+            courseAssignments = courseAssignmentsBucket.get();
         } else {
             Map<String, String> cookies = login(user);
 
-            assignments = new AssignmentScraper().getAssignmentsForCourse(cookies, course);
-            assignmentsBucket.set(assignments);
+            courseAssignments = new CourseAssignmentScraper(cookies).getAssignmentsForCourse(course);
+            courseAssignmentsBucket.set(courseAssignments);
+        }
+
+        // TODO Cache AssignmentCore?
+
+        // Load details and grade for assignment
+        for (AssignmentCore assignmentCore : courseAssignments) {
+            RBucket<AssignmentDetails> assignmentDetailsBucket = redisson.getBucket("assignment:details:" + assignmentCore.getId());
+            Assignment assignment;
+            AssignmentDetails assignmentDetails;
+            if (assignmentDetailsBucket.isExists()) {
+                assignmentDetails = assignmentDetailsBucket.get();
+            } else {
+                Map<String, String> cookies = login(user);
+                AssignmentDetailsScraper assignmentDetailsScraper = new AssignmentDetailsScraper();
+                assignmentDetails = assignmentDetailsScraper.loadAssignmentDetails(cookies, assignmentCore.getId());
+                assignmentDetailsBucket.set(assignmentDetails);
+            }
+
+            if (assignmentCore.getType() == Assignment.Type.NOTES) {
+                assignment = Assignment.fromSubObjects(assignmentCore, assignmentDetails);
+            } else {
+                RBucket<AssignmentGrade> assignmentGradeBucket = redisson.getBucket("user:" + user.getUuid() + "assignment:grade:" + assignmentCore.getId());
+                AssignmentGrade assignmentGrade;
+                if (assignmentGradeBucket.isExists()) {
+                    assignmentGrade = assignmentGradeBucket.get();
+                } else {
+                    Map<String, String> cookies = login(user);
+                    AssignmentGradeScraper assignmentGradeScraper = new AssignmentGradeScraper();
+                    assignmentGrade = assignmentGradeScraper.loadAssignmentGrade(cookies, assignmentCore.getId());
+                    assignmentGradeBucket.set(assignmentGrade);
+                }
+                assignment = GradedAssignment.fromSubObjects(assignmentCore, assignmentDetails, assignmentGrade);
+            }
+
+            assignments.add(assignment);
         }
 
         return assignments;
