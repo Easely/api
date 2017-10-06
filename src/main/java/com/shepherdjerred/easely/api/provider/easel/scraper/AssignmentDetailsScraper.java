@@ -52,6 +52,11 @@ public class AssignmentDetailsScraper {
                 attachmentUrl = embedElement.attr("src");
             } catch (UnsupportedMimeTypeException e) {
                 attachmentUrl = e.getUrl();
+            } catch (IOException e) {
+                // Too many redirects?
+                // TODO
+                e.printStackTrace();
+                attachmentUrl = null;
             }
 
             return new AssignmentDetails(dueTime, attachmentUrl);
