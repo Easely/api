@@ -69,6 +69,8 @@ public class Main {
         int port = getPort();
         port(port);
 
+        enableCors();
+
         new AssignmentController(store, provider).setupRoutes();
         new CourseController(store, provider).setupRoutes();
         new UserController(store).setupRoutes();
