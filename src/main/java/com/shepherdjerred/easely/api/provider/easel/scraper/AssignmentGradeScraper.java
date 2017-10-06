@@ -29,36 +29,41 @@ public class AssignmentGradeScraper {
                     .execute();
 
             Element totalPointsElement = classInfoUrl.parse().select("#points").first();
-            String totalPointsText = totalPointsElement.text().replace(" Points", "");
-            int possiblePoints = Integer.valueOf(totalPointsText);
+            if (totalPointsElement != null) {
+                String totalPointsText = totalPointsElement.text().replace(" Points", "");
+                int possiblePoints = Integer.valueOf(totalPointsText);
 
-            log.debug("LOADING GRADES FOR " + assignmentId);
+                log.debug("LOADING GRADES FOR " + assignmentId);
 
-            Connection.Response classGradesUrl = Jsoup.connect(BASE_URL + ASSIGNMENT_SUBMIT_URL + assignmentId)
-                    .cookies(cookies)
-                    .method(Connection.Method.GET)
-                    .execute();
+                Connection.Response classGradesUrl = Jsoup.connect(BASE_URL + ASSIGNMENT_SUBMIT_URL + assignmentId)
+                        .cookies(cookies)
+                        .method(Connection.Method.GET)
+                        .execute();
 
-            Element earnedPointsElement = classGradesUrl.parse().select("body > div").first();
+                Element earnedPointsElement = classGradesUrl.parse().select("body > div").first();
 
-            int earnedPoints;
-            boolean isGraded;
-            if (earnedPointsElement != null) {
-                String earnedPointsText = earnedPointsElement.text().replace("Grade: ", "");
-                // todo handle better
-                if (earnedPointsText.equals("Submissions for this assignment are no longer being accepted")) {
-                    log.warn("Assignment grade not fetched");
-                    return new AssignmentGrade(0, 0, false);
+                int earnedPoints;
+                boolean isGraded;
+                if (earnedPointsElement != null) {
+                    String earnedPointsText = earnedPointsElement.text().replace("Grade: ", "");
+                    // todo handle better
+                    if (earnedPointsText.equals("Submissions for this assignment are no longer being accepted")) {
+                        log.warn("Assignment grade not fetched");
+                        return new AssignmentGrade(0, 0, false);
+                    }
+                    earnedPoints = Integer.valueOf(earnedPointsText.replaceAll("\\u00a0", "").replaceAll(" ", ""));
+                    isGraded = true;
+                } else {
+                    earnedPoints = 0;
+                    isGraded = false;
                 }
-                earnedPoints = Integer.valueOf(earnedPointsText.replaceAll("\\u00a0", "").replaceAll(" ", ""));
-                isGraded = true;
+
+                return new AssignmentGrade(possiblePoints, earnedPoints, isGraded);
+
             } else {
-                earnedPoints = 0;
-                isGraded = false;
+                // TODO handle better
+                return new AssignmentGrade(0, 0, false);
             }
-
-            return new AssignmentGrade(possiblePoints, earnedPoints, isGraded);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
