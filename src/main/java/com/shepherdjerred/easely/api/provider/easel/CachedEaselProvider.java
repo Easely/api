@@ -18,9 +18,12 @@ import org.redisson.config.Config;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Log4j2
 public class CachedEaselProvider implements Provider {
@@ -71,6 +74,7 @@ public class CachedEaselProvider implements Provider {
             loginScraper.login(user.getEaselUsername(), user.getEaselPassword());
             cookies = loginScraper.getCookies();
             cookiesBucket.set(cookies);
+            cookiesBucket.expire(1, TimeUnit.HOURS);
         }
 
         return cookies;
@@ -91,6 +95,7 @@ public class CachedEaselProvider implements Provider {
             Map<String, String> cookies = login(user);
             userCourses = new UserCourseScraper().getCourses(cookies);
             userCoursesBucket.set(userCourses);
+            userCoursesBucket.expire(30, TimeUnit.DAYS);
         }
 
         // TODO Cache the CourseCore?
@@ -111,6 +116,7 @@ public class CachedEaselProvider implements Provider {
                 CourseDetailsScraper courseDetailsScraper = new CourseDetailsScraper();
                 courseDetails = courseDetailsScraper.loadCourseDetails(cookies, courseCore.getId());
                 courseDetailsBucket.set(courseDetails);
+                courseDetailsBucket.expire(7, TimeUnit.DAYS);
             }
             course = Course.fromSubObjects(courseCore, courseDetails);
             courses.add(course);
@@ -144,6 +150,7 @@ public class CachedEaselProvider implements Provider {
 
             courseAssignments = new CourseAssignmentScraper(cookies).getAssignmentsForCourse(course);
             courseAssignmentsBucket.set(courseAssignments);
+            courseAssignmentsBucket.expire(1, TimeUnit.DAYS);
         }
 
         // TODO Cache AssignmentCore?
@@ -160,6 +167,10 @@ public class CachedEaselProvider implements Provider {
                 AssignmentDetailsScraper assignmentDetailsScraper = new AssignmentDetailsScraper();
                 assignmentDetails = assignmentDetailsScraper.loadAssignmentDetails(cookies, assignmentCore.getId());
                 assignmentDetailsBucket.set(assignmentDetails);
+                // If the due date hasn't past, let's update the assignment daily
+                if (assignmentCore.getDate().isAfter(LocalDate.now())) {
+                    assignmentDetailsBucket.expire(1, TimeUnit.DAYS);
+                }
             }
 
             if (assignmentCore.getType() == Assignment.Type.NOTES) {
@@ -174,6 +185,16 @@ public class CachedEaselProvider implements Provider {
                     AssignmentGradeScraper assignmentGradeScraper = new AssignmentGradeScraper();
                     assignmentGrade = assignmentGradeScraper.loadAssignmentGrade(cookies, assignmentCore.getId());
                     assignmentGradeBucket.set(assignmentGrade);
+                    // If the due date hasn't past, let's not update it until it's due
+                    if (assignmentCore.getDate().isBefore(LocalDate.now())) {
+                        assignmentGradeBucket.expireAt(Date.valueOf(assignmentCore.getDate()));
+                    } else {
+                        // If the assigment isn't graded, let's refresh it in a day
+                        if (assignmentGrade.isGraded()) {
+                            assignmentGradeBucket.expire(1, TimeUnit.DAYS);
+                        }
+                    }
+
                 }
                 assignment = GradedAssignment.fromSubObjects(assignmentCore, assignmentDetails, assignmentGrade);
             }
