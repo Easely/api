@@ -186,7 +186,7 @@ public class CachedEaselProvider implements Provider {
                     assignmentGrade = assignmentGradeScraper.loadAssignmentGrade(cookies, assignmentCore.getId());
                     assignmentGradeBucket.set(assignmentGrade);
                     // If the due date hasn't past, let's not update it until it's due
-                    if (assignmentCore.getDate().isBefore(LocalDate.now())) {
+                    if (assignmentCore.getDate().isAfter(LocalDate.now())) {
                         assignmentGradeBucket.expireAt(Date.valueOf(assignmentCore.getDate()));
                     } else {
                         // If the assigment isn't graded, let's refresh it in a day
