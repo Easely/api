@@ -3,6 +3,7 @@ package com.shepherdjerred.easely.api.object;
 import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.EnumSet;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -24,9 +25,20 @@ public class User {
     @Getter
     @Setter
     private String easelPassword;
+    @Getter
+    @Setter
+    private EnumSet<Permission> permissions;
 
     public boolean authenticate(String password) {
         return BCrypt.checkpw(password, hashedPassword);
+    }
+
+    public boolean hasPermission(Permission permission) {
+        return permissions.contains(permission);
+    }
+
+    public enum Permission {
+        LIST_USERS, CLEAR_CACHE, DELETE_USER
     }
 
 }
