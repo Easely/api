@@ -18,6 +18,8 @@ public class AssignmentCore {
     @Getter
     private LocalDate date;
     @Getter
+    private int number;
+    @Getter
     private Assignment.Type type;
     @Getter
     private Course course;

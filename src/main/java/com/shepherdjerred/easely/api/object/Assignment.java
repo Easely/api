@@ -19,6 +19,8 @@ public class Assignment {
     @Getter
     private LocalDateTime date;
     @Getter
+    private int number;
+    @Getter
     private Type type;
     @Getter
     private Course course;
@@ -27,12 +29,13 @@ public class Assignment {
 
     public static Assignment fromSubObjects(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails) {
         return new Assignment(
-               assignmentCore.getId(),
-               assignmentCore.getName(),
-               assignmentCore.getDate().atTime(assignmentDetails.getDueTime()),
-               assignmentCore.getType(),
-               assignmentCore.getCourse(),
-               assignmentDetails.getAttachment()
+                assignmentCore.getId(),
+                assignmentCore.getName(),
+                assignmentCore.getDate().atTime(assignmentDetails.getDueTime()),
+                assignmentCore.getNumber(),
+                assignmentCore.getType(),
+                assignmentCore.getCourse(),
+                assignmentDetails.getAttachment()
         );
     }
 
