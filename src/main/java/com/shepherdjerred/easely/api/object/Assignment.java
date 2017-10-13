@@ -43,6 +43,7 @@ public class Assignment {
         HOMEWORK,
         NOTES,
         PROJECT,
-        EXAM
+        EXAM,
+        FINAL
     }
 }

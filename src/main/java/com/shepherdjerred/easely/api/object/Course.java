@@ -21,14 +21,17 @@ public class Course {
     private String teacher;
     @Getter
     private Map<String, String> resources;
+    @Getter
+    private CourseGrade courseGrade;
 
-    public static Course fromSubObjects(CourseCore courseCore, CourseDetails courseDetails) {
+    public static Course fromSubObjects(CourseCore courseCore, CourseDetails courseDetails, CourseGrade courseGrade) {
         return new Course(
                 courseCore.getId(),
                 courseCore.getName(),
                 courseCore.getCode(),
                 courseDetails.getTeacher(),
-                courseDetails.getResources()
+                courseDetails.getResources(),
+                courseGrade
         );
     }
 }

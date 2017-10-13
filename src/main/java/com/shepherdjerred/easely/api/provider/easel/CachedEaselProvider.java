@@ -2,10 +2,7 @@ package com.shepherdjerred.easely.api.provider.easel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.shepherdjerred.easely.api.object.Assignment;
-import com.shepherdjerred.easely.api.object.Course;
-import com.shepherdjerred.easely.api.object.GradedAssignment;
-import com.shepherdjerred.easely.api.object.User;
+import com.shepherdjerred.easely.api.object.*;
 import com.shepherdjerred.easely.api.provider.Provider;
 import com.shepherdjerred.easely.api.provider.easel.scraper.*;
 import com.shepherdjerred.easely.api.provider.easel.scraper.objects.*;
@@ -106,8 +103,9 @@ public class CachedEaselProvider implements Provider {
         // Load details for the courses
         // Here we get the actual Course object
         for (CourseCore courseCore : userCourses) {
-            RBucket<CourseDetails> courseDetailsBucket = redisson.getBucket("course:details:" + courseCore.getId());
             Course course;
+
+            RBucket<CourseDetails> courseDetailsBucket = redisson.getBucket("course:details:" + courseCore.getId());
             CourseDetails courseDetails;
             if (courseDetailsBucket.isExists()) {
                 courseDetails = courseDetailsBucket.get();
@@ -118,7 +116,21 @@ public class CachedEaselProvider implements Provider {
                 courseDetailsBucket.set(courseDetails);
                 courseDetailsBucket.expire(7, TimeUnit.DAYS);
             }
-            course = Course.fromSubObjects(courseCore, courseDetails);
+
+            RBucket<CourseGrade> courseGradeBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":course:" + courseCore.getId() + ":grade");
+            CourseGrade courseGrade;
+            if (courseGradeBucket.isExists()) {
+                courseGrade = courseGradeBucket.get();
+            } else {
+                Map<String, String> cookies = login(user);
+                CourseGradeScraper courseGradeScraper = new CourseGradeScraper();
+                // TODO load user ID
+                courseGrade = courseGradeScraper.loadCourseGrades(cookies, courseCore.getId(), String.valueOf(1673));
+                courseGradeBucket.set(courseGrade);
+                courseGradeBucket.expire(1, TimeUnit.DAYS);
+            }
+
+            course = Course.fromSubObjects(courseCore, courseDetails, courseGrade);
             courses.add(course);
         }
 
@@ -176,7 +188,7 @@ public class CachedEaselProvider implements Provider {
             if (assignmentCore.getType() == Assignment.Type.NOTES) {
                 assignment = Assignment.fromSubObjects(assignmentCore, assignmentDetails);
             } else {
-                RBucket<AssignmentGrade> assignmentGradeBucket = redisson.getBucket("user:" + user.getUuid() + "assignment:grade:" + assignmentCore.getId());
+                RBucket<AssignmentGrade> assignmentGradeBucket = redisson.getBucket("user:" + user.getUuid() + ":assignment:" + assignmentCore.getId() + ":grade" );
                 AssignmentGrade assignmentGrade;
                 if (assignmentGradeBucket.isExists()) {
                     assignmentGrade = assignmentGradeBucket.get();

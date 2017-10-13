@@ -1,5 +1,6 @@
 package com.shepherdjerred.easely.api.provider.easel.scraper;
 
+import com.shepherdjerred.easely.api.object.AssignmentSubmission;
 import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentGrade;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
@@ -7,6 +8,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 @Log4j2
@@ -42,14 +45,23 @@ public class AssignmentGradeScraper {
 
                 Element earnedPointsElement = classGradesUrl.parse().select("body > div").first();
 
+                Collection<AssignmentSubmission> assignmentSubmissions = new ArrayList<>();
+
+                Element noFilesElement = classGradesUrl.parse().select("body > h1").first();
+
+                // TODO go through submissions table
+                if (noFilesElement == null) {
+
+                }
+
                 int earnedPoints;
                 boolean isGraded;
                 if (earnedPointsElement != null) {
                     String earnedPointsText = earnedPointsElement.text().replace("Grade: ", "");
-                    // todo handle better
+                    // TODO handle better
                     if (earnedPointsText.equals("Submissions for this assignment are no longer being accepted")) {
                         log.warn("Assignment grade not fetched");
-                        return new AssignmentGrade(0, 0, false);
+                        return new AssignmentGrade(0, 0, false, assignmentSubmissions);
                     }
                     earnedPoints = Integer.valueOf(earnedPointsText.replaceAll("\\u00a0", "").replaceAll(" ", ""));
                     isGraded = true;
@@ -58,11 +70,11 @@ public class AssignmentGradeScraper {
                     isGraded = false;
                 }
 
-                return new AssignmentGrade(possiblePoints, earnedPoints, isGraded);
+                return new AssignmentGrade(possiblePoints, earnedPoints, isGraded, assignmentSubmissions);
 
             } else {
                 // TODO handle better
-                return new AssignmentGrade(0, 0, false);
+                return new AssignmentGrade(0, 0, false, null);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -32,7 +32,7 @@ public class GradedAssignment extends Assignment {
         this.assignmentSubmissions = assignmentSubmissions;
     }
 
-    public static GradedAssignment fromSubObjects(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails, AssignmentGrade gradedAssignment) {
+    public static GradedAssignment fromSubObjects(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails, AssignmentGrade assignmentGrade) {
         return new GradedAssignment(
                 assignmentCore.getId(),
                 assignmentCore.getName(),
@@ -41,10 +41,10 @@ public class GradedAssignment extends Assignment {
                 assignmentCore.getType(),
                 assignmentCore.getCourse(),
                 assignmentDetails.getAttachment(),
-                gradedAssignment.getPossiblePoints(),
-                gradedAssignment.getEarnedPoints(),
-                gradedAssignment.isGraded(),
-                gradedAssignment
+                assignmentGrade.getPossiblePoints(),
+                assignmentGrade.getEarnedPoints(),
+                assignmentGrade.isGraded(),
+                assignmentGrade.getAssignmentSubmissions()
         );
     }
 }

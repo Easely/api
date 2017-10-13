@@ -58,6 +58,7 @@ public class CourseAssignmentScraper {
                     String assignmentElementText = assignmentElement.child(0).text();
 
                     String assignmentId;
+                    int assignmentNumber;
                     String assignmentName;
                     LocalDate assignmentDueDate;
 
@@ -71,12 +72,18 @@ public class CourseAssignmentScraper {
                     String assignmentDueDateText = assignmentElementText.substring(1, 11);
                     assignmentDueDate = LocalDate.parse(assignmentDueDateText, dateTimeFormatter);
 
+                    // Get the assignment number
+                    int firstHashtag = assignmentElementText.indexOf('#');
+                    int endOfNumber = assignmentElementText.indexOf(' ', firstHashtag);
+                    String assignmentNumberText = assignmentElementText.substring(firstHashtag + 1, endOfNumber);
+                    assignmentNumber = Integer.valueOf(assignmentNumberText);
+
                     // Get the assignment name
                     String assignmentStringAfterDate = assignmentElementText.substring(12);
                     int firstDashAfterDate = assignmentStringAfterDate.indexOf("-");
                     assignmentName = assignmentStringAfterDate.substring(firstDashAfterDate + 2);
 
-                    AssignmentCore assignmentCore = new AssignmentCore(assignmentId, assignmentName, assignmentDueDate, type, course);
+                    AssignmentCore assignmentCore = new AssignmentCore(assignmentId, assignmentName, assignmentDueDate, assignmentNumber, type, course);
                     assignments.add(assignmentCore);
                 }
             }
