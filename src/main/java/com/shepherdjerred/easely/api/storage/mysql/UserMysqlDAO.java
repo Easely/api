@@ -8,6 +8,7 @@ import org.codejargon.fluentjdbc.api.query.Mapper;
 import org.codejargon.fluentjdbc.api.query.Query;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,12 +19,14 @@ public class UserMysqlDAO implements UserDAO {
 
     public UserMysqlDAO(MysqlStore store) {
         fluentJdbc = new FluentJdbcBuilder().connectionProvider(store.getDatabase().getDataSource()).build();
+        // TODO load permissions from MySQL
         userMapper = rs -> new User(
                 UUID.fromString(rs.getString("user_uuid")),
                 rs.getString("email"),
                 rs.getString("password"),
                 rs.getString("easel_username"),
-                rs.getString("easel_password")
+                rs.getString("easel_password"),
+                EnumSet.noneOf(User.Permission.class)
         );
     }
 

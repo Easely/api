@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.UnsupportedEncodingException;
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -82,7 +83,8 @@ public class UserController implements Controller {
                     registerPayload.getEmail(),
                     BCrypt.hashpw(registerPayload.getPassword(), BCrypt.gensalt()),
                     registerPayload.getEaselUsername(),
-                    registerPayload.getEaselPassword()
+                    registerPayload.getEaselPassword(),
+                    EnumSet.noneOf(User.Permission.class)
             );
 
             store.addUser(user);
