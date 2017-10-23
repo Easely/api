@@ -124,8 +124,19 @@ public class CachedEaselProvider implements Provider {
             } else {
                 Map<String, String> cookies = login(user);
                 CourseGradeScraper courseGradeScraper = new CourseGradeScraper();
-                // TODO load user ID
-                courseGrade = courseGradeScraper.loadCourseGrades(cookies, courseCore.getId(), String.valueOf(1673));
+
+                RBucket<String> easelUserIdBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":id");
+                String easelUserId;
+
+                if (easelUserIdBucket.isExists()) {
+                    easelUserId = easelUserIdBucket.get();
+                } else {
+                    UserIdScraper userIdScraper = new UserIdScraper();
+                    easelUserId = userIdScraper.getUserId(cookies);
+                    easelUserIdBucket.set(easelUserId);
+                }
+
+                courseGrade = courseGradeScraper.loadCourseGrades(cookies, courseCore.getId(), easelUserId);
                 courseGradeBucket.set(courseGrade);
                 courseGradeBucket.expire(1, TimeUnit.DAYS);
             }
