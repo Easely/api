@@ -75,7 +75,7 @@ public class CourseAssignmentScraper {
                     // Get the assignment number
                     int firstHashtag = assignmentElementText.indexOf('#');
                     int endOfNumber;
-                    if (type != Assignment.Type.EXAM) {
+                    if (assignmentElementText.contains("-")) {
                         endOfNumber = assignmentElementText.indexOf(' ', firstHashtag);
                     } else {
                         endOfNumber = assignmentElementText.length();
@@ -83,13 +83,13 @@ public class CourseAssignmentScraper {
                     String assignmentNumberText = assignmentElementText.substring(firstHashtag + 1, endOfNumber);
                     assignmentNumber = Integer.valueOf(assignmentNumberText);
 
-                    if (type != Assignment.Type.EXAM) {
+                    if (assignmentElementText.contains("-")) {
                         // Get the assignment name
                         String assignmentStringAfterDate = assignmentElementText.substring(12);
                         int firstDashAfterDate = assignmentStringAfterDate.indexOf("-");
                         assignmentName = assignmentStringAfterDate.substring(firstDashAfterDate + 2);
                     } else {
-                        assignmentName = "Exam #" + assignmentNumber;
+                        assignmentName = type.toString() + " #" + assignmentNumber;
                     }
 
                     AssignmentCore assignmentCore = new AssignmentCore(assignmentId, assignmentName, assignmentDueDate, assignmentNumber, type, course);
