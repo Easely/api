@@ -80,6 +80,8 @@ public class CourseAssignmentScraper {
                     } else {
                         endOfNumber = assignmentElementText.length() - 1;
                     }
+                    log.debug(assignmentElementText);
+                    
                     String assignmentNumberText = assignmentElementText.substring(firstHashtag + 1, endOfNumber);
                     assignmentNumber = Integer.valueOf(assignmentNumberText);
 
