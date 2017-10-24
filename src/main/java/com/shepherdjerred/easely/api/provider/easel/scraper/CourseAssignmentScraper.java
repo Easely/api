@@ -75,7 +75,9 @@ public class CourseAssignmentScraper {
                     // Get the assignment number
                     int firstHashtag = assignmentElementText.indexOf('#');
                     int endOfNumber;
-                    if (assignmentElementText.contains("-")) {
+                    boolean doesAssignmentHasName = assignmentElementText.substring(firstHashtag).contains("-");
+
+                    if (doesAssignmentHasName) {
                         endOfNumber = assignmentElementText.indexOf(' ', firstHashtag);
                     } else {
                         endOfNumber = assignmentElementText.length();
@@ -87,7 +89,7 @@ public class CourseAssignmentScraper {
                     String assignmentNumberText = assignmentElementText.substring(firstHashtag + 1, endOfNumber);
                     assignmentNumber = Integer.valueOf(assignmentNumberText);
 
-                    if (assignmentElementText.contains("-")) {
+                    if (doesAssignmentHasName) {
                         // Get the assignment name
                         String assignmentStringAfterDate = assignmentElementText.substring(12);
                         int firstDashAfterDate = assignmentStringAfterDate.indexOf("-");
