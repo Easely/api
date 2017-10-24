@@ -78,10 +78,12 @@ public class CourseAssignmentScraper {
                     if (assignmentElementText.contains("-")) {
                         endOfNumber = assignmentElementText.indexOf(' ', firstHashtag);
                     } else {
-                        endOfNumber = assignmentElementText.length() - 1;
+                        endOfNumber = assignmentElementText.length();
                     }
                     log.debug(assignmentElementText);
-                    
+                    log.debug(firstHashtag);
+                    log.debug(endOfNumber);
+
                     String assignmentNumberText = assignmentElementText.substring(firstHashtag + 1, endOfNumber);
                     assignmentNumber = Integer.valueOf(assignmentNumberText);
 
