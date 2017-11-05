@@ -11,8 +11,8 @@ The API is written in Java with the Spark Framework. It uses Jsoup to scrape EAS
 ## Deploying
 The Easely API was made to deploy with Dokku.
 
-### Enviornment variables
-In order for Easely API to run, certain envoriment variables must first be defined
+### Environment variables
+In order for Easely API to run, certain environment variables must first be defined
 
 * JWT_SECRET
 * SENTRY_DSN
