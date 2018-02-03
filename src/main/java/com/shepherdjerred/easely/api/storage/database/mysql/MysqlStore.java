@@ -1,8 +1,9 @@
-package com.shepherdjerred.easely.api.storage.mysql;
+package com.shepherdjerred.easely.api.storage.database.mysql;
 
 import com.shepherdjerred.easely.api.object.User;
 import com.shepherdjerred.easely.api.storage.Store;
-import com.shepherdjerred.easely.api.storage.dao.UserDAO;
+import com.shepherdjerred.easely.api.storage.database.Database;
+import com.shepherdjerred.easely.api.storage.database.dao.UserDAO;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -18,7 +19,7 @@ public class MysqlStore implements Store {
 
     public MysqlStore(Database database) {
         this.database = database;
-        userDAO = new UserMysqlDAO(this);
+        userDAO = new UserMysqlDAO(database.getDataSource());
     }
 
     @Override

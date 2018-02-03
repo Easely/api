@@ -159,7 +159,6 @@ public class CachedEaselProvider implements Provider {
         return assignments;
     }
 
-    @Override
     public Collection<Assignment> getAssignments(User user, Course course) {
         Collection<Assignment> assignments = new ArrayList<>();
         Collection<AssignmentCore> courseAssignments;

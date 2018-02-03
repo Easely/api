@@ -1,12 +1,13 @@
-package com.shepherdjerred.easely.api.storage.mysql;
+package com.shepherdjerred.easely.api.storage.database.mysql;
 
 import com.shepherdjerred.easely.api.object.User;
-import com.shepherdjerred.easely.api.storage.dao.UserDAO;
+import com.shepherdjerred.easely.api.storage.database.dao.UserDAO;
 import org.codejargon.fluentjdbc.api.FluentJdbc;
 import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;
 import org.codejargon.fluentjdbc.api.query.Mapper;
 import org.codejargon.fluentjdbc.api.query.Query;
 
+import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Optional;
@@ -17,8 +18,8 @@ public class UserMysqlDAO implements UserDAO {
     private final FluentJdbc fluentJdbc;
     private final Mapper<User> userMapper;
 
-    public UserMysqlDAO(MysqlStore store) {
-        fluentJdbc = new FluentJdbcBuilder().connectionProvider(store.getDatabase().getDataSource()).build();
+    public UserMysqlDAO(DataSource dataSource) {
+        fluentJdbc = new FluentJdbcBuilder().connectionProvider(dataSource).build();
         // TODO load permissions from MySQL
         userMapper = rs -> new User(
                 UUID.fromString(rs.getString("user_uuid")),

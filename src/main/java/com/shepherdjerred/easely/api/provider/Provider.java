@@ -9,5 +9,4 @@ import java.util.Collection;
 public interface Provider {
     Collection<Course> getCourses(User user);
     Collection<Assignment> getAssignments(User user);
-    Collection<Assignment> getAssignments(User user, Course course);
 }

@@ -6,8 +6,8 @@ import com.shepherdjerred.easely.api.controller.UserController;
 import com.shepherdjerred.easely.api.provider.Provider;
 import com.shepherdjerred.easely.api.provider.easel.CachedEaselProvider;
 import com.shepherdjerred.easely.api.storage.Store;
-import com.shepherdjerred.easely.api.storage.mysql.Database;
-import com.shepherdjerred.easely.api.storage.mysql.MysqlStore;
+import com.shepherdjerred.easely.api.storage.database.mysql.HikariMysqlDatabase;
+import com.shepherdjerred.easely.api.storage.database.mysql.MysqlStore;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.log4j.Log4j2;
 
@@ -33,10 +33,10 @@ public class Main {
     private static void setupMysqlStorage() {
         HikariConfig hikariConfig = getHikariConfig();
 
-        Database database = new Database(hikariConfig);
-        database.migrate();
+        HikariMysqlDatabase hikariMysqlDatabase = new HikariMysqlDatabase(hikariConfig);
+        hikariMysqlDatabase.migrate();
 
-        store = new MysqlStore(database);
+        store = new MysqlStore(hikariMysqlDatabase);
     }
 
     private static HikariConfig getHikariConfig() {

@@ -1,15 +1,16 @@
-package com.shepherdjerred.easely.api.storage.mysql;
+package com.shepherdjerred.easely.api.storage.database.mysql;
 
+import com.shepherdjerred.easely.api.storage.database.Database;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;
 
-public class Database {
+public class HikariMysqlDatabase implements Database {
     private DataSource dataSource;
 
-    public Database(HikariConfig hikariConfig) {
+    public HikariMysqlDatabase(HikariConfig hikariConfig) {
         dataSource = new HikariDataSource(hikariConfig);
     }
 

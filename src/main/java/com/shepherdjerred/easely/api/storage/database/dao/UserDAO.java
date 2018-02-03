@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.storage.dao;
+package com.shepherdjerred.easely.api.storage.database.dao;
 
 import com.shepherdjerred.easely.api.object.User;
 
