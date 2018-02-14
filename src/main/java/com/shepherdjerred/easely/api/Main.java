@@ -88,7 +88,7 @@ public class Main {
         });
 
         before((request, response) -> {
-            response.header("Access-Control-Allow-Origin", "https://easely-web.shepherdjerred.com");
+            response.header("Access-Control-Allow-Origin", "*");
         });
     }
 
