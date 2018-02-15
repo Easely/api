@@ -8,7 +8,6 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
 public class User {
 
     @Getter

@@ -7,7 +7,6 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
 public class CourseDetails {
     @Getter
     private String teacher;

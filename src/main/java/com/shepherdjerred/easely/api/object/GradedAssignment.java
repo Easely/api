@@ -3,7 +3,6 @@ package com.shepherdjerred.easely.api.object;
 import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentCore;
 import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentDetails;
 import com.shepherdjerred.easely.api.provider.easel.scraper.objects.AssignmentGrade;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,7 +12,6 @@ import java.util.Collection;
 
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode
 public class GradedAssignment extends Assignment {
     @Getter
     private int possiblePoints;
@@ -33,8 +31,7 @@ public class GradedAssignment extends Assignment {
     }
 
     public static GradedAssignment fromSubObjects(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails, AssignmentGrade assignmentGrade) {
-        return new GradedAssignment(
-                assignmentCore.getId(),
+        return new GradedAssignment(assignmentCore.getId(),
                 assignmentCore.getName(),
                 assignmentCore.getDate().atTime(assignmentDetails.getDueTime()),
                 assignmentCore.getNumber(),
@@ -44,7 +41,6 @@ public class GradedAssignment extends Assignment {
                 assignmentGrade.getPossiblePoints(),
                 assignmentGrade.getEarnedPoints(),
                 assignmentGrade.isGraded(),
-                assignmentGrade.getAssignmentSubmissions()
-        );
+                assignmentGrade.getAssignmentSubmissions());
     }
 }

@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
 public class AssignmentSubmission {
     @Getter
     private String fileName;

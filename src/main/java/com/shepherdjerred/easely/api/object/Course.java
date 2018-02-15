@@ -9,7 +9,6 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
 public class Course {
     @Getter
     private String id;
@@ -25,13 +24,11 @@ public class Course {
     private CourseGrade courseGrade;
 
     public static Course fromSubObjects(CourseCore courseCore, CourseDetails courseDetails, CourseGrade courseGrade) {
-        return new Course(
-                courseCore.getId(),
+        return new Course(courseCore.getId(),
                 courseCore.getName(),
                 courseCore.getCode(),
                 courseDetails.getTeacher(),
                 courseDetails.getResources(),
-                courseGrade
-        );
+                courseGrade);
     }
 }

@@ -34,7 +34,7 @@ public class AssignmentGradeScraper {
             Element totalPointsElement = classInfoUrl.parse().select("#points").first();
             if (totalPointsElement != null) {
                 String totalPointsText = totalPointsElement.text().replace(" Points", "");
-                int possiblePoints = Integer.valueOf(totalPointsText);
+                int possiblePoints = Integer.parseInt(totalPointsText);
 
                 log.debug("LOADING GRADES FOR " + assignmentId);
 
@@ -63,7 +63,7 @@ public class AssignmentGradeScraper {
                         log.warn("Assignment grade not fetched");
                         return new AssignmentGrade(0, 0, false, assignmentSubmissions);
                     }
-                    earnedPoints = Integer.valueOf(earnedPointsText.replaceAll("\\u00a0", "").replaceAll(" ", ""));
+                    earnedPoints = Integer.parseInt(earnedPointsText.replaceAll("\\u00a0", "").replaceAll(" ", ""));
                     isGraded = true;
                 } else {
                     earnedPoints = 0;

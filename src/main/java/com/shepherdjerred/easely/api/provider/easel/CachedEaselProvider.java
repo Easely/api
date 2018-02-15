@@ -78,7 +78,7 @@ public class CachedEaselProvider implements Provider {
     }
 
     @Override
-    public Collection<Course> getCourses(User user) {
+    public Collection<Course> getCoursesForUser(User user) {
         Collection<CourseCore> userCourses;
         Collection<Course> courses = new ArrayList<>();
 
@@ -149,9 +149,9 @@ public class CachedEaselProvider implements Provider {
     }
 
     @Override
-    public Collection<Assignment> getAssignments(User user) {
+    public Collection<Assignment> getAssignmentsForUser(User user) {
         Collection<Assignment> assignments = new ArrayList<>();
-        getCourses(user).forEach(course -> {
+        getCoursesForUser(user).forEach(course -> {
             getAssignments(user, course).forEach(assignment -> {
                 assignments.add(assignment);
             });

@@ -1,26 +1,23 @@
 package com.shepherdjerred.easely.api;
 
-import com.shepherdjerred.easely.api.controller.AssignmentController;
-import com.shepherdjerred.easely.api.controller.CourseController;
-import com.shepherdjerred.easely.api.controller.UserController;
+import com.shepherdjerred.easely.api.config.Config;
+import com.shepherdjerred.easely.api.config.EnviornmentVariableConfig;
 import com.shepherdjerred.easely.api.provider.Provider;
 import com.shepherdjerred.easely.api.provider.easel.CachedEaselProvider;
+import com.shepherdjerred.easely.api.router.AssignmentRouter;
+import com.shepherdjerred.easely.api.router.CourseRouter;
+import com.shepherdjerred.easely.api.router.UserRouter;
 import com.shepherdjerred.easely.api.storage.Store;
 import com.shepherdjerred.easely.api.storage.database.mysql.HikariMysqlDatabase;
 import com.shepherdjerred.easely.api.storage.database.mysql.MysqlStore;
-import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.log4j.Log4j2;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import static spark.Spark.before;
-import static spark.Spark.options;
-import static spark.Spark.port;
+import static spark.Spark.*;
 
 @Log4j2
 public class Main {
 
+    private static Config config;
     private static Store store;
     private static Provider provider;
 
@@ -30,35 +27,15 @@ public class Main {
         setupRoutes();
     }
 
-    private static void setupMysqlStorage() {
-        HikariConfig hikariConfig = getHikariConfig();
+    private static void setupConfig() {
+        config = new EnviornmentVariableConfig();
+    }
 
-        HikariMysqlDatabase hikariMysqlDatabase = new HikariMysqlDatabase(hikariConfig);
+    private static void setupMysqlStorage() {
+        HikariMysqlDatabase hikariMysqlDatabase = new HikariMysqlDatabase(config.getHikariConfig());
         hikariMysqlDatabase.migrate();
 
         store = new MysqlStore(hikariMysqlDatabase);
-    }
-
-    private static HikariConfig getHikariConfig() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        if (processBuilder.environment().get("CLEARDB_DATABASE_URL") != null) {
-            HikariConfig hikariConfig = new HikariConfig();
-            try {
-                URI jdbUri = new URI(processBuilder.environment().get("CLEARDB_DATABASE_URL"));
-                String jdbcUrl = "jdbc:mysql://" + jdbUri.getHost() + ":" + String.valueOf(jdbUri.getPort()) + jdbUri.getPath();
-
-                hikariConfig.setJdbcUrl(jdbcUrl);
-                hikariConfig.setUsername(jdbUri.getUserInfo().split(":")[0]);
-                hikariConfig.setPassword(jdbUri.getUserInfo().split(":")[1]);
-                hikariConfig.setMaximumPoolSize(4);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-
-            return hikariConfig;
-        } else {
-            return new HikariConfig("hikari.properties");
-        }
     }
 
     private static void setupProvider() {
@@ -66,14 +43,13 @@ public class Main {
     }
 
     private static void setupRoutes() {
-        int port = getPort();
-        port(port);
+        port(config.getServerPort());
 
         enableCors();
 
-        new AssignmentController(store, provider).setupRoutes();
-        new CourseController(store, provider).setupRoutes();
-        new UserController(store).setupRoutes();
+        new AssignmentRouter(store, provider).setupRoutes();
+        new CourseRouter(store, provider).setupRoutes();
+        new UserRouter(store).setupRoutes();
     }
 
     private static void enableCors() {
@@ -87,24 +63,7 @@ public class Main {
             return "OK";
         });
 
-        before((request, response) -> {
-            response.header("Access-Control-Allow-Origin", "*");
-        });
-    }
-
-    /**
-     * Returns the port the application should listen on. It will first look for an environment variable named PORT,
-     * otherwise it will return 8080
-     *
-     * @return
-     */
-    private static int getPort() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        String portVar = processBuilder.environment().get("PORT");
-        if (portVar != null) {
-            return Integer.parseInt(portVar);
-        }
-        return 8080;
+        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
     }
 
 }

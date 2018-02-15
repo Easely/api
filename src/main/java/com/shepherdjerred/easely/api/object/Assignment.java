@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
 public class Assignment {
 
     @Getter
@@ -28,15 +27,13 @@ public class Assignment {
     private String attachment;
 
     public static Assignment fromSubObjects(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails) {
-        return new Assignment(
-                assignmentCore.getId(),
+        return new Assignment(assignmentCore.getId(),
                 assignmentCore.getName(),
                 assignmentCore.getDate().atTime(assignmentDetails.getDueTime()),
                 assignmentCore.getNumber(),
                 assignmentCore.getType(),
                 assignmentCore.getCourse(),
-                assignmentDetails.getAttachment()
-        );
+                assignmentDetails.getAttachment());
     }
 
     public enum Type {

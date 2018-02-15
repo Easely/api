@@ -21,14 +21,12 @@ public class UserMysqlDAO implements UserDAO {
     public UserMysqlDAO(DataSource dataSource) {
         fluentJdbc = new FluentJdbcBuilder().connectionProvider(dataSource).build();
         // TODO load permissions from MySQL
-        userMapper = rs -> new User(
-                UUID.fromString(rs.getString("user_uuid")),
+        userMapper = rs -> new User(UUID.fromString(rs.getString("user_uuid")),
                 rs.getString("email"),
                 rs.getString("password"),
                 rs.getString("easel_username"),
                 rs.getString("easel_password"),
-                EnumSet.noneOf(User.Permission.class)
-        );
+                EnumSet.noneOf(User.Permission.class));
     }
 
     public Optional<User> select(String email) {

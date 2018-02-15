@@ -8,7 +8,6 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
 public class AssignmentGrade {
     @Getter
     private int possiblePoints;

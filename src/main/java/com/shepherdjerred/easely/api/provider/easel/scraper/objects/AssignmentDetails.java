@@ -7,7 +7,6 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
 public class AssignmentDetails {
     @Getter
     private LocalTime dueTime;

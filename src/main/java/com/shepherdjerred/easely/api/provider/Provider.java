@@ -7,6 +7,6 @@ import com.shepherdjerred.easely.api.object.User;
 import java.util.Collection;
 
 public interface Provider {
-    Collection<Course> getCourses(User user);
-    Collection<Assignment> getAssignments(User user);
+    Collection<Course> getCoursesForUser(User user);
+    Collection<Assignment> getAssignmentsForUser(User user);
 }
