@@ -1,6 +1,6 @@
 package com.shepherdjerred.easely.api.storage.database.dao;
 
-import com.shepherdjerred.easely.api.object.User;
+import com.shepherdjerred.easely.api.model.User;
 
 import java.util.Collection;
 import java.util.Optional;

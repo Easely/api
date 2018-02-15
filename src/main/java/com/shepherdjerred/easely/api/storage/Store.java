@@ -1,6 +1,6 @@
 package com.shepherdjerred.easely.api.storage;
 
-import com.shepherdjerred.easely.api.object.User;
+import com.shepherdjerred.easely.api.model.User;
 
 import java.util.Optional;
 import java.util.UUID;

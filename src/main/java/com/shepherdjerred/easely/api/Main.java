@@ -1,9 +1,9 @@
 package com.shepherdjerred.easely.api;
 
-import com.shepherdjerred.easely.api.config.Config;
-import com.shepherdjerred.easely.api.config.EnviornmentVariableConfig;
+import com.shepherdjerred.easely.api.config.EaselyConfig;
+import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
 import com.shepherdjerred.easely.api.provider.Provider;
-import com.shepherdjerred.easely.api.provider.easel.CachedEaselProvider;
+import com.shepherdjerred.easely.api.provider.CachedEaselProvider;
 import com.shepherdjerred.easely.api.router.AssignmentRouter;
 import com.shepherdjerred.easely.api.router.CourseRouter;
 import com.shepherdjerred.easely.api.router.UserRouter;
@@ -17,23 +17,23 @@ import static spark.Spark.*;
 @Log4j2
 public class Main {
 
-    private static Config config;
+    private static EaselyConfig easelyConfig;
     private static Store store;
     private static Provider provider;
 
     public static void main(String args[]) {
         setupConfig();
-        setupMysqlStorage();
+        setupMysqlStore();
         setupProvider();
         setupRoutes();
     }
 
     private static void setupConfig() {
-        config = new EnviornmentVariableConfig();
+        easelyConfig = new EnvVarEaselyConfig();
     }
 
-    private static void setupMysqlStorage() {
-        HikariMysqlDatabase hikariMysqlDatabase = new HikariMysqlDatabase(config.getHikariConfig());
+    private static void setupMysqlStore() {
+        HikariMysqlDatabase hikariMysqlDatabase = new HikariMysqlDatabase(easelyConfig.getHikariConfig());
         hikariMysqlDatabase.migrate();
 
         store = new MysqlStore(hikariMysqlDatabase);
@@ -44,7 +44,7 @@ public class Main {
     }
 
     private static void setupRoutes() {
-        port(config.getServerPort());
+        port(easelyConfig.getServerPort());
 
         enableCors();
 

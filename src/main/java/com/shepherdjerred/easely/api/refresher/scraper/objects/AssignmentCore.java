@@ -1,7 +1,7 @@
-package com.shepherdjerred.easely.api.provider.easel.scraper.objects;
+package com.shepherdjerred.easely.api.refresher.scraper.objects;
 
-import com.shepherdjerred.easely.api.object.Assignment;
-import com.shepherdjerred.easely.api.object.Course;
+import com.shepherdjerred.easely.api.model.Assignment;
+import com.shepherdjerred.easely.api.model.Course;
 import lombok.*;
 
 import java.time.LocalDate;

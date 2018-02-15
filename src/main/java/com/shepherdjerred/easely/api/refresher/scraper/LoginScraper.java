@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.provider.easel.scraper;
+package com.shepherdjerred.easely.api.refresher.scraper;
 
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;

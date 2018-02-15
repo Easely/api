@@ -1,20 +1,12 @@
-package com.shepherdjerred.easely.api.provider.easel;
+package com.shepherdjerred.easely.api.provider;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.shepherdjerred.easely.api.object.*;
-import com.shepherdjerred.easely.api.provider.Provider;
-import com.shepherdjerred.easely.api.provider.easel.scraper.*;
-import com.shepherdjerred.easely.api.provider.easel.scraper.objects.*;
+import com.shepherdjerred.easely.api.model.*;
+import com.shepherdjerred.easely.api.refresher.scraper.*;
+import com.shepherdjerred.easely.api.refresher.scraper.objects.*;
 import lombok.extern.log4j.Log4j2;
-import org.redisson.Redisson;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
-import org.redisson.codec.JsonJacksonCodec;
-import org.redisson.config.Config;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,51 +20,15 @@ public class CachedEaselProvider implements Provider {
     private RedissonClient redisson;
 
     public CachedEaselProvider() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
 
-        Config config = getRedissonConfig();
-        config.setCodec(new JsonJacksonCodec(mapper));
-        redisson = Redisson.create(config);
-    }
-
-    private Config getRedissonConfig() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        Config config;
-        if (processBuilder.environment().get("REDIS_URL") != null) {
-            String redisUrl = processBuilder.environment().get("REDIS_URL");
-
-            String password = redisUrl.substring(redisUrl.indexOf(':', redisUrl.indexOf(':') + 1) + 1, redisUrl.indexOf('@'));
-
-            log.debug(redisUrl);
-            log.debug(password);
-
-            config = new Config();
-            config.useSingleServer().setAddress(redisUrl).setPassword(password);
-        } else {
-            try {
-                config = Config.fromJSON(new File("redissonConfig.json"));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-        return config;
     }
 
     private Map<String, String> login(User user) {
         Map<String, String> cookies;
-        RBucket<Map<String, String>> cookiesBucket = redisson.getBucket("user:" + user.getUuid() + ":cookies");
 
-        if (cookiesBucket.isExists()) {
-            cookies = cookiesBucket.get();
-        } else {
-            LoginScraper loginScraper = new LoginScraper();
-            loginScraper.login(user.getEaselUsername(), user.getEaselPassword());
-            cookies = loginScraper.getCookies();
-            cookiesBucket.set(cookies);
-            cookiesBucket.expire(1, TimeUnit.HOURS);
-        }
+        LoginScraper loginScraper = new LoginScraper();
+        loginScraper.login(user.getEaselUsername(), user.getEaselPassword());
+        cookies = loginScraper.getCookies();
 
         return cookies;
     }
@@ -101,7 +57,7 @@ public class CachedEaselProvider implements Provider {
         // CourseCore is rarely updated, but we have nothing to lose by updating the cache
 
         // Load details for the courses
-        // Here we get the actual Course object
+        // Here we get the actual Course model
         for (CourseCore courseCore : userCourses) {
             Course course;
 
@@ -198,7 +154,7 @@ public class CachedEaselProvider implements Provider {
             if (assignmentCore.getType() == Assignment.Type.NOTES) {
                 assignment = Assignment.fromSubObjects(assignmentCore, assignmentDetails);
             } else {
-                RBucket<AssignmentGrade> assignmentGradeBucket = redisson.getBucket("user:" + user.getUuid() + ":assignment:" + assignmentCore.getId() + ":grade" );
+                RBucket<AssignmentGrade> assignmentGradeBucket = redisson.getBucket("user:" + user.getUuid() + ":assignment:" + assignmentCore.getId() + ":grade");
                 AssignmentGrade assignmentGrade;
                 if (assignmentGradeBucket.isExists()) {
                     assignmentGrade = assignmentGradeBucket.get();

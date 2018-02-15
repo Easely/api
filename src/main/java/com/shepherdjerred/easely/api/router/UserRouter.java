@@ -8,7 +8,7 @@ import com.shepherdjerred.easely.api.controller.UserController;
 import com.shepherdjerred.easely.api.controller.payload.LoginPayload;
 import com.shepherdjerred.easely.api.controller.payload.PostLoginPayload;
 import com.shepherdjerred.easely.api.controller.payload.RegisterPayload;
-import com.shepherdjerred.easely.api.object.User;
+import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
 

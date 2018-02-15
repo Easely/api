@@ -1,6 +1,6 @@
-package com.shepherdjerred.easely.api.provider.easel.scraper.objects;
+package com.shepherdjerred.easely.api.refresher.scraper.objects;
 
-import com.shepherdjerred.easely.api.object.AssignmentSubmission;
+import com.shepherdjerred.easely.api.model.AssignmentSubmission;
 import lombok.*;
 
 import java.util.Collection;

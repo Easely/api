@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.object;
+package com.shepherdjerred.easely.api.model;
 
 import lombok.*;
 

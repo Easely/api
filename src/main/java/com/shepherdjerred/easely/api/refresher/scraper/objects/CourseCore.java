@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.provider.easel.scraper.objects;
+package com.shepherdjerred.easely.api.refresher.scraper.objects;
 
 import lombok.*;
 

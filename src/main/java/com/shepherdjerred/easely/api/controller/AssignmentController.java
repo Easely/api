@@ -1,7 +1,7 @@
 package com.shepherdjerred.easely.api.controller;
 
-import com.shepherdjerred.easely.api.object.Assignment;
-import com.shepherdjerred.easely.api.object.User;
+import com.shepherdjerred.easely.api.model.Assignment;
+import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.provider.Provider;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;

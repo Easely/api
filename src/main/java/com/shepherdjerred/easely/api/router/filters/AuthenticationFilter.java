@@ -4,7 +4,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.shepherdjerred.easely.api.object.User;
+import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
 import spark.Filter;

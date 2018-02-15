@@ -1,6 +1,6 @@
 package com.shepherdjerred.easely.api.controller;
 
-import com.shepherdjerred.easely.api.object.User;
+import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
 import org.mindrot.jbcrypt.BCrypt;

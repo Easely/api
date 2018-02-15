@@ -1,7 +1,7 @@
 package com.shepherdjerred.easely.api.router;
 
 import com.shepherdjerred.easely.api.controller.AssignmentController;
-import com.shepherdjerred.easely.api.object.User;
+import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.provider.Provider;
 import com.shepherdjerred.easely.api.router.filters.AuthenticationFilter;
 import com.shepherdjerred.easely.api.storage.Store;

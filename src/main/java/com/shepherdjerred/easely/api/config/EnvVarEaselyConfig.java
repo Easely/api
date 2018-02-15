@@ -3,15 +3,17 @@ package com.shepherdjerred.easely.api.config;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 @Log4j2
-public class EnviornmentVariableConfig implements Config {
+public class EnvVarEaselyConfig implements EaselyConfig {
 
     private ProcessBuilder processBuilder;
 
-    public EnviornmentVariableConfig() {
+    public EnvVarEaselyConfig() {
         processBuilder = new ProcessBuilder();
     }
 
@@ -74,5 +76,31 @@ public class EnviornmentVariableConfig implements Config {
     @Override
     public String getCrossOriginDomains() {
         return null;
+    }
+
+    @Override
+    public org.redisson.config.Config getRedissonConfig() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        org.redisson.config.Config config;
+        if (processBuilder.environment().get("REDIS_URL") != null) {
+            String redisUrl = processBuilder.environment().get("REDIS_URL");
+
+            String password = redisUrl.substring(redisUrl.indexOf(':', redisUrl.indexOf(':') + 1) + 1, redisUrl.indexOf('@'));
+
+            log.debug(redisUrl);
+            log.debug(password);
+
+            config = new org.redisson.config.Config();
+            config.useSingleServer().setAddress(redisUrl).setPassword(password);
+        } else {
+            log.warn("No REDIS_URL set in environment variables. Using redissonConfig.json");
+            try {
+                config = org.redisson.config.Config.fromJSON(new File("redissonConfig.json"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return config;
     }
 }

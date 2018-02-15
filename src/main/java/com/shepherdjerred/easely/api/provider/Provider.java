@@ -1,8 +1,8 @@
 package com.shepherdjerred.easely.api.provider;
 
-import com.shepherdjerred.easely.api.object.Assignment;
-import com.shepherdjerred.easely.api.object.Course;
-import com.shepherdjerred.easely.api.object.User;
+import com.shepherdjerred.easely.api.model.Assignment;
+import com.shepherdjerred.easely.api.model.Course;
+import com.shepherdjerred.easely.api.model.User;
 
 import java.util.Collection;
 
