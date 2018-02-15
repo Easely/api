@@ -22,6 +22,7 @@ public class Main {
     private static Provider provider;
 
     public static void main(String args[]) {
+        setupConfig();
         setupMysqlStorage();
         setupProvider();
         setupRoutes();
