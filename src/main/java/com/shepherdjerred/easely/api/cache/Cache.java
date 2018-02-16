@@ -12,13 +12,13 @@ public interface Cache {
 
     void setEaselUserId(User user, String userId);
 
-    void setUserCourses(User user, Collection<CourseCore> courses);
+    void setUserCourseCores(User user, Collection<CourseCore> courses);
 
     void setCourseDetails(CourseCore courseCore, CourseDetails courseDetails);
 
     void setUserCourseGrade(User user, CourseCore courseCore, CourseGrade courseGrade);
 
-    void setCourseAssignments(CourseCore courseCore, Collection<AssignmentCore> assignments);
+    void setCourseAssignmentCores(CourseCore courseCore, Collection<AssignmentCore> assignments);
 
     void setAssignmentDetails(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails);
 
@@ -28,13 +28,13 @@ public interface Cache {
 
     boolean hasEaselUserId(User user);
 
-    boolean hasUserCourses(User user);
+    boolean hasUserCourseCores(User user);
 
     boolean hasCourseDetails(CourseCore courseCore);
 
     boolean hasUserCourseGrade(User user, CourseCore courseCore);
 
-    boolean hasCourseAssignments(CourseCore courseCore);
+    boolean hasCourseAssignmentCores(CourseCore courseCore);
 
     boolean hasAssignmentDetails(AssignmentCore assignmentCore);
 
@@ -44,13 +44,13 @@ public interface Cache {
 
     String getEaselUserId(User user);
 
-    Collection<CourseCore> getUserCourses(User user);
+    Collection<CourseCore> getUserCourseCores(User user);
 
     CourseDetails getCourseDetails(CourseCore courseCore);
 
     CourseGrade getCourseGrade(User user, CourseCore courseCore);
 
-    Collection<AssignmentCore> getCourseAssignments(CourseCore courseCore);
+    Collection<AssignmentCore> getCourseAssignmentCores(CourseCore courseCore);
 
     AssignmentDetails getAssignmentDetails(AssignmentCore assignmentCore);
 

@@ -48,7 +48,7 @@ public class RedisCache implements Cache {
     }
 
     @Override
-    public void setUserCourses(User user, Collection<CourseCore> courses) {
+    public void setUserCourseCores(User user, Collection<CourseCore> courses) {
         RBucket<Collection<CourseCore>> userCoursesBucket = redisson.getBucket("user:" + user.getUuid() + ":courses");
         userCoursesBucket.set(courses);
         userCoursesBucket.expire(24, TimeUnit.DAYS);
@@ -69,7 +69,7 @@ public class RedisCache implements Cache {
     }
 
     @Override
-    public void setCourseAssignments(CourseCore courseCore, Collection<AssignmentCore> assignments) {
+    public void setCourseAssignmentCores(CourseCore courseCore, Collection<AssignmentCore> assignments) {
         RBucket<Collection<AssignmentCore>> courseAssignmentsBucket = redisson.getBucket("course:" + courseCore.getId() + ":assignments");
         courseAssignmentsBucket.set(assignments);
         courseAssignmentsBucket.expire(1, TimeUnit.DAYS);
@@ -110,7 +110,7 @@ public class RedisCache implements Cache {
     }
 
     @Override
-    public boolean hasUserCourses(User user) {
+    public boolean hasUserCourseCores(User user) {
         RBucket<Collection<CourseCore>> userCoursesBucket = redisson.getBucket("user:" + user.getUuid() + ":courses");
         return userCoursesBucket.isExists();
     }
@@ -128,7 +128,7 @@ public class RedisCache implements Cache {
     }
 
     @Override
-    public boolean hasCourseAssignments(CourseCore courseCore) {
+    public boolean hasCourseAssignmentCores(CourseCore courseCore) {
         RBucket<Collection<AssignmentCore>> courseAssignmentsBucket = redisson.getBucket("course:" + courseCore.getId() + ":assignments");
         return courseAssignmentsBucket.isExists();
     }
@@ -158,7 +158,7 @@ public class RedisCache implements Cache {
     }
 
     @Override
-    public Collection<CourseCore> getUserCourses(User user) {
+    public Collection<CourseCore> getUserCourseCores(User user) {
         RBucket<Collection<CourseCore>> userCoursesBucket = redisson.getBucket("user:" + user.getUuid() + ":courses");
         return userCoursesBucket.get();
     }
@@ -176,7 +176,7 @@ public class RedisCache implements Cache {
     }
 
     @Override
-    public Collection<AssignmentCore> getCourseAssignments(CourseCore courseCore) {
+    public Collection<AssignmentCore> getCourseAssignmentCores(CourseCore courseCore) {
         RBucket<Collection<AssignmentCore>> courseAssignmentsBucket = redisson.getBucket("course:" + courseCore.getId() + ":assignments");
         return courseAssignmentsBucket.get();
     }

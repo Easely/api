@@ -22,7 +22,7 @@ public class CacheProvider implements Provider {
     @Override
     public Collection<Course> getUserCourses(User user) {
         Collection<Course> courses = new ArrayList<>();
-        Collection<CourseCore> userCourseCores = cache.getUserCourses(user);
+        Collection<CourseCore> userCourseCores = cache.getUserCourseCores(user);
         userCourseCores.forEach(courseCore -> {
             CourseDetails courseDetails = cache.getCourseDetails(courseCore);
             CourseGrade courseGrade = cache.getCourseGrade(user, courseCore);
@@ -35,9 +35,9 @@ public class CacheProvider implements Provider {
     @Override
     public Collection<Assignment> getUserAssignments(User user) {
         Collection<Assignment> assignments = new ArrayList<>();
-        Collection<CourseCore> userCourseCores = cache.getUserCourses(user);
+        Collection<CourseCore> userCourseCores = cache.getUserCourseCores(user);
         userCourseCores.forEach(courseCore -> {
-            Collection<AssignmentCore> assignmentCores = cache.getCourseAssignments(courseCore);
+            Collection<AssignmentCore> assignmentCores = cache.getCourseAssignmentCores(courseCore);
             assignmentCores.forEach(assignmentCore -> {
                 AssignmentDetails assignmentDetails = cache.getAssignmentDetails(assignmentCore);
                 if (assignmentCore.getType() == Assignment.Type.NOTES) {
