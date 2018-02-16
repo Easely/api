@@ -35,48 +35,48 @@ public class RedisCache implements Cache {
     }
 
     @Override
-    public void saveUserEaselCookies(User user, Map<String, String> cookies) {
+    public void setUserEaselCookies(User user, Map<String, String> cookies) {
         RBucket<Map<String, String>> cookiesBucket = redisson.getBucket("user:" + user.getUuid() + ":cookies");
         cookiesBucket.set(cookies);
         cookiesBucket.expire(1, TimeUnit.HOURS);
     }
 
     @Override
-    public void saveEaselUserId(User user, String easelUserId) {
+    public void setEaselUserId(User user, String easelUserId) {
         RBucket<String> easelUserIdBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":id");
         easelUserIdBucket.set(easelUserId);
     }
 
     @Override
-    public void saveUserCourses(User user, Collection<CourseCore> courses) {
+    public void setUserCourses(User user, Collection<CourseCore> courses) {
         RBucket<Collection<CourseCore>> userCoursesBucket = redisson.getBucket("user:" + user.getUuid() + ":courses");
         userCoursesBucket.set(courses);
         userCoursesBucket.expire(24, TimeUnit.DAYS);
     }
 
     @Override
-    public void saveCourseDetails(CourseCore courseCore, CourseDetails courseDetails) {
+    public void setCourseDetails(CourseCore courseCore, CourseDetails courseDetails) {
         RBucket<CourseDetails> courseDetailsBucket = redisson.getBucket("course:details:" + courseCore.getId());
         courseDetailsBucket.set(courseDetails);
         courseDetailsBucket.expire(7, TimeUnit.DAYS);
     }
 
     @Override
-    public void saveUserCourseGrade(User user, CourseCore courseCore, CourseGrade courseGrade) {
+    public void setUserCourseGrade(User user, CourseCore courseCore, CourseGrade courseGrade) {
         RBucket<CourseGrade> courseGradeBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":course:" + courseCore.getId() + ":grade");
         courseGradeBucket.set(courseGrade);
         courseGradeBucket.expire(1, TimeUnit.DAYS);
     }
 
     @Override
-    public void saveCourseAssignments(CourseCore courseCore, Collection<AssignmentCore> assignments) {
+    public void setCourseAssignments(CourseCore courseCore, Collection<AssignmentCore> assignments) {
         RBucket<Collection<AssignmentCore>> courseAssignmentsBucket = redisson.getBucket("course:" + courseCore.getId() + ":assignments");
         courseAssignmentsBucket.set(assignments);
         courseAssignmentsBucket.expire(1, TimeUnit.DAYS);
     }
 
     @Override
-    public void saveAssignmentDetails(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails) {
+    public void setAssignmentDetails(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails) {
         RBucket<AssignmentDetails> assignmentDetailsBucket = redisson.getBucket("assignment:details:" + assignmentCore.getId());
         assignmentDetailsBucket.set(assignmentDetails);
         if (assignmentCore.getDate().isAfter(LocalDate.now())) {
@@ -85,7 +85,7 @@ public class RedisCache implements Cache {
     }
 
     @Override
-    public void saveUserAssignmentGrade(User user, AssignmentCore assignmentCore, AssignmentGrade assignmentGrade) {
+    public void setUserAssignmentGrade(User user, AssignmentCore assignmentCore, AssignmentGrade assignmentGrade) {
         RBucket<AssignmentGrade> assignmentGradeBucket = redisson.getBucket("user:" + user.getUuid() + ":assignment:" + assignmentCore.getId() + ":grade");
         assignmentGradeBucket.set(assignmentGrade);
         if (assignmentCore.getDate().isAfter(LocalDate.now())) {
@@ -146,49 +146,49 @@ public class RedisCache implements Cache {
     }
 
     @Override
-    public Map<String, String> loadUserEaselCookies(User user) {
+    public Map<String, String> getUserEaselCookies(User user) {
         RBucket<Map<String, String>> cookiesBucket = redisson.getBucket("user:" + user.getUuid() + ":cookies");
         return cookiesBucket.get();
     }
 
     @Override
-    public String loadEaselUserId(User user) {
+    public String getEaselUserId(User user) {
         RBucket<String> easelUserIdBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":id");
         return easelUserIdBucket.get();
     }
 
     @Override
-    public Collection<CourseCore> loadUserCourses(User user) {
+    public Collection<CourseCore> getUserCourses(User user) {
         RBucket<Collection<CourseCore>> userCoursesBucket = redisson.getBucket("user:" + user.getUuid() + ":courses");
         return userCoursesBucket.get();
     }
 
     @Override
-    public CourseDetails loadCourseDetails(CourseCore courseCore) {
+    public CourseDetails getCourseDetails(CourseCore courseCore) {
         RBucket<CourseDetails> courseDetailsBucket = redisson.getBucket("course:details:" + courseCore.getId());
         return courseDetailsBucket.get();
     }
 
     @Override
-    public CourseGrade loadCourseGrade(User user, CourseCore courseCore) {
+    public CourseGrade getCourseGrade(User user, CourseCore courseCore) {
         RBucket<CourseGrade> courseGradeBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":course:" + courseCore.getId() + ":grade");
         return courseGradeBucket.get();
     }
 
     @Override
-    public Collection<AssignmentCore> loadCourseAssignments(CourseCore courseCore) {
+    public Collection<AssignmentCore> getCourseAssignments(CourseCore courseCore) {
         RBucket<Collection<AssignmentCore>> courseAssignmentsBucket = redisson.getBucket("course:" + courseCore.getId() + ":assignments");
         return courseAssignmentsBucket.get();
     }
 
     @Override
-    public AssignmentDetails loadAssignmentDetails(AssignmentCore assignmentCore) {
+    public AssignmentDetails getAssignmentDetails(AssignmentCore assignmentCore) {
         RBucket<AssignmentDetails> assignmentDetailsBucket = redisson.getBucket("assignment:details:" + assignmentCore.getId());
         return assignmentDetailsBucket.get();
     }
 
     @Override
-    public AssignmentGrade loadAssignmentGrade(User user, AssignmentCore assignmentCore) {
+    public AssignmentGrade getAssignmentGrade(User user, AssignmentCore assignmentCore) {
         RBucket<AssignmentGrade> assignmentGradeBucket = redisson.getBucket("user:" + user.getUuid() + ":assignment:" + assignmentCore.getId() + ":grade");
         return assignmentGradeBucket.get();
     }

@@ -15,7 +15,7 @@ public class CourseController {
     private Provider provider;
 
     public Collection<Course> getCoursesForUser(User user) {
-        return provider.getCoursesForUser(user);
+        return provider.getUserCourses(user);
     }
 
 }

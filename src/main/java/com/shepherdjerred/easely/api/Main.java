@@ -3,7 +3,7 @@ package com.shepherdjerred.easely.api;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
 import com.shepherdjerred.easely.api.provider.Provider;
-import com.shepherdjerred.easely.api.provider.CachedEaselProvider;
+import com.shepherdjerred.easely.api.provider.CacheProvider;
 import com.shepherdjerred.easely.api.router.AssignmentRouter;
 import com.shepherdjerred.easely.api.router.CourseRouter;
 import com.shepherdjerred.easely.api.router.UserRouter;
@@ -40,7 +40,7 @@ public class Main {
     }
 
     private static void setupProvider() {
-        provider = new CachedEaselProvider();
+        provider = new CacheProvider();
     }
 
     private static void setupRoutes() {

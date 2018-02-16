@@ -15,6 +15,6 @@ public class AssignmentController {
     private Provider provider;
 
     public Collection<Assignment> getAssignmentsForUser(User user) {
-        return provider.getAssignmentsForUser(user);
+        return provider.getUserAssignments(user);
     }
 }

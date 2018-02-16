@@ -8,21 +8,21 @@ import java.util.Collection;
 import java.util.Map;
 
 public interface Cache {
-    void saveUserEaselCookies(User user, Map<String, String> cookies);
+    void setUserEaselCookies(User user, Map<String, String> cookies);
 
-    void saveEaselUserId(User user, String userId);
+    void setEaselUserId(User user, String userId);
 
-    void saveUserCourses(User user, Collection<CourseCore> courses);
+    void setUserCourses(User user, Collection<CourseCore> courses);
 
-    void saveCourseDetails(CourseCore courseCore, CourseDetails courseDetails);
+    void setCourseDetails(CourseCore courseCore, CourseDetails courseDetails);
 
-    void saveUserCourseGrade(User user, CourseCore courseCore, CourseGrade courseGrade);
+    void setUserCourseGrade(User user, CourseCore courseCore, CourseGrade courseGrade);
 
-    void saveCourseAssignments(CourseCore courseCore, Collection<AssignmentCore> assignments);
+    void setCourseAssignments(CourseCore courseCore, Collection<AssignmentCore> assignments);
 
-    void saveAssignmentDetails(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails);
+    void setAssignmentDetails(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails);
 
-    void saveUserAssignmentGrade(User user, AssignmentCore assignmentCore, AssignmentGrade assignmentGrade);
+    void setUserAssignmentGrade(User user, AssignmentCore assignmentCore, AssignmentGrade assignmentGrade);
 
     boolean hasUserEaselCookies(User user);
 
@@ -40,19 +40,19 @@ public interface Cache {
 
     boolean hasUserAssignmentGrade(User user, AssignmentCore assignmentCore);
 
-    Map<String, String> loadUserEaselCookies(User user);
+    Map<String, String> getUserEaselCookies(User user);
 
-    String loadEaselUserId(User user);
+    String getEaselUserId(User user);
 
-    Collection<CourseCore> loadUserCourses(User user);
+    Collection<CourseCore> getUserCourses(User user);
 
-    CourseDetails loadCourseDetails(CourseCore courseCore);
+    CourseDetails getCourseDetails(CourseCore courseCore);
 
-    CourseGrade loadCourseGrade(User user, CourseCore courseCore);
+    CourseGrade getCourseGrade(User user, CourseCore courseCore);
 
-    Collection<AssignmentCore> loadCourseAssignments(CourseCore courseCore);
+    Collection<AssignmentCore> getCourseAssignments(CourseCore courseCore);
 
-    AssignmentDetails loadAssignmentDetails(AssignmentCore assignmentCore);
+    AssignmentDetails getAssignmentDetails(AssignmentCore assignmentCore);
 
-    AssignmentGrade loadAssignmentGrade(User user, AssignmentCore assignmentCore);
+    AssignmentGrade getAssignmentGrade(User user, AssignmentCore assignmentCore);
 }
