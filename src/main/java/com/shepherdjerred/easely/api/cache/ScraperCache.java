@@ -10,7 +10,7 @@ import java.util.Map;
 public interface ScraperCache {
     void setUserEaselCookies(User user, Map<String, String> cookies);
 
-    void setEaselUserId(User user, String userId);
+    void setEaselUserId(User user, String userEaselId);
 
     void setUserCourseCores(User user, Collection<CourseCore> courses);
 

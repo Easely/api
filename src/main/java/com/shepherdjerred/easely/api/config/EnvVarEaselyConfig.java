@@ -28,6 +28,7 @@ public class EnvVarEaselyConfig implements EaselyConfig {
         }
     }
 
+    // TODO the env var should be something more generic, like MYSQL_URL
     @Override
     public HikariConfig getHikariConfig() {
         if (processBuilder.environment().get("CLEARDB_DATABASE_URL") != null) {
@@ -73,6 +74,7 @@ public class EnvVarEaselyConfig implements EaselyConfig {
         }
     }
 
+    // TODO
     @Override
     public String getCrossOriginDomains() {
         return null;

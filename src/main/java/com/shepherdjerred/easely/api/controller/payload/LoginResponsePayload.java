@@ -1,15 +1,13 @@
 package com.shepherdjerred.easely.api.controller.payload;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class PostLoginPayload implements Payload {
+@AllArgsConstructor
+public class LoginResponsePayload implements Payload {
 
     @Getter
     private final String jsonWebToken;
-
-    public PostLoginPayload(String jsonWebToken) {
-        this.jsonWebToken = jsonWebToken;
-    }
 
     @Override
     public boolean isValid() {

@@ -42,9 +42,9 @@ public class RedisScraperCache implements ScraperCache {
     }
 
     @Override
-    public void setEaselUserId(User user, String easelUserId) {
+    public void setEaselUserId(User user, String userEaselId) {
         RBucket<String> easelUserIdBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":id");
-        easelUserIdBucket.set(easelUserId);
+        easelUserIdBucket.set(userEaselId);
     }
 
     @Override
@@ -148,48 +148,56 @@ public class RedisScraperCache implements ScraperCache {
     @Override
     public Map<String, String> getUserEaselCookies(User user) {
         RBucket<Map<String, String>> cookiesBucket = redisson.getBucket("user:" + user.getUuid() + ":cookies");
+        log.trace(cookiesBucket.get());
         return cookiesBucket.get();
     }
 
     @Override
     public String getEaselUserId(User user) {
         RBucket<String> easelUserIdBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":id");
+        log.trace(easelUserIdBucket.get());
         return easelUserIdBucket.get();
     }
 
     @Override
     public Collection<CourseCore> getUserCourseCores(User user) {
         RBucket<Collection<CourseCore>> userCoursesBucket = redisson.getBucket("user:" + user.getUuid() + ":courses");
+        log.trace(userCoursesBucket.get());
         return userCoursesBucket.get();
     }
 
     @Override
     public CourseDetails getCourseDetails(CourseCore courseCore) {
         RBucket<CourseDetails> courseDetailsBucket = redisson.getBucket("course:details:" + courseCore.getId());
+        log.trace(courseDetailsBucket.get());
         return courseDetailsBucket.get();
     }
 
     @Override
     public CourseGrade getCourseGrade(User user, CourseCore courseCore) {
         RBucket<CourseGrade> courseGradeBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":course:" + courseCore.getId() + ":grade");
+        log.trace(courseGradeBucket.get());
         return courseGradeBucket.get();
     }
 
     @Override
     public Collection<AssignmentCore> getCourseAssignmentCores(CourseCore courseCore) {
         RBucket<Collection<AssignmentCore>> courseAssignmentsBucket = redisson.getBucket("course:" + courseCore.getId() + ":assignments");
+        log.trace(courseAssignmentsBucket.get());
         return courseAssignmentsBucket.get();
     }
 
     @Override
     public AssignmentDetails getAssignmentDetails(AssignmentCore assignmentCore) {
         RBucket<AssignmentDetails> assignmentDetailsBucket = redisson.getBucket("assignment:details:" + assignmentCore.getId());
+        log.trace(assignmentDetailsBucket.get());
         return assignmentDetailsBucket.get();
     }
 
     @Override
     public AssignmentGrade getAssignmentGrade(User user, AssignmentCore assignmentCore) {
         RBucket<AssignmentGrade> assignmentGradeBucket = redisson.getBucket("user:" + user.getUuid() + ":assignment:" + assignmentCore.getId() + ":grade");
+        log.trace(assignmentGradeBucket.get());
         return assignmentGradeBucket.get();
     }
 }

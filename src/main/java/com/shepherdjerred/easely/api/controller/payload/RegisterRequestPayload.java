@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.validator.routines.EmailValidator;
 
-public class RegisterPayload implements Payload {
+public class RegisterRequestPayload implements Payload {
 
     @Getter
     @Setter
@@ -19,6 +19,7 @@ public class RegisterPayload implements Payload {
     @Setter
     private String easelPassword;
 
+    // TODO provide message with what went wrong
     @Override
     public boolean isValid() {
         if (!EmailValidator.getInstance().isValid(email)) {

@@ -20,19 +20,20 @@ public class UserController {
 
     public User login(String email, String password) throws FailedLoginException {
         UUID userUuid = store.getUserUuid(email);
-        Optional<User> userToAuthTo = store.getUser(userUuid);
+        Optional<User> userToAuthAs = store.getUser(userUuid);
 
-        if (!userToAuthTo.isPresent()) {
+        if (!userToAuthAs.isPresent()) {
             throw new FailedLoginException("User does not exist");
         }
 
-        if (!userToAuthTo.get().authenticate(password)) {
+        if (!userToAuthAs.get().authenticate(password)) {
             throw new FailedLoginException("Incorrect password");
         }
 
-        return userToAuthTo.get();
+        return userToAuthAs.get();
     }
 
+    // TODO validation should be done here instead of in payload
     public User register(String email, String password, String easelUsername, String easelPassword) {
 
         User user = new User(UUID.randomUUID(),

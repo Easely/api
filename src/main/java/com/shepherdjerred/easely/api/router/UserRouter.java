@@ -6,9 +6,9 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.controller.UserController;
-import com.shepherdjerred.easely.api.controller.payload.LoginPayload;
-import com.shepherdjerred.easely.api.controller.payload.PostLoginPayload;
-import com.shepherdjerred.easely.api.controller.payload.RegisterPayload;
+import com.shepherdjerred.easely.api.controller.payload.LoginRequestPayload;
+import com.shepherdjerred.easely.api.controller.payload.LoginResponsePayload;
+import com.shepherdjerred.easely.api.controller.payload.RegisterRequestPayload;
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
@@ -36,9 +36,9 @@ public class UserRouter implements Router {
             log.debug("Attempting to login");
             response.type("application/json");
 
-            LoginPayload loginPayload = objectMapper.readValue(request.body(), LoginPayload.class);
+            LoginRequestPayload loginRequestPayload = objectMapper.readValue(request.body(), LoginRequestPayload.class);
 
-            if (!loginPayload.isValid()) {
+            if (!loginRequestPayload.isValid()) {
                 response.status(400);
                 log.error("Payload not valid");
                 // TODO
@@ -47,7 +47,7 @@ public class UserRouter implements Router {
 
             User user;
             try {
-                user = userController.login(loginPayload.getEmail(), loginPayload.getPassword());
+                user = userController.login(loginRequestPayload.getEmail(), loginRequestPayload.getPassword());
             } catch (FailedLoginException e) {
                 log.error(e);
                 // TODO
@@ -58,11 +58,11 @@ public class UserRouter implements Router {
                 Algorithm algorithm = Algorithm.HMAC256(easelyConfig.getJwtSecret());
                 String token = JWT.create()
                         .withIssuer(easelyConfig.getJwtIssuer())
-                        .withClaim("email", loginPayload.getEmail())
+                        .withClaim("email", loginRequestPayload.getEmail())
                         .withClaim("uuid", String.valueOf(user.getUuid()))
                         .withClaim("easelUsername", user.getEaselUsername())
                         .sign(algorithm);
-                return new PostLoginPayload(token);
+                return new LoginResponsePayload(token);
             } catch (UnsupportedEncodingException | JWTCreationException exception) {
                 response.status(500);
                 return objectMapper.writeValueAsString(exception.getMessage());
@@ -72,24 +72,24 @@ public class UserRouter implements Router {
         post("/api/user/register", (request, response) -> {
             response.type("application/json");
 
-            RegisterPayload registerPayload = objectMapper.readValue(request.body(), RegisterPayload.class);
+            RegisterRequestPayload registerRequestPayload = objectMapper.readValue(request.body(), RegisterRequestPayload.class);
 
-            if (!registerPayload.isValid()) {
+            if (!registerRequestPayload.isValid()) {
                 response.status(400);
                 return "";
             }
 
-            User user = userController.register(registerPayload.getEmail(), registerPayload.getPassword(), registerPayload.getEaselUsername(), registerPayload.getEaselPassword());
+            User user = userController.register(registerRequestPayload.getEmail(), registerRequestPayload.getPassword(), registerRequestPayload.getEaselUsername(), registerRequestPayload.getEaselPassword());
 
             try {
                 Algorithm algorithm = Algorithm.HMAC256(easelyConfig.getJwtSecret());
                 String token = JWT.create()
                         .withIssuer(easelyConfig.getJwtIssuer())
-                        .withClaim("email", registerPayload.getEmail())
+                        .withClaim("email", registerRequestPayload.getEmail())
                         .withClaim("uuid", String.valueOf(user.getUuid()))
                         .withClaim("easelUsername", user.getEaselUsername())
                         .sign(algorithm);
-                return objectMapper.writeValueAsString(new PostLoginPayload(token));
+                return objectMapper.writeValueAsString(new LoginResponsePayload(token));
             } catch (UnsupportedEncodingException | JWTCreationException exception) {
                 response.status(500);
                 return objectMapper.writeValueAsString(exception.getMessage());
