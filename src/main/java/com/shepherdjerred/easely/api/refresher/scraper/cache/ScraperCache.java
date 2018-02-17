@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.cache;
+package com.shepherdjerred.easely.api.refresher.scraper.cache;
 
 import com.shepherdjerred.easely.api.model.CourseGrade;
 import com.shepherdjerred.easely.api.model.User;

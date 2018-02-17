@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.router.filters;
+package com.shepherdjerred.easely.api.http.router.filters;
 
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;

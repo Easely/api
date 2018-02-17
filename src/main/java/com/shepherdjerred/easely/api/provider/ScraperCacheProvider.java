@@ -1,6 +1,6 @@
 package com.shepherdjerred.easely.api.provider;
 
-import com.shepherdjerred.easely.api.cache.ScraperCache;
+import com.shepherdjerred.easely.api.refresher.scraper.cache.ScraperCache;
 import com.shepherdjerred.easely.api.model.*;
 import com.shepherdjerred.easely.api.refresher.scraper.objects.*;
 import lombok.extern.log4j.Log4j2;

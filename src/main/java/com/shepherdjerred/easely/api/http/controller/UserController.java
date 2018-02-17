@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.controller;
+package com.shepherdjerred.easely.api.http.controller;
 
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.storage.Store;

@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.controller.payload;
+package com.shepherdjerred.easely.api.http.controller.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

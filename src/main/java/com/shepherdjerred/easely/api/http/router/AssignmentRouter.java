@@ -1,32 +1,32 @@
-package com.shepherdjerred.easely.api.router;
+package com.shepherdjerred.easely.api.http.router;
 
 import com.shepherdjerred.easely.api.config.EaselyConfig;
-import com.shepherdjerred.easely.api.controller.CourseController;
+import com.shepherdjerred.easely.api.http.controller.AssignmentController;
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.provider.Provider;
-import com.shepherdjerred.easely.api.router.filters.AuthenticationFilter;
+import com.shepherdjerred.easely.api.http.router.filters.AuthenticationFilter;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
 
 import static spark.Spark.*;
 
 @Log4j2
-public class CourseRouter implements Router {
+public class AssignmentRouter implements Router {
 
-    private CourseController courseController;
+    private AssignmentController assignmentController;
     private Store store;
     private EaselyConfig easelyConfig;
 
-    public CourseRouter(Store store, Provider provider, EaselyConfig easelyConfig) {
+    public AssignmentRouter(Store store, Provider provider, EaselyConfig easelyConfig) {
         this.store = store;
-        courseController = new CourseController(provider);
+        assignmentController = new AssignmentController(provider);
         this.easelyConfig = easelyConfig;
     }
 
     public void setupRoutes() {
-        before("/api/courses", new AuthenticationFilter(store, easelyConfig));
+        before("/api/assignments", new AuthenticationFilter(store, easelyConfig));
 
-        get("/api/courses", (request, response) -> {
+        get("/api/assignments", (request, response) -> {
             response.type("application/json");
 
             User user;
@@ -39,7 +39,7 @@ public class CourseRouter implements Router {
                 return "";
             }
 
-            return courseController.getCoursesForUser(user);
+            return assignmentController.getAssignmentsForUser(user);
         }, new JsonTransformer());
     }
 

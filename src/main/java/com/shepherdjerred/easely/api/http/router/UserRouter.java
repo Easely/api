@@ -1,14 +1,14 @@
-package com.shepherdjerred.easely.api.router;
+package com.shepherdjerred.easely.api.http.router;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
-import com.shepherdjerred.easely.api.controller.UserController;
-import com.shepherdjerred.easely.api.controller.payload.LoginRequestPayload;
-import com.shepherdjerred.easely.api.controller.payload.LoginResponsePayload;
-import com.shepherdjerred.easely.api.controller.payload.RegisterRequestPayload;
+import com.shepherdjerred.easely.api.http.controller.UserController;
+import com.shepherdjerred.easely.api.http.controller.payload.LoginRequestPayload;
+import com.shepherdjerred.easely.api.http.controller.payload.LoginResponsePayload;
+import com.shepherdjerred.easely.api.http.controller.payload.RegisterRequestPayload;
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;

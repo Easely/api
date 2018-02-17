@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.router;
+package com.shepherdjerred.easely.api.http.router;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import spark.ResponseTransformer;

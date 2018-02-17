@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.router.filters;
+package com.shepherdjerred.easely.api.http.router.filters;
 
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import lombok.AllArgsConstructor;

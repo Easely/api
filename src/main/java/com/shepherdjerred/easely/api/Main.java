@@ -1,14 +1,14 @@
 package com.shepherdjerred.easely.api;
 
-import com.shepherdjerred.easely.api.cache.ScraperCache;
-import com.shepherdjerred.easely.api.cache.RedisScraperCache;
+import com.shepherdjerred.easely.api.refresher.scraper.cache.ScraperCache;
+import com.shepherdjerred.easely.api.refresher.scraper.cache.RedisScraperCache;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
 import com.shepherdjerred.easely.api.provider.ScraperCacheProvider;
 import com.shepherdjerred.easely.api.provider.Provider;
-import com.shepherdjerred.easely.api.router.AssignmentRouter;
-import com.shepherdjerred.easely.api.router.CourseRouter;
-import com.shepherdjerred.easely.api.router.UserRouter;
+import com.shepherdjerred.easely.api.http.router.AssignmentRouter;
+import com.shepherdjerred.easely.api.http.router.CourseRouter;
+import com.shepherdjerred.easely.api.http.router.UserRouter;
 import com.shepherdjerred.easely.api.storage.Store;
 import com.shepherdjerred.easely.api.storage.database.mysql.HikariMysqlDatabase;
 import com.shepherdjerred.easely.api.storage.database.mysql.MysqlStore;
