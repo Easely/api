@@ -11,11 +11,11 @@ import java.util.Collection;
 // TODO don't create the full objects here. this class should only load from a cache
 
 @Log4j2
-public class CacheProvider implements Provider {
+public class ScraperCacheProvider implements Provider {
 
     private ScraperCache scraperCache;
 
-    public CacheProvider(ScraperCache scraperCache) {
+    public ScraperCacheProvider(ScraperCache scraperCache) {
         this.scraperCache = scraperCache;
     }
 

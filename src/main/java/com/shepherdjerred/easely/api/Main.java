@@ -4,7 +4,7 @@ import com.shepherdjerred.easely.api.cache.ScraperCache;
 import com.shepherdjerred.easely.api.cache.RedisScraperCache;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
-import com.shepherdjerred.easely.api.provider.CacheProvider;
+import com.shepherdjerred.easely.api.provider.ScraperCacheProvider;
 import com.shepherdjerred.easely.api.provider.Provider;
 import com.shepherdjerred.easely.api.router.AssignmentRouter;
 import com.shepherdjerred.easely.api.router.CourseRouter;
@@ -22,29 +22,19 @@ public class Main {
     private static EaselyConfig easelyConfig;
     private static Store store;
     private static Provider provider;
-    private static ScraperCache scraperCache;
 
     public static void main(String args[]) {
-        setupConfig();
-        scraperCache = new RedisScraperCache(easelyConfig);
-        setupMysqlStore();
-        setupProvider();
-        setupRoutes();
-    }
-
-    private static void setupConfig() {
         easelyConfig = new EnvVarEaselyConfig();
+        setupMysqlStore();
+        ScraperCache scraperCache = new RedisScraperCache(easelyConfig);
+        provider = new ScraperCacheProvider(scraperCache);
+        setupRoutes();
     }
 
     private static void setupMysqlStore() {
         HikariMysqlDatabase hikariMysqlDatabase = new HikariMysqlDatabase(easelyConfig.getHikariConfig());
         hikariMysqlDatabase.migrate();
-
         store = new MysqlStore(hikariMysqlDatabase);
-    }
-
-    private static void setupProvider() {
-        provider = new CacheProvider(scraperCache);
     }
 
     private static void setupRoutes() {
