@@ -3,7 +3,7 @@ package com.shepherdjerred.easely.api.http.router;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.http.controller.AssignmentController;
 import com.shepherdjerred.easely.api.model.User;
-import com.shepherdjerred.easely.api.loader.Loader;
+import com.shepherdjerred.easely.api.provider.loader.Loader;
 import com.shepherdjerred.easely.api.http.router.filters.AuthenticationFilter;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;

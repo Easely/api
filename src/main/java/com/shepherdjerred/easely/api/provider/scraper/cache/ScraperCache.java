@@ -1,8 +1,9 @@
-package com.shepherdjerred.easely.api.refresher.scraper.cache;
+package com.shepherdjerred.easely.api.provider.scraper.cache;
 
 import com.shepherdjerred.easely.api.model.CourseGrade;
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.refresher.scraper.objects.*;
+import com.shepherdjerred.easely.api.provider.scraper.objects.*;
 
 import java.util.Collection;
 import java.util.Map;

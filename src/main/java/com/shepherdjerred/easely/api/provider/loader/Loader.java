@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.loader;
+package com.shepherdjerred.easely.api.provider.loader;
 
 import com.shepherdjerred.easely.api.model.Assignment;
 import com.shepherdjerred.easely.api.model.Course;

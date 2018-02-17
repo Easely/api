@@ -2,7 +2,7 @@ package com.shepherdjerred.easely.api.http.controller;
 
 import com.shepherdjerred.easely.api.model.Assignment;
 import com.shepherdjerred.easely.api.model.User;
-import com.shepherdjerred.easely.api.loader.Loader;
+import com.shepherdjerred.easely.api.provider.loader.Loader;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 

@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.refresher.scraper.objects;
+package com.shepherdjerred.easely.api.provider.scraper.objects;
 
 import com.shepherdjerred.easely.api.model.AssignmentSubmission;
 import lombok.*;

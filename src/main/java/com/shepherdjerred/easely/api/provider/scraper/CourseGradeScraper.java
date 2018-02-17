@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.refresher.scraper;
+package com.shepherdjerred.easely.api.provider.scraper;
 
 import com.shepherdjerred.easely.api.model.Assignment;
 import com.shepherdjerred.easely.api.model.CourseGrade;

@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.refresher.scraper.cache;
+package com.shepherdjerred.easely.api.provider.scraper.cache;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -6,6 +6,7 @@ import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.model.CourseGrade;
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.refresher.scraper.objects.*;
+import com.shepherdjerred.easely.api.provider.scraper.objects.*;
 import lombok.extern.log4j.Log4j2;
 import org.redisson.Redisson;
 import org.redisson.api.RBucket;

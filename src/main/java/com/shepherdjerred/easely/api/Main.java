@@ -1,11 +1,11 @@
 package com.shepherdjerred.easely.api;
 
-import com.shepherdjerred.easely.api.refresher.scraper.cache.ScraperCache;
-import com.shepherdjerred.easely.api.refresher.scraper.cache.RedisScraperCache;
+import com.shepherdjerred.easely.api.provider.scraper.cache.ScraperCache;
+import com.shepherdjerred.easely.api.provider.scraper.cache.RedisScraperCache;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
-import com.shepherdjerred.easely.api.loader.ScraperCacheLoader;
-import com.shepherdjerred.easely.api.loader.Loader;
+import com.shepherdjerred.easely.api.provider.loader.ScraperCacheLoader;
+import com.shepherdjerred.easely.api.provider.loader.Loader;
 import com.shepherdjerred.easely.api.http.router.AssignmentRouter;
 import com.shepherdjerred.easely.api.http.router.CourseRouter;
 import com.shepherdjerred.easely.api.http.router.UserRouter;

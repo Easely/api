@@ -1,6 +1,6 @@
-package com.shepherdjerred.easely.api.refresher.scraper;
+package com.shepherdjerred.easely.api.provider.scraper;
 
-import com.shepherdjerred.easely.api.refresher.scraper.objects.AssignmentDetails;
+import com.shepherdjerred.easely.api.provider.scraper.objects.AssignmentDetails;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

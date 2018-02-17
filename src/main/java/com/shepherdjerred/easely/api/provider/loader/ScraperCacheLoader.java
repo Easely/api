@@ -1,24 +1,21 @@
-package com.shepherdjerred.easely.api.loader;
+package com.shepherdjerred.easely.api.provider.loader;
 
-import com.shepherdjerred.easely.api.refresher.scraper.cache.ScraperCache;
+import com.shepherdjerred.easely.api.provider.scraper.cache.ScraperCache;
 import com.shepherdjerred.easely.api.model.*;
-import com.shepherdjerred.easely.api.refresher.scraper.objects.*;
+import com.shepherdjerred.easely.api.provider.scraper.objects.*;
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-// TODO don't create the full objects here. this class should only load from a cache
-
 @Log4j2
+@AllArgsConstructor
 public class ScraperCacheLoader implements Loader {
 
     private ScraperCache scraperCache;
 
-    public ScraperCacheLoader(ScraperCache scraperCache) {
-        this.scraperCache = scraperCache;
-    }
-
+    // TODO we need to detect if we're missing objects here
     @Override
     public Collection<Course> getUserCourses(User user) {
         Collection<Course> courses = new ArrayList<>();
@@ -32,6 +29,7 @@ public class ScraperCacheLoader implements Loader {
         return courses;
     }
 
+    // TODO we need to detect if we're missing objects here
     @Override
     public Collection<Assignment> getUserAssignments(User user) {
         Collection<Assignment> assignments = new ArrayList<>();
