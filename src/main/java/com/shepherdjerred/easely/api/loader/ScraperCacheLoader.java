@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.provider;
+package com.shepherdjerred.easely.api.loader;
 
 import com.shepherdjerred.easely.api.refresher.scraper.cache.ScraperCache;
 import com.shepherdjerred.easely.api.model.*;
@@ -11,11 +11,11 @@ import java.util.Collection;
 // TODO don't create the full objects here. this class should only load from a cache
 
 @Log4j2
-public class ScraperCacheProvider implements Provider {
+public class ScraperCacheLoader implements Loader {
 
     private ScraperCache scraperCache;
 
-    public ScraperCacheProvider(ScraperCache scraperCache) {
+    public ScraperCacheLoader(ScraperCache scraperCache) {
         this.scraperCache = scraperCache;
     }
 

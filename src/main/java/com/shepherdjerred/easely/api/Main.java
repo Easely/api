@@ -4,8 +4,8 @@ import com.shepherdjerred.easely.api.refresher.scraper.cache.ScraperCache;
 import com.shepherdjerred.easely.api.refresher.scraper.cache.RedisScraperCache;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
-import com.shepherdjerred.easely.api.provider.ScraperCacheProvider;
-import com.shepherdjerred.easely.api.provider.Provider;
+import com.shepherdjerred.easely.api.loader.ScraperCacheLoader;
+import com.shepherdjerred.easely.api.loader.Loader;
 import com.shepherdjerred.easely.api.http.router.AssignmentRouter;
 import com.shepherdjerred.easely.api.http.router.CourseRouter;
 import com.shepherdjerred.easely.api.http.router.UserRouter;
@@ -21,13 +21,13 @@ public class Main {
 
     private static EaselyConfig easelyConfig;
     private static Store store;
-    private static Provider provider;
+    private static Loader loader;
 
     public static void main(String args[]) {
         easelyConfig = new EnvVarEaselyConfig();
         setupMysqlStore();
         ScraperCache scraperCache = new RedisScraperCache(easelyConfig);
-        provider = new ScraperCacheProvider(scraperCache);
+        loader = new ScraperCacheLoader(scraperCache);
         setupRoutes();
     }
 
@@ -42,8 +42,8 @@ public class Main {
 
         enableCors();
 
-        new AssignmentRouter(store, provider, easelyConfig).setupRoutes();
-        new CourseRouter(store, provider, easelyConfig).setupRoutes();
+        new AssignmentRouter(store, loader, easelyConfig).setupRoutes();
+        new CourseRouter(store, loader, easelyConfig).setupRoutes();
         new UserRouter(store, easelyConfig).setupRoutes();
     }
 
