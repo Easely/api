@@ -1,5 +1,6 @@
 package com.shepherdjerred.easely.api.router;
 
+import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.controller.CourseController;
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.provider.Provider;
@@ -14,14 +15,16 @@ public class CourseRouter implements Router {
 
     private CourseController courseController;
     private Store store;
+    private EaselyConfig easelyConfig;
 
-    public CourseRouter(Store store, Provider provider) {
+    public CourseRouter(Store store, Provider provider, EaselyConfig easelyConfig) {
         this.store = store;
         courseController = new CourseController(provider);
+        this.easelyConfig = easelyConfig;
     }
 
     public void setupRoutes() {
-        before("/api/courses", new AuthenticationFilter(store));
+        before("/api/courses", new AuthenticationFilter(store, easelyConfig));
 
         get("/api/courses", (request, response) -> {
             response.type("application/json");

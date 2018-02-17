@@ -1,6 +1,6 @@
 package com.shepherdjerred.easely.api.provider;
 
-import com.shepherdjerred.easely.api.cache.Cache;
+import com.shepherdjerred.easely.api.cache.ScraperCache;
 import com.shepherdjerred.easely.api.model.*;
 import com.shepherdjerred.easely.api.refresher.scraper.objects.*;
 import lombok.extern.log4j.Log4j2;
@@ -13,19 +13,19 @@ import java.util.Collection;
 @Log4j2
 public class CacheProvider implements Provider {
 
-    private Cache cache;
+    private ScraperCache scraperCache;
 
-    public CacheProvider(Cache cache) {
-        this.cache = cache;
+    public CacheProvider(ScraperCache scraperCache) {
+        this.scraperCache = scraperCache;
     }
 
     @Override
     public Collection<Course> getUserCourses(User user) {
         Collection<Course> courses = new ArrayList<>();
-        Collection<CourseCore> userCourseCores = cache.getUserCourseCores(user);
+        Collection<CourseCore> userCourseCores = scraperCache.getUserCourseCores(user);
         userCourseCores.forEach(courseCore -> {
-            CourseDetails courseDetails = cache.getCourseDetails(courseCore);
-            CourseGrade courseGrade = cache.getCourseGrade(user, courseCore);
+            CourseDetails courseDetails = scraperCache.getCourseDetails(courseCore);
+            CourseGrade courseGrade = scraperCache.getCourseGrade(user, courseCore);
             Course course = Course.fromSubObjects(courseCore, courseDetails, courseGrade);
             courses.add(course);
         });
@@ -35,16 +35,16 @@ public class CacheProvider implements Provider {
     @Override
     public Collection<Assignment> getUserAssignments(User user) {
         Collection<Assignment> assignments = new ArrayList<>();
-        Collection<CourseCore> userCourseCores = cache.getUserCourseCores(user);
+        Collection<CourseCore> userCourseCores = scraperCache.getUserCourseCores(user);
         userCourseCores.forEach(courseCore -> {
-            Collection<AssignmentCore> assignmentCores = cache.getCourseAssignmentCores(courseCore);
+            Collection<AssignmentCore> assignmentCores = scraperCache.getCourseAssignmentCores(courseCore);
             assignmentCores.forEach(assignmentCore -> {
-                AssignmentDetails assignmentDetails = cache.getAssignmentDetails(assignmentCore);
+                AssignmentDetails assignmentDetails = scraperCache.getAssignmentDetails(assignmentCore);
                 if (assignmentCore.getType() == Assignment.Type.NOTES) {
                     Assignment assignment = Assignment.fromSubObjects(assignmentCore, assignmentDetails);
                     assignments.add(assignment);
                 } else {
-                    AssignmentGrade assignmentGrade = cache.getAssignmentGrade(user, assignmentCore);
+                    AssignmentGrade assignmentGrade = scraperCache.getAssignmentGrade(user, assignmentCore);
                     GradedAssignment gradedAssignment = GradedAssignment.fromSubObjects(assignmentCore, assignmentDetails, assignmentGrade);
                     assignments.add(gradedAssignment);
                 }

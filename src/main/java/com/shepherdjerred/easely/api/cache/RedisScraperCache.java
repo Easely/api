@@ -21,11 +21,11 @@ import java.util.concurrent.TimeUnit;
 // TODO eliminate duplication of bucket definitions
 
 @Log4j2
-public class RedisCache implements Cache {
+public class RedisScraperCache implements ScraperCache {
 
     private RedissonClient redisson;
 
-    public RedisCache(EaselyConfig easelyConfig) {
+    public RedisScraperCache(EaselyConfig easelyConfig) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 

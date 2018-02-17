@@ -7,7 +7,7 @@ import com.shepherdjerred.easely.api.refresher.scraper.objects.*;
 import java.util.Collection;
 import java.util.Map;
 
-public interface Cache {
+public interface ScraperCache {
     void setUserEaselCookies(User user, Map<String, String> cookies);
 
     void setEaselUserId(User user, String userId);

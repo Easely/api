@@ -10,7 +10,7 @@ import com.shepherdjerred.easely.api.controller.payload.LoginPayload;
 import com.shepherdjerred.easely.api.controller.payload.PostLoginPayload;
 import com.shepherdjerred.easely.api.controller.payload.RegisterPayload;
 import com.shepherdjerred.easely.api.model.User;
-import lombok.AllArgsConstructor;
+import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
 
 import javax.security.auth.login.FailedLoginException;
@@ -19,12 +19,16 @@ import java.io.UnsupportedEncodingException;
 import static spark.Spark.post;
 
 @Log4j2
-@AllArgsConstructor
 public class UserRouter implements Router {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
     private UserController userController;
     private EaselyConfig easelyConfig;
+
+    public UserRouter(Store store, EaselyConfig easelyConfig) {
+        this.userController = new UserController(store);
+        this.easelyConfig = easelyConfig;
+    }
 
     @Override
     public void setupRoutes() {

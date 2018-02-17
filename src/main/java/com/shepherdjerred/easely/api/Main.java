@@ -1,7 +1,7 @@
 package com.shepherdjerred.easely.api;
 
-import com.shepherdjerred.easely.api.cache.Cache;
-import com.shepherdjerred.easely.api.cache.RedisCache;
+import com.shepherdjerred.easely.api.cache.ScraperCache;
+import com.shepherdjerred.easely.api.cache.RedisScraperCache;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
 import com.shepherdjerred.easely.api.provider.CacheProvider;
@@ -22,11 +22,11 @@ public class Main {
     private static EaselyConfig easelyConfig;
     private static Store store;
     private static Provider provider;
-    private static Cache cache;
+    private static ScraperCache scraperCache;
 
     public static void main(String args[]) {
         setupConfig();
-        cache = new RedisCache(easelyConfig);
+        scraperCache = new RedisScraperCache(easelyConfig);
         setupMysqlStore();
         setupProvider();
         setupRoutes();
@@ -44,7 +44,7 @@ public class Main {
     }
 
     private static void setupProvider() {
-        provider = new CacheProvider(cache);
+        provider = new CacheProvider(scraperCache);
     }
 
     private static void setupRoutes() {
@@ -52,14 +52,13 @@ public class Main {
 
         enableCors();
 
-        new AssignmentRouter(store, provider).setupRoutes();
-        new CourseRouter(store, provider).setupRoutes();
-        new UserRouter(store).setupRoutes();
+        new AssignmentRouter(store, provider, easelyConfig).setupRoutes();
+        new CourseRouter(store, provider, easelyConfig).setupRoutes();
+        new UserRouter(store, easelyConfig).setupRoutes();
     }
 
     private static void enableCors() {
         options("/*", (request, response) -> {
-
             String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
             if (accessControlRequestHeaders != null) {
                 response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
