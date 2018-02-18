@@ -90,14 +90,14 @@ public class CachedEaselScraper implements EaselScraper {
                 courseDetailsBucket.expire(7, TimeUnit.DAYS);
             }
 
-            RBucket<UserCourseGrade> courseGradeBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":course:" + courseCore.getId() + ":grade");
+            RBucket<UserCourseGrade> courseGradeBucket = redisson.getBucket("user:" + user.getUuid() + ":course:" + courseCore.getId() + ":grade");
             UserCourseGrade courseGrade;
             if (courseGradeBucket.isExists()) {
                 courseGrade = courseGradeBucket.get();
             } else {
                 Map<String, String> cookies = login(user);
 
-                RBucket<String> easelUserIdBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":id");
+                RBucket<String> easelUserIdBucket = redisson.getBucket("user:" + user.getUuid() + ":id");
                 String easelUserId;
 
                 if (easelUserIdBucket.isExists()) {
