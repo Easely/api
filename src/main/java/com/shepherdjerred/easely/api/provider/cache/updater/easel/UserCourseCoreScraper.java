@@ -1,6 +1,6 @@
-package com.shepherdjerred.easely.api.provider.scraper;
+package com.shepherdjerred.easely.api.provider.cache.updater.easel;
 
-import com.shepherdjerred.easely.api.provider.scraper.objects.CourseCore;
+import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.CourseCore;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -12,12 +12,12 @@ import java.util.Collection;
 import java.util.Map;
 
 @Log4j2
-public class UserCourseScraper {
+public class UserCourseCoreScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final String CLASS_LIST_URL = BASE_URL + "/cgi-bin/user";
 
-    public Collection<CourseCore> getCourses(Map<String, String> cookies) {
+    public static Collection<CourseCore> getCourses(Map<String, String> cookies) {
         Collection<CourseCore> courses = new ArrayList<>();
 
         log.debug("LOADING COURSES FOR USER");

@@ -7,7 +7,15 @@ import com.shepherdjerred.easely.api.model.User;
 import java.util.Collection;
 
 public interface Provider {
-    ProviderContentStatus<Collection<Course>> getUserCourses(User user);
+    Collection<Course> getUserCourses(User user);
 
-    ProviderContentStatus<Collection<Assignment>> getUserAssignments(User user);
+    Collection<Assignment> getUserAssignments(User user);
+
+    void updateUserCourses();
+
+    void updateUserAssignments();
+
+    void updateCourse();
+
+    void updateAssignment();
 }

@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.provider.scraper;
+package com.shepherdjerred.easely.api.provider.cache.updater.easel;
 
 import com.shepherdjerred.easely.api.model.Assignment;
 import com.shepherdjerred.easely.api.model.CourseGrade;
@@ -13,13 +13,13 @@ import java.util.EnumMap;
 import java.util.Map;
 
 @Log4j2
-public class CourseGradeScraper {
+public class UserCourseGradeScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final String CLASS_GRADES_URL = "/details.php?class_id=";
 
 
-    public CourseGrade loadCourseGrades(Map<String, String> cookies, String courseId, String userId) {
+    public static CourseGrade loadCourseGrades(Map<String, String> cookies, String courseId, String userId) {
         try {
             log.debug("LOADING GRADES FOR " + courseId);
 

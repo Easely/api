@@ -2,7 +2,7 @@ package com.shepherdjerred.easely.api.http.controller;
 
 import com.shepherdjerred.easely.api.model.Assignment;
 import com.shepherdjerred.easely.api.model.User;
-import com.shepherdjerred.easely.api.provider.loader.Loader;
+import com.shepherdjerred.easely.api.provider.Provider;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -12,9 +12,9 @@ import java.util.Collection;
 @AllArgsConstructor
 public class AssignmentController {
 
-    private Loader loader;
+    private Provider provider;
 
     public Collection<Assignment> getAssignmentsForUser(User user) {
-        return loader.getUserAssignments(user);
+        return provider.getUserAssignments(user);
     }
 }

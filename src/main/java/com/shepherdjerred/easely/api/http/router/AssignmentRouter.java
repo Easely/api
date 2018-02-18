@@ -2,9 +2,9 @@ package com.shepherdjerred.easely.api.http.router;
 
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.http.controller.AssignmentController;
-import com.shepherdjerred.easely.api.model.User;
-import com.shepherdjerred.easely.api.provider.loader.Loader;
 import com.shepherdjerred.easely.api.http.router.filters.AuthenticationFilter;
+import com.shepherdjerred.easely.api.model.User;
+import com.shepherdjerred.easely.api.provider.Provider;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
 
@@ -17,9 +17,9 @@ public class AssignmentRouter implements Router {
     private Store store;
     private EaselyConfig easelyConfig;
 
-    public AssignmentRouter(Store store, Loader loader, EaselyConfig easelyConfig) {
+    public AssignmentRouter(Store store, Provider provider, EaselyConfig easelyConfig) {
         this.store = store;
-        assignmentController = new AssignmentController(loader);
+        assignmentController = new AssignmentController(provider);
         this.easelyConfig = easelyConfig;
     }
 

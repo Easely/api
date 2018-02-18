@@ -1,8 +1,8 @@
-package com.shepherdjerred.easely.api.provider.scraper;
+package com.shepherdjerred.easely.api.provider.cache.updater.easel;
 
 import com.shepherdjerred.easely.api.model.Assignment;
 import com.shepherdjerred.easely.api.model.Course;
-import com.shepherdjerred.easely.api.provider.scraper.objects.AssignmentCore;
+import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.AssignmentCore;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
@@ -18,12 +18,12 @@ import java.util.Map;
 
 @AllArgsConstructor
 @Log4j2
-public class CourseAssignmentScraper {
+public class CourseAssignmentCoreScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public Collection<AssignmentCore> getAssignmentsForCourse(Map<String, String> cookies, Course course) {
+    public static Collection<AssignmentCore> getAssignmentsForCourse(Map<String, String> cookies, Course course) {
         Collection<AssignmentCore> assignments = new ArrayList<>();
 
         for (Assignment.Type type : Assignment.Type.values()) {
@@ -34,7 +34,7 @@ public class CourseAssignmentScraper {
         return assignments;
     }
 
-    private Collection<AssignmentCore> getAssignmentsOfTypeForCourse(Map<String,String> cookies, Course course, Assignment.Type type) {
+    private static Collection<AssignmentCore> getAssignmentsOfTypeForCourse(Map<String,String> cookies, Course course, Assignment.Type type) {
         Collection<AssignmentCore> assignments = new ArrayList<>();
 
         try {

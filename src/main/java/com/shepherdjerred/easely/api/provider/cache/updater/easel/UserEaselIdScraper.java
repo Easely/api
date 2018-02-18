@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.provider.scraper;
+package com.shepherdjerred.easely.api.provider.cache.updater.easel;
 
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.util.Map;
 
 @Log4j2
-public class UserIdScraper {
+public class UserEaselIdScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final String CLASS_LIST_URL = BASE_URL + "/cgi-bin/user";
 
-    public String getUserId(Map<String, String> cookies) {
+    public static String getUserId(Map<String, String> cookies) {
         log.debug("LOADING USER EASEL ID");
 
         try {

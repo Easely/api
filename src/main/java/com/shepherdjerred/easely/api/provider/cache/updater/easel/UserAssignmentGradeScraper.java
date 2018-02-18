@@ -1,7 +1,7 @@
-package com.shepherdjerred.easely.api.provider.scraper;
+package com.shepherdjerred.easely.api.provider.cache.updater.easel;
 
 import com.shepherdjerred.easely.api.model.AssignmentSubmission;
-import com.shepherdjerred.easely.api.provider.scraper.objects.AssignmentGrade;
+import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.AssignmentGrade;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -13,13 +13,13 @@ import java.util.Collection;
 import java.util.Map;
 
 @Log4j2
-public class AssignmentGradeScraper {
+public class UserAssignmentGradeScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final String ASSIGNMENT_INFO_URL = "/cgi-bin/info?id=";
     private static final String ASSIGNMENT_SUBMIT_URL = "/cgi-bin/submit?id=";
 
-    public AssignmentGrade loadAssignmentGrade(Map<String, String> cookies, String assignmentId) {
+    public static AssignmentGrade loadAssignmentGrade(Map<String, String> cookies, String assignmentId) {
         try {
 
 

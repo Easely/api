@@ -88,7 +88,7 @@ fabric.properties
 hs_err_pid*
 
 ### Windows ###
-# Windows thumbnail scraperCache files
+# Windows thumbnail cache files
 Thumbs.db
 ehthumbs.db
 ehthumbs_vista.db

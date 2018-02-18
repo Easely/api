@@ -1,9 +1,8 @@
-package com.shepherdjerred.easely.api.provider.scraper.cache;
+package com.shepherdjerred.easely.api.provider.cache;
 
 import com.shepherdjerred.easely.api.model.CourseGrade;
 import com.shepherdjerred.easely.api.model.User;
-import com.shepherdjerred.easely.api.refresher.scraper.objects.*;
-import com.shepherdjerred.easely.api.provider.scraper.objects.*;
+import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.*;
 
 import java.util.Collection;
 import java.util.Map;
@@ -41,19 +40,19 @@ public interface ScraperCache {
 
     boolean hasUserAssignmentGrade(User user, AssignmentCore assignmentCore);
 
-    Map<String, String> getUserEaselCookies(User user);
+    Map<String, String> getUserEaselCookies(User user) throws CacheException;
 
-    String getEaselUserId(User user);
+    String getEaselUserId(User user) throws CacheException;
 
-    Collection<CourseCore> getUserCourseCores(User user);
+    Collection<CourseCore> getUserCourseCores(User user) throws CacheException;
 
-    CourseDetails getCourseDetails(CourseCore courseCore);
+    CourseDetails getCourseDetails(CourseCore courseCore) throws CacheException;
 
-    CourseGrade getCourseGrade(User user, CourseCore courseCore);
+    CourseGrade getCourseGrade(User user, CourseCore courseCore) throws CacheException;
 
-    Collection<AssignmentCore> getCourseAssignmentCores(CourseCore courseCore);
+    Collection<AssignmentCore> getCourseAssignmentCores(CourseCore courseCore) throws CacheException;
 
-    AssignmentDetails getAssignmentDetails(AssignmentCore assignmentCore);
+    AssignmentDetails getAssignmentDetails(AssignmentCore assignmentCore) throws CacheException;
 
-    AssignmentGrade getAssignmentGrade(User user, AssignmentCore assignmentCore);
+    AssignmentGrade getAssignmentGrade(User user, AssignmentCore assignmentCore) throws CacheException;
 }

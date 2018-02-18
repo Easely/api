@@ -1,7 +1,7 @@
 package com.shepherdjerred.easely.api.model;
 
-import com.shepherdjerred.easely.api.provider.scraper.objects.AssignmentCore;
-import com.shepherdjerred.easely.api.provider.scraper.objects.AssignmentDetails;
+import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.AssignmentCore;
+import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.AssignmentDetails;
 import lombok.*;
 
 import java.time.LocalDateTime;

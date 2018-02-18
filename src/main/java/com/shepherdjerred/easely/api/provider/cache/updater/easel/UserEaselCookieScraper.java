@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.provider.scraper;
+package com.shepherdjerred.easely.api.provider.cache.updater.easel;
 
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
@@ -8,13 +8,13 @@ import java.io.IOException;
 import java.util.Map;
 
 @Log4j2
-public class CookieScraper {
+public class UserEaselCookieScraper {
 
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final String LOGIN_URL = BASE_URL + "/cgi-bin/proc_login";
 
     // TODO check that getCookies was successful
-    public Map<String, String> getCookies(String username, String password) {
+    public static Map<String, String> getCookies(String username, String password) {
         log.debug("Logging into EASEL");
         try {
             Connection.Response loginResponse = Jsoup.connect(LOGIN_URL)

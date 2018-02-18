@@ -1,12 +1,11 @@
-package com.shepherdjerred.easely.api.provider.scraper.cache;
+package com.shepherdjerred.easely.api.provider.cache;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.model.CourseGrade;
 import com.shepherdjerred.easely.api.model.User;
-import com.shepherdjerred.easely.api.refresher.scraper.objects.*;
-import com.shepherdjerred.easely.api.provider.scraper.objects.*;
+import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.*;
 import lombok.extern.log4j.Log4j2;
 import org.redisson.Redisson;
 import org.redisson.api.RBucket;
@@ -18,8 +17,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-// TODO eliminate duplication of bucket definitions
 
 @Log4j2
 public class RedisScraperCache implements ScraperCache {
@@ -147,57 +144,81 @@ public class RedisScraperCache implements ScraperCache {
     }
 
     @Override
-    public Map<String, String> getUserEaselCookies(User user) {
+    public Map<String, String> getUserEaselCookies(User user) throws CacheException {
         RBucket<Map<String, String>> cookiesBucket = redisson.getBucket("user:" + user.getUuid() + ":cookies");
+        if (!cookiesBucket.isExists()) {
+            throw new CacheException();
+        }
         log.trace(cookiesBucket.get());
         return cookiesBucket.get();
     }
 
     @Override
-    public String getEaselUserId(User user) {
+    public String getEaselUserId(User user) throws CacheException {
         RBucket<String> easelUserIdBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":id");
+        if (!easelUserIdBucket.isExists()) {
+            throw new CacheException();
+        }
         log.trace(easelUserIdBucket.get());
         return easelUserIdBucket.get();
     }
 
     @Override
-    public Collection<CourseCore> getUserCourseCores(User user) {
+    public Collection<CourseCore> getUserCourseCores(User user) throws CacheException {
         RBucket<Collection<CourseCore>> userCoursesBucket = redisson.getBucket("user:" + user.getUuid() + ":courses");
+        if (!userCoursesBucket.isExists()) {
+            throw new CacheException();
+        }
         log.trace(userCoursesBucket.get());
         return userCoursesBucket.get();
     }
 
     @Override
-    public CourseDetails getCourseDetails(CourseCore courseCore) {
+    public CourseDetails getCourseDetails(CourseCore courseCore) throws CacheException {
         RBucket<CourseDetails> courseDetailsBucket = redisson.getBucket("course:details:" + courseCore.getId());
+        if (!courseDetailsBucket.isExists()) {
+            throw new CacheException();
+        }
         log.trace(courseDetailsBucket.get());
         return courseDetailsBucket.get();
     }
 
     @Override
-    public CourseGrade getCourseGrade(User user, CourseCore courseCore) {
+    public CourseGrade getCourseGrade(User user, CourseCore courseCore) throws CacheException {
         RBucket<CourseGrade> courseGradeBucket = redisson.getBucket("user:uuid:" + user.getUuid() + ":course:" + courseCore.getId() + ":grade");
+        if (!courseGradeBucket.isExists()) {
+            throw new CacheException();
+        }
         log.trace(courseGradeBucket.get());
         return courseGradeBucket.get();
     }
 
     @Override
-    public Collection<AssignmentCore> getCourseAssignmentCores(CourseCore courseCore) {
+    public Collection<AssignmentCore> getCourseAssignmentCores(CourseCore courseCore) throws CacheException {
         RBucket<Collection<AssignmentCore>> courseAssignmentsBucket = redisson.getBucket("course:" + courseCore.getId() + ":assignments");
+        if (!courseAssignmentsBucket.isExists()) {
+            throw new CacheException();
+        }
         log.trace(courseAssignmentsBucket.get());
         return courseAssignmentsBucket.get();
     }
 
     @Override
-    public AssignmentDetails getAssignmentDetails(AssignmentCore assignmentCore) {
+    public AssignmentDetails getAssignmentDetails(AssignmentCore assignmentCore) throws CacheException {
         RBucket<AssignmentDetails> assignmentDetailsBucket = redisson.getBucket("assignment:details:" + assignmentCore.getId());
+        if (!assignmentDetailsBucket.isExists()) {
+            throw new CacheException();
+        }
         log.trace(assignmentDetailsBucket.get());
         return assignmentDetailsBucket.get();
     }
 
     @Override
-    public AssignmentGrade getAssignmentGrade(User user, AssignmentCore assignmentCore) {
+    public AssignmentGrade getAssignmentGrade(User user, AssignmentCore assignmentCore) throws CacheException {
         RBucket<AssignmentGrade> assignmentGradeBucket = redisson.getBucket("user:" + user.getUuid() + ":assignment:" + assignmentCore.getId() + ":grade");
+        if (!assignmentGradeBucket.isExists()) {
+            throw new CacheException();
+        }
         log.trace(assignmentGradeBucket.get());
         return assignmentGradeBucket.get();
     }

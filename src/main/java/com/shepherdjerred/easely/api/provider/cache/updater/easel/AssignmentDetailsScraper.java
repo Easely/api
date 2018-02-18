@@ -1,6 +1,6 @@
-package com.shepherdjerred.easely.api.provider.scraper;
+package com.shepherdjerred.easely.api.provider.cache.updater.easel;
 
-import com.shepherdjerred.easely.api.provider.scraper.objects.AssignmentDetails;
+import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.AssignmentDetails;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -21,7 +21,7 @@ public class AssignmentDetailsScraper {
     private static final String ASSIGNMENT_INFO_URL = "/cgi-bin/info?id=";
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("hh:mma");
 
-    public AssignmentDetails loadAssignmentDetails(Map<String, String> cookies, String assignmentId) {
+    public static AssignmentDetails loadAssignmentDetails(Map<String, String> cookies, String assignmentId) {
         try {
 
 
