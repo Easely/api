@@ -1,8 +1,9 @@
-package com.shepherdjerred.easely.api.easel.cache;
+package com.shepherdjerred.easely.api.easel.scraper.cache;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
+import com.shepherdjerred.easely.api.CacheException;
 import com.shepherdjerred.easely.api.easel.scraper.model.*;
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.model.UserCourseGrade;

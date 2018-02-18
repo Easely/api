@@ -2,6 +2,8 @@ package com.shepherdjerred.easely.api.easel.cache;
 
 // TODO eliminate duplication of bucket definitions
 
+import com.shepherdjerred.easely.api.CacheException;
+import com.shepherdjerred.easely.api.easel.scraper.cache.ScraperCache;
 import com.shepherdjerred.easely.api.easel.scraper.model.*;
 import com.shepherdjerred.easely.api.model.*;
 import lombok.AllArgsConstructor;

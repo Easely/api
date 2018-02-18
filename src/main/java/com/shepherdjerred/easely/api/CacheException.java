@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.easel.cache;
+package com.shepherdjerred.easely.api;
 
 public class CacheException extends Exception {
 }

@@ -1,6 +1,6 @@
 package com.shepherdjerred.easely.api.easel;
 
-import com.shepherdjerred.easely.api.easel.scraper.Scraper;
+import com.shepherdjerred.easely.api.easel.scraper.EaselScraper;
 import com.shepherdjerred.easely.api.model.Assignment;
 import com.shepherdjerred.easely.api.model.Course;
 import com.shepherdjerred.easely.api.model.User;
@@ -13,11 +13,11 @@ import java.util.Collection;
 @AllArgsConstructor
 public class ScraperEaselAdapter implements EaselAdapter {
 
-    private Scraper scraper;
+    private EaselScraper easelScraper;
 
     @Override
     public AdapterContent<Collection<Course>> getUserCourses(User user) {
-        Collection<Course> courses = scraper.scrapeUserCourse(user);
+        Collection<Course> courses = easelScraper.scrapeUserCourse(user);
         return new AdapterContent<>(true,
                 courses,
                 null,
@@ -28,7 +28,7 @@ public class ScraperEaselAdapter implements EaselAdapter {
 
     @Override
     public AdapterContent<Collection<Assignment>> getUserAssignments(User user) {
-        Collection<Assignment> assignments = scraper.scrapeUserAssignments(user);
+        Collection<Assignment> assignments = easelScraper.scrapeUserAssignments(user);
         return new AdapterContent<>(true,
                 assignments,
                 null,
