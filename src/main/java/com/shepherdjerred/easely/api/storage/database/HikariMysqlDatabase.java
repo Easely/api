@@ -1,6 +1,5 @@
-package com.shepherdjerred.easely.api.storage.database.mysql;
+package com.shepherdjerred.easely.api.storage.database;
 
-import com.shepherdjerred.easely.api.storage.database.Database;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.flywaydb.core.Flyway;

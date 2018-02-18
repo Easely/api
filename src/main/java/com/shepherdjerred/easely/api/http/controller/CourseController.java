@@ -15,7 +15,12 @@ public class CourseController {
     private EaselAdapter easelAdapter;
 
     public Collection<Course> getCoursesForUser(User user) {
-        return easelAdapter.getUserCourses(user);
+        if (easelAdapter.getUserCourses(user).isLoaded()) {
+            return easelAdapter.getUserCourses(user).getContent();
+        } else {
+            // TODO
+            return null;
+        }
     }
 
 }

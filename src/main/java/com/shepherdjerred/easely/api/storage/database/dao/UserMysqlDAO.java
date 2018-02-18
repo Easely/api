@@ -1,7 +1,6 @@
-package com.shepherdjerred.easely.api.storage.database.mysql;
+package com.shepherdjerred.easely.api.storage.database.dao;
 
 import com.shepherdjerred.easely.api.model.User;
-import com.shepherdjerred.easely.api.storage.database.dao.UserDAO;
 import org.codejargon.fluentjdbc.api.FluentJdbc;
 import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;
 import org.codejargon.fluentjdbc.api.query.Mapper;
@@ -75,5 +74,6 @@ public class UserMysqlDAO implements UserDAO {
     public void update(User type) {
         // TODO
     }
+
 
 }

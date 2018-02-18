@@ -1,9 +1,9 @@
-package com.shepherdjerred.easely.api.storage.database.mysql;
+package com.shepherdjerred.easely.api.storage;
 
 import com.shepherdjerred.easely.api.model.User;
-import com.shepherdjerred.easely.api.storage.Store;
 import com.shepherdjerred.easely.api.storage.database.Database;
 import com.shepherdjerred.easely.api.storage.database.dao.UserDAO;
+import com.shepherdjerred.easely.api.storage.database.dao.UserMysqlDAO;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 

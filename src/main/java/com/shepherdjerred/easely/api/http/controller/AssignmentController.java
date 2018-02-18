@@ -15,6 +15,11 @@ public class AssignmentController {
     private EaselAdapter easelAdapter;
 
     public Collection<Assignment> getAssignmentsForUser(User user) {
-        return easelAdapter.getUserAssignments(user);
+        if (easelAdapter.getUserAssignments(user).isLoaded()) {
+            return easelAdapter.getUserAssignments(user).getContent();
+        } else {
+            // TODO
+            return null;
+        }
     }
 }
