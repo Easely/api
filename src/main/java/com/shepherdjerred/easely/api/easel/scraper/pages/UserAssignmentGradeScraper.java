@@ -1,7 +1,7 @@
-package com.shepherdjerred.easely.api.provider.cache.updater.easel;
+package com.shepherdjerred.easely.api.easel.scraper.pages;
 
 import com.shepherdjerred.easely.api.model.AssignmentSubmission;
-import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.AssignmentGrade;
+import com.shepherdjerred.easely.api.easel.scraper.model.AssignmentGrade;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

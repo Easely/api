@@ -1,7 +1,7 @@
 package com.shepherdjerred.easely.api.model;
 
-import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.CourseCore;
-import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.CourseDetails;
+import com.shepherdjerred.easely.api.easel.scraper.model.CourseCore;
+import com.shepherdjerred.easely.api.easel.scraper.model.CourseDetails;
 import lombok.*;
 
 import java.util.Map;

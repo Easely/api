@@ -1,8 +1,8 @@
 package com.shepherdjerred.easely.api.model;
 
-import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.AssignmentCore;
-import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.AssignmentDetails;
-import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.AssignmentGrade;
+import com.shepherdjerred.easely.api.easel.scraper.model.AssignmentCore;
+import com.shepherdjerred.easely.api.easel.scraper.model.AssignmentDetails;
+import com.shepherdjerred.easely.api.easel.scraper.model.AssignmentGrade;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

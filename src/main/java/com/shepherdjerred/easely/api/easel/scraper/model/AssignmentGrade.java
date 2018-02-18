@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.provider.cache.updater.easel.model;
+package com.shepherdjerred.easely.api.easel.scraper.model;
 
 import com.shepherdjerred.easely.api.model.AssignmentSubmission;
 import lombok.*;

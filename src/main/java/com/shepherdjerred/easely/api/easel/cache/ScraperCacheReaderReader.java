@@ -1,8 +1,10 @@
-package com.shepherdjerred.easely.api.provider.cache;
+package com.shepherdjerred.easely.api.easel.cache;
 
-import com.shepherdjerred.easely.api.config.EaselyConfig;
+import com.shepherdjerred.easely.api.CacheException;
+import com.shepherdjerred.easely.api.easel.scraper.cache.ScraperCache;
+import com.shepherdjerred.easely.api.easel.scraper.model.*;
 import com.shepherdjerred.easely.api.model.*;
-import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.*;
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;
@@ -11,11 +13,10 @@ import java.util.Collection;
 // TODO eliminate duplication of bucket definitions
 
 @Log4j2
-public class RedisCache extends RedisScraperCache implements Cache {
+@AllArgsConstructor
+public class ScraperCacheReaderReader implements CacheReader {
 
-    public RedisCache(EaselyConfig easelyConfig) {
-        super(easelyConfig);
-    }
+    private ScraperCache scraperCache;
 
     // TODO do this better
     @Override
@@ -43,7 +44,7 @@ public class RedisCache extends RedisScraperCache implements Cache {
     public Collection<Course> getUserCourses(User user) throws CacheException {
         Collection<Course> courses = new ArrayList<>();
 
-        Collection<CourseCore> userCourseCores = getUserCourseCores(user);
+        Collection<CourseCore> userCourseCores = scraperCache.getUserCourseCores(user);
         for (CourseCore courseCore : userCourseCores) {
             Course course = loadFullUserCourse(user, courseCore);
             courses.add(course);
@@ -56,9 +57,9 @@ public class RedisCache extends RedisScraperCache implements Cache {
     public Collection<Assignment> getUserAssignments(User user) throws CacheException {
         Collection<Assignment> assignments = new ArrayList<>();
 
-        Collection<CourseCore> userCourseCores = getUserCourseCores(user);
+        Collection<CourseCore> userCourseCores = scraperCache.getUserCourseCores(user);
         for (CourseCore courseCore : userCourseCores) {
-            Collection<AssignmentCore> assignmentCores = getCourseAssignmentCores(courseCore);
+            Collection<AssignmentCore> assignmentCores = scraperCache.getCourseAssignmentCores(courseCore);
             for (AssignmentCore assignmentCore : assignmentCores) {
                 Assignment assignment = loadFullUserAssignment(user, assignmentCore);
                 assignments.add(assignment);
@@ -69,11 +70,11 @@ public class RedisCache extends RedisScraperCache implements Cache {
     }
 
     private CourseDetails loadCourseDetails(CourseCore courseCore) throws CacheException {
-        return getCourseDetails(courseCore);
+        return scraperCache.getCourseDetails(courseCore);
     }
 
     private CourseGrade loadUserCourseGrade(User user, CourseCore courseCore) throws CacheException {
-        return getCourseGrade(user, courseCore);
+        return scraperCache.getCourseGrade(user, courseCore);
     }
 
     private Course loadFullUserCourse(User user, CourseCore courseCore) throws CacheException {
@@ -83,11 +84,11 @@ public class RedisCache extends RedisScraperCache implements Cache {
     }
 
     private AssignmentDetails loadAssignmentDetails(AssignmentCore assignmentCore) throws CacheException {
-        return getAssignmentDetails(assignmentCore);
+        return scraperCache.getAssignmentDetails(assignmentCore);
     }
 
     private AssignmentGrade loadAssignmentGrade(User user, AssignmentCore assignmentCore) throws CacheException {
-        return getAssignmentGrade(user, assignmentCore);
+        return scraperCache.getAssignmentGrade(user, assignmentCore);
     }
 
     private Assignment loadFullUserAssignment(User user, AssignmentCore assignmentCore) throws CacheException {

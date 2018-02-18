@@ -1,8 +1,9 @@
-package com.shepherdjerred.easely.api.provider.cache;
+package com.shepherdjerred.easely.api.easel.scraper.cache;
 
+import com.shepherdjerred.easely.api.CacheException;
+import com.shepherdjerred.easely.api.easel.scraper.model.*;
 import com.shepherdjerred.easely.api.model.CourseGrade;
 import com.shepherdjerred.easely.api.model.User;
-import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.*;
 
 import java.util.Collection;
 import java.util.Map;

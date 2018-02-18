@@ -4,7 +4,7 @@ import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.http.controller.CourseController;
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.http.router.filters.AuthenticationFilter;
-import com.shepherdjerred.easely.api.provider.Provider;
+import com.shepherdjerred.easely.api.easel.EaselAdapter;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
 
@@ -17,9 +17,9 @@ public class CourseRouter implements Router {
     private Store store;
     private EaselyConfig easelyConfig;
 
-    public CourseRouter(Store store, Provider provider, EaselyConfig easelyConfig) {
+    public CourseRouter(Store store, EaselAdapter easelAdapter, EaselyConfig easelyConfig) {
         this.store = store;
-        courseController = new CourseController(provider);
+        courseController = new CourseController(easelAdapter);
         this.easelyConfig = easelyConfig;
     }
 

@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.provider.cache.updater.easel;
+package com.shepherdjerred.easely.api.easel.scraper.pages;
 
 import com.shepherdjerred.easely.api.model.Assignment;
 import com.shepherdjerred.easely.api.model.CourseGrade;

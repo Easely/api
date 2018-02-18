@@ -2,14 +2,15 @@ package com.shepherdjerred.easely.api;
 
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
+import com.shepherdjerred.easely.api.easel.cache.EaselCacheEaselAdapter;
+import com.shepherdjerred.easely.api.easel.cache.DataCacheUpdater;
+import com.shepherdjerred.easely.api.easel.cache.*;
+import com.shepherdjerred.easely.api.easel.scraper.cache.CachedScraper;
 import com.shepherdjerred.easely.api.http.router.AssignmentRouter;
 import com.shepherdjerred.easely.api.http.router.CourseRouter;
 import com.shepherdjerred.easely.api.http.router.UserRouter;
-import com.shepherdjerred.easely.api.provider.Provider;
-import com.shepherdjerred.easely.api.provider.cache.CacheProvider;
-import com.shepherdjerred.easely.api.provider.cache.RedisCache;
-import com.shepherdjerred.easely.api.provider.cache.Cache;
-import com.shepherdjerred.easely.api.storage.Store;
+import com.shepherdjerred.easely.api.easel.EaselAdapter;
+import com.shepherdjerred.easely.api.easel.cache.CacheReader;
 import com.shepherdjerred.easely.api.storage.database.mysql.HikariMysqlDatabase;
 import com.shepherdjerred.easely.api.storage.database.mysql.MysqlStore;
 import lombok.extern.log4j.Log4j2;
@@ -20,14 +21,15 @@ import static spark.Spark.*;
 public class Main {
 
     private static EaselyConfig easelyConfig;
-    private static Store store;
-    private static Provider provider;
+    private static com.shepherdjerred.easely.api.storage.Store store;
+    private static EaselAdapter easelAdapter;
 
     public static void main(String args[]) {
         easelyConfig = new EnvVarEaselyConfig();
         setupMysqlStore();
-        Cache cache = new RedisCache(easelyConfig);
-        provider = new CacheProvider(cache);
+        CacheReader cacheReader = new ScraperCacheReaderReader(easelyConfig);
+        DataCacheUpdater dataCacheUpdater = new ScraperEaselCacheUpdater(new CachedScraper(), cacheReader);
+        easelAdapter = new EaselCacheEaselAdapter(cacheReader, dataCacheUpdater);
         setupRoutes();
     }
 
@@ -42,8 +44,8 @@ public class Main {
 
         enableCors();
 
-        new AssignmentRouter(store, provider, easelyConfig).setupRoutes();
-        new CourseRouter(store, provider, easelyConfig).setupRoutes();
+        new AssignmentRouter(store, easelAdapter, easelyConfig).setupRoutes();
+        new CourseRouter(store, easelAdapter, easelyConfig).setupRoutes();
         new UserRouter(store, easelyConfig).setupRoutes();
     }
 

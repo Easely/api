@@ -1,13 +1,14 @@
-package com.shepherdjerred.easely.api.provider.cache.updater;
+package com.shepherdjerred.easely.api.easel.scraper.cache;
 
+import com.shepherdjerred.easely.api.easel.scraper.Scraper;
+import com.shepherdjerred.easely.api.easel.scraper.model.*;
 import com.shepherdjerred.easely.api.model.CourseGrade;
 import com.shepherdjerred.easely.api.model.User;
-import com.shepherdjerred.easely.api.provider.cache.updater.easel.model.*;
 
 import java.util.Collection;
 import java.util.Map;
 
-public class CachedCookieScraper implements Scraper {
+public class CachedScraper implements Scraper {
     @Override
     public Map<String, String> getUserEaselCookies(User user) {
         return null;
