@@ -10,8 +10,4 @@ public interface EaselAdapter {
     Collection<Course> getUserCourses(User user);
 
     Collection<Assignment> getUserAssignments(User user);
-
-    void updateUserCourses(User user);
-
-    void updateUserAssignments(User user);
 }

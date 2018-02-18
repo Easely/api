@@ -18,12 +18,11 @@ public class UserCourseCoreScraper {
     private static final String CLASS_LIST_URL = BASE_URL + "/cgi-bin/user";
 
     public static Collection<CourseCore> getCourses(Map<String, String> cookies) {
+        log.debug("Loading courses for user");
+
         Collection<CourseCore> courses = new ArrayList<>();
 
-        log.debug("LOADING COURSES FOR USER");
-
         try {
-
             // Load the page with classes
             Connection.Response homePage = Jsoup.connect(CLASS_LIST_URL)
                     .cookies(cookies)

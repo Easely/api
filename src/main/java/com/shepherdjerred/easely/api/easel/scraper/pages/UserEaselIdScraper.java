@@ -15,10 +15,9 @@ public class UserEaselIdScraper {
     private static final String CLASS_LIST_URL = BASE_URL + "/cgi-bin/user";
 
     public static String getUserId(Map<String, String> cookies) {
-        log.debug("LOADING USER EASEL ID");
+        log.debug("Loading user EASEL ID");
 
         try {
-
             // Load the page with classes
             Connection.Response homePage = Jsoup.connect(CLASS_LIST_URL)
                     .cookies(cookies)

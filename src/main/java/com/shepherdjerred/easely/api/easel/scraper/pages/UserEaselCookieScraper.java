@@ -15,7 +15,7 @@ public class UserEaselCookieScraper {
 
     // TODO check that getCookies was successful
     public static Map<String, String> getCookies(String username, String password) {
-        log.debug("Logging into EASEL");
+        log.debug("Logging into EASEL for " + username);
         try {
             Connection.Response loginResponse = Jsoup.connect(LOGIN_URL)
                     .data("user", username)

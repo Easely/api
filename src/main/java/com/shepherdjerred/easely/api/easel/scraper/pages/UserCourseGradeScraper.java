@@ -1,7 +1,7 @@
 package com.shepherdjerred.easely.api.easel.scraper.pages;
 
 import com.shepherdjerred.easely.api.model.Assignment;
-import com.shepherdjerred.easely.api.model.CourseGrade;
+import com.shepherdjerred.easely.api.model.UserCourseGrade;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -19,10 +19,10 @@ public class UserCourseGradeScraper {
     private static final String CLASS_GRADES_URL = "/details.php?class_id=";
 
 
-    public static CourseGrade loadCourseGrades(Map<String, String> cookies, String courseId, String userId) {
-        try {
-            log.debug("LOADING GRADES FOR " + courseId);
+    public static UserCourseGrade loadCourseGrades(Map<String, String> cookies, String courseId, String userId) {
+        log.debug("Loading course grade for the course " + courseId + " and user " + userId);
 
+        try {
             // Load the page with classes
             Connection.Response classGradesUrl = Jsoup.connect(BASE_URL + CLASS_GRADES_URL + courseId + "&sid=" + userId)
                     .cookies(cookies)
@@ -59,7 +59,7 @@ public class UserCourseGradeScraper {
             String averageString = averageElement.text().replace("%", "");
             double average = Double.valueOf(averageString);
 
-            CourseGrade courseGrade = new CourseGrade(
+            UserCourseGrade userCourseGrade = new UserCourseGrade(
                     assignmentWeights.get(Assignment.Type.HOMEWORK),
                     assignmentWeights.get(Assignment.Type.PROJECT),
                     assignmentWeights.get(Assignment.Type.EXAM),
@@ -67,7 +67,7 @@ public class UserCourseGradeScraper {
                     average
             );
 
-            return courseGrade;
+            return userCourseGrade;
 
         } catch (IOException e) {
             e.printStackTrace();

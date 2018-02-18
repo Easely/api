@@ -22,11 +22,8 @@ public class AssignmentDetailsScraper {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("hh:mma");
 
     public static AssignmentDetails loadAssignmentDetails(Map<String, String> cookies, String assignmentId) {
+        log.debug("Loading assignment details for " + assignmentId);
         try {
-
-
-            log.debug("LOADING DETAILS FOR " + assignmentId);
-
             Connection.Response assignmentInfoUrl = Jsoup.connect(BASE_URL + ASSIGNMENT_INFO_URL + assignmentId)
                     .cookies(cookies)
                     .method(Connection.Method.GET)
@@ -63,7 +60,6 @@ public class AssignmentDetailsScraper {
 
         } catch (IOException e) {
             e.printStackTrace();
-
         }
         return null;
     }

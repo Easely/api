@@ -24,6 +24,8 @@ public class CourseAssignmentCoreScraper {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static Collection<AssignmentCore> getAssignmentsForCourse(Map<String, String> cookies, Course course) {
+        log.debug("Loading assignments for the course " + course.getId());
+
         Collection<AssignmentCore> assignments = new ArrayList<>();
 
         for (Assignment.Type type : Assignment.Type.values()) {

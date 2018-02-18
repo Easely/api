@@ -17,11 +17,8 @@ public class CourseDetailsScraper {
     private static final String CLASS_DETAILS_URL = "/cgi-bin/class?id=";
 
     public static CourseDetails loadCourseDetails(Map<String, String> cookies, String courseId) {
+        log.debug("Loading course details for " + courseId);
         try {
-
-
-            log.debug("LOADING DETAILS FOR " + courseId);
-
             // Load the page with classes
             Connection.Response classDetailsUrl = Jsoup.connect(BASE_URL + CLASS_DETAILS_URL + courseId)
                     .cookies(cookies)

@@ -8,7 +8,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class AssignmentGrade {
+public class UserAssignmentGrade {
     @Getter
     private int possiblePoints;
     @Getter

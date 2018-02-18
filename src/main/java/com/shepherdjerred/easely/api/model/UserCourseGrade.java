@@ -5,7 +5,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class CourseGrade {
+public class UserCourseGrade {
     @Getter
     private double homeworkWeight;
     @Getter

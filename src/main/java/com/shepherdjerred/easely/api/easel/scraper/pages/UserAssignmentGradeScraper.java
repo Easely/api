@@ -1,7 +1,7 @@
 package com.shepherdjerred.easely.api.easel.scraper.pages;
 
 import com.shepherdjerred.easely.api.model.AssignmentSubmission;
-import com.shepherdjerred.easely.api.easel.scraper.model.AssignmentGrade;
+import com.shepherdjerred.easely.api.easel.scraper.model.UserAssignmentGrade;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -19,12 +19,9 @@ public class UserAssignmentGradeScraper {
     private static final String ASSIGNMENT_INFO_URL = "/cgi-bin/info?id=";
     private static final String ASSIGNMENT_SUBMIT_URL = "/cgi-bin/submit?id=";
 
-    public static AssignmentGrade loadAssignmentGrade(Map<String, String> cookies, String assignmentId) {
+    public static UserAssignmentGrade loadAssignmentGrade(Map<String, String> cookies, String assignmentId) {
+        log.debug("Loading assignment grade for " + assignmentId);
         try {
-
-
-            log.debug("LOADING INFO FOR " + assignmentId);
-
             // Load the page with classes
             Connection.Response classInfoUrl = Jsoup.connect(BASE_URL + ASSIGNMENT_INFO_URL + assignmentId)
                     .cookies(cookies)
@@ -61,7 +58,7 @@ public class UserAssignmentGradeScraper {
                     // TODO handle better
                     if (earnedPointsText.equals("Submissions for this assignment are no longer being accepted")) {
                         log.warn("Assignment grade not fetched");
-                        return new AssignmentGrade(0, 0, false, assignmentSubmissions);
+                        return new UserAssignmentGrade(0, 0, false, assignmentSubmissions);
                     }
                     earnedPoints = Integer.parseInt(earnedPointsText.replaceAll("\\u00a0", "").replaceAll(" ", ""));
                     isGraded = true;
@@ -70,11 +67,11 @@ public class UserAssignmentGradeScraper {
                     isGraded = false;
                 }
 
-                return new AssignmentGrade(possiblePoints, earnedPoints, isGraded, assignmentSubmissions);
+                return new UserAssignmentGrade(possiblePoints, earnedPoints, isGraded, assignmentSubmissions);
 
             } else {
                 // TODO handle better
-                return new AssignmentGrade(0, 0, false, null);
+                return new UserAssignmentGrade(0, 0, false, null);
             }
         } catch (IOException e) {
             e.printStackTrace();

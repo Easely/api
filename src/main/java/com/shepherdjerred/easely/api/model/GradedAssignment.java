@@ -2,7 +2,7 @@ package com.shepherdjerred.easely.api.model;
 
 import com.shepherdjerred.easely.api.easel.scraper.model.AssignmentCore;
 import com.shepherdjerred.easely.api.easel.scraper.model.AssignmentDetails;
-import com.shepherdjerred.easely.api.easel.scraper.model.AssignmentGrade;
+import com.shepherdjerred.easely.api.easel.scraper.model.UserAssignmentGrade;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -30,7 +30,7 @@ public class GradedAssignment extends Assignment {
         this.assignmentSubmissions = assignmentSubmissions;
     }
 
-    public static GradedAssignment fromSubObjects(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails, AssignmentGrade assignmentGrade) {
+    public static GradedAssignment fromSubObjects(AssignmentCore assignmentCore, AssignmentDetails assignmentDetails, UserAssignmentGrade userAssignmentGrade) {
         return new GradedAssignment(assignmentCore.getId(),
                 assignmentCore.getName(),
                 assignmentCore.getDate().atTime(assignmentDetails.getDueTime()),
@@ -38,9 +38,9 @@ public class GradedAssignment extends Assignment {
                 assignmentCore.getType(),
                 assignmentCore.getCourse(),
                 assignmentDetails.getAttachment(),
-                assignmentGrade.getPossiblePoints(),
-                assignmentGrade.getEarnedPoints(),
-                assignmentGrade.isGraded(),
-                assignmentGrade.getAssignmentSubmissions());
+                userAssignmentGrade.getPossiblePoints(),
+                userAssignmentGrade.getEarnedPoints(),
+                userAssignmentGrade.isGraded(),
+                userAssignmentGrade.getAssignmentSubmissions());
     }
 }
