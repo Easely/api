@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.easel;
+package com.shepherdjerred.easely.api.easel.adapter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

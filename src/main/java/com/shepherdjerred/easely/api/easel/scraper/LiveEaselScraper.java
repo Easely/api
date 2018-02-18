@@ -21,7 +21,6 @@ public class LiveEaselScraper implements EaselScraper {
         return UserEaselIdScraper.getUserId(cookies);
     }
 
-
     @Override
     public Collection<Course> scrapeUserCourse(User user) {
         Collection<Course> courses = new ArrayList<>();

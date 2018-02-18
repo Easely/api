@@ -4,7 +4,7 @@ import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.http.controller.CourseController;
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.http.router.filters.AuthenticationFilter;
-import com.shepherdjerred.easely.api.easel.EaselAdapter;
+import com.shepherdjerred.easely.api.easel.adapter.EaselAdapter;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
 

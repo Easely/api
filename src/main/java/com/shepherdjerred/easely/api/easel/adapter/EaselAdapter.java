@@ -1,4 +1,4 @@
-package com.shepherdjerred.easely.api.easel;
+package com.shepherdjerred.easely.api.easel.adapter;
 
 import com.shepherdjerred.easely.api.model.Assignment;
 import com.shepherdjerred.easely.api.model.Course;
