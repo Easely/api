@@ -4,12 +4,12 @@ import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
 import com.shepherdjerred.easely.api.easel.adapter.EaselAdapter;
 import com.shepherdjerred.easely.api.easel.adapter.ScraperEaselAdapter;
-import com.shepherdjerred.easely.api.easel.scraper.LiveEaselScraper;
+import com.shepherdjerred.easely.api.easel.scraper.CachedEaselScraper;
 import com.shepherdjerred.easely.api.http.router.AssignmentRouter;
 import com.shepherdjerred.easely.api.http.router.CourseRouter;
 import com.shepherdjerred.easely.api.http.router.UserRouter;
-import com.shepherdjerred.easely.api.storage.database.HikariMysqlDatabase;
 import com.shepherdjerred.easely.api.storage.MysqlStore;
+import com.shepherdjerred.easely.api.storage.database.HikariMysqlDatabase;
 import lombok.extern.log4j.Log4j2;
 
 import static spark.Spark.*;
@@ -24,7 +24,7 @@ public class Main {
     public static void main(String args[]) {
         easelyConfig = new EnvVarEaselyConfig();
         setupMysqlStore();
-        easelAdapter = new ScraperEaselAdapter(new LiveEaselScraper());
+        easelAdapter = new ScraperEaselAdapter(new CachedEaselScraper(easelyConfig));
         setupRoutes();
     }
 
