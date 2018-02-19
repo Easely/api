@@ -13,7 +13,7 @@ public class UserEaselCookieScraper {
     private static final String BASE_URL = "https://cs.harding.edu/easel";
     private static final String LOGIN_URL = BASE_URL + "/cgi-bin/proc_login";
 
-    // TODO check that getCookies was successful
+    // TODO check that login was successful
     public static Map<String, String> getCookies(String username, String password) {
         log.debug("Logging into EASEL for " + username);
         try {

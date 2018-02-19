@@ -16,24 +16,28 @@ public class ScraperEaselAdapter implements EaselAdapter {
     private EaselScraper easelScraper;
 
     @Override
-    public AdapterContent<Collection<Course>> getUserCourses(User user) {
+    public LoadingContent<Collection<Course>> getUserCourses(User user) {
         Collection<Course> courses = easelScraper.scrapeUserCourse(user);
-        return new AdapterContent<>(true,
+        return new LoadingContent<>(
+                true,
                 courses,
                 null,
                 false,
                 0,
-                0);
+                0
+        );
     }
 
     @Override
-    public AdapterContent<Collection<Assignment>> getUserAssignments(User user) {
+    public LoadingContent<Collection<Assignment>> getUserAssignments(User user) {
         Collection<Assignment> assignments = easelScraper.scrapeUserAssignments(user);
-        return new AdapterContent<>(true,
+        return new LoadingContent<>(
+                true,
                 assignments,
                 null,
                 false,
                 0,
-                0);
+                0
+        );
     }
 }

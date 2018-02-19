@@ -32,8 +32,8 @@ public class UserRouter implements Router {
 
     @Override
     public void setupRoutes() {
-        post("/api/user/getCookies", (request, response) -> {
-            log.debug("Attempting to getCookies");
+        post("/api/user/login", (request, response) -> {
+            log.debug("Attempting to login");
             response.type("application/json");
 
             LoginRequestPayload loginRequestPayload = objectMapper.readValue(request.body(), LoginRequestPayload.class);

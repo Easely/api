@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
-public class AdapterContent<T> {
+public class LoadingContent<T> {
     @Getter
     @Setter
     private boolean isLoaded;

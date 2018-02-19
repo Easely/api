@@ -7,7 +7,7 @@ import com.shepherdjerred.easely.api.model.User;
 import java.util.Collection;
 
 public interface EaselAdapter {
-    AdapterContent<Collection<Course>> getUserCourses(User user);
+    LoadingContent<Collection<Course>> getUserCourses(User user);
 
-    AdapterContent<Collection<Assignment>> getUserAssignments(User user);
+    LoadingContent<Collection<Assignment>> getUserAssignments(User user);
 }
