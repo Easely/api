@@ -1,14 +1,14 @@
 package com.shepherdjerred.easely.api.http.router;
 
 import com.shepherdjerred.easely.api.config.EaselyConfig;
-import com.shepherdjerred.easely.api.http.controller.AssignmentController;
-import com.shepherdjerred.easely.api.http.router.filters.AuthenticationFilter;
-import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.easel.adapter.EaselAdapter;
+import com.shepherdjerred.easely.api.http.controller.AssignmentController;
+import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
 
-import static spark.Spark.*;
+import static spark.Spark.get;
+import static spark.Spark.internalServerError;
 
 @Log4j2
 public class AssignmentRouter implements Router {
@@ -24,7 +24,7 @@ public class AssignmentRouter implements Router {
     }
 
     public void setupRoutes() {
-        before("/api/assignments", new AuthenticationFilter(store, easelyConfig));
+//        before("/api/assignments", new AuthenticationFilter(store, easelyConfig));
 
         get("/api/assignments", (request, response) -> {
             response.type("application/json");

@@ -47,6 +47,8 @@ public class Main {
     private static void enableCors() {
         options("/*", (request, response) -> {
 
+            log.debug("Accepting OPTIONS request");
+
             String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
             if (accessControlRequestHeaders != null) {
                 response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
@@ -60,9 +62,7 @@ public class Main {
             return "OK";
         });
 
-        before((request, response) -> {
-            response.header("Access-Control-Allow-Origin", "*");
-        });
+        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
     }
 
 }
