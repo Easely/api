@@ -29,6 +29,11 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void handle(Request request, Response response) {
         log.debug("Attempting to validate request");
+
+        if (request.requestMethod().equals("OPTIONS")) {
+            return;
+        }
+
         DecodedJWT jwt;
         try {
             Algorithm algorithm = Algorithm.HMAC256(easelyConfig.getJwtSecret());
