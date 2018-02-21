@@ -3,12 +3,12 @@ package com.shepherdjerred.easely.api.http.router;
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.easel.adapter.EaselAdapter;
 import com.shepherdjerred.easely.api.http.controller.CourseController;
+import com.shepherdjerred.easely.api.http.router.filters.AuthenticationFilter;
 import com.shepherdjerred.easely.api.model.User;
 import com.shepherdjerred.easely.api.storage.Store;
 import lombok.extern.log4j.Log4j2;
 
-import static spark.Spark.get;
-import static spark.Spark.internalServerError;
+import static spark.Spark.*;
 
 @Log4j2
 public class CourseRouter implements Router {
@@ -24,7 +24,7 @@ public class CourseRouter implements Router {
     }
 
     public void setupRoutes() {
-//        before("/api/courses", new AuthenticationFilter(store, easelyConfig));
+        before("/api/courses", new AuthenticationFilter(store, easelyConfig));
 
         get("/api/courses", (request, response) -> {
             response.type("application/json");
