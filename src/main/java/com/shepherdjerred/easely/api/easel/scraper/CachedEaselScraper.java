@@ -30,6 +30,9 @@ public class CachedEaselScraper implements EaselScraper {
         mapper.registerModule(new JavaTimeModule());
 
         Config config = easelyConfig.getRedissonConfig();
+        config.useClusterServers()
+                .setMasterConnectionMinimumIdleSize(1)
+                .setMasterConnectionPoolSize(6);
         config.setCodec(new JsonJacksonCodec(mapper));
         redisson = Redisson.create(config);
     }
