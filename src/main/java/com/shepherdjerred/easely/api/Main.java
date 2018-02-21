@@ -4,7 +4,7 @@ import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
 import com.shepherdjerred.easely.api.easel.adapter.EaselAdapter;
 import com.shepherdjerred.easely.api.easel.adapter.ScraperEaselAdapter;
-import com.shepherdjerred.easely.api.easel.scraper.CachedEaselScraper;
+import com.shepherdjerred.easely.api.easel.scraper.LiveEaselScraper;
 import com.shepherdjerred.easely.api.http.router.AssignmentRouter;
 import com.shepherdjerred.easely.api.http.router.CourseRouter;
 import com.shepherdjerred.easely.api.http.router.UserRouter;
@@ -24,7 +24,7 @@ public class Main {
     public static void main(String args[]) {
         easelyConfig = new EnvVarEaselyConfig();
         setupMysqlStore();
-        easelAdapter = new ScraperEaselAdapter(new CachedEaselScraper(easelyConfig));
+        easelAdapter = new ScraperEaselAdapter(new LiveEaselScraper());
         setupRoutes();
     }
 
@@ -46,7 +46,6 @@ public class Main {
 
     private static void enableCors() {
         options("/*", (request, response) -> {
-
             log.debug("Accepting OPTIONS request");
 
             String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
