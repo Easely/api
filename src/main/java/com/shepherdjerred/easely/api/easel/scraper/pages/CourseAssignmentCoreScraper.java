@@ -1,12 +1,13 @@
 package com.shepherdjerred.easely.api.easel.scraper.pages;
 
+import com.shepherdjerred.easely.api.easel.scraper.model.AssignmentCore;
 import com.shepherdjerred.easely.api.model.Assignment;
 import com.shepherdjerred.easely.api.model.Course;
-import com.shepherdjerred.easely.api.easel.scraper.model.AssignmentCore;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
@@ -46,7 +47,9 @@ public class CourseAssignmentCoreScraper {
                     .method(Connection.Method.GET)
                     .execute();
 
-            Element assignmentListElement = assignmentListPage.parse().select("body > table.box > tbody > tr:nth-child(2) > td > ul").first();
+            Document document = assignmentListPage.parse();
+
+            Element assignmentListElement = document.select("body > table.box > tbody > tr:nth-child(2) > td > ul").first();
 
             // Check that there are assignments
             if (assignmentListElement != null) {

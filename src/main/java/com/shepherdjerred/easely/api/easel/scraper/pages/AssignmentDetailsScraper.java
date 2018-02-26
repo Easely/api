@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.UnsupportedMimeTypeException;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -29,7 +30,9 @@ public class AssignmentDetailsScraper {
                     .method(Connection.Method.GET)
                     .execute();
 
-            Element dateElement = assignmentInfoUrl.parse().body().select("#date").first();
+            Document document = assignmentInfoUrl.parse();
+
+            Element dateElement = document.body().select("#date").first();
 
             String dateElementText = dateElement.text();
             int colonIndex = dateElementText.indexOf(":");
@@ -45,7 +48,7 @@ public class AssignmentDetailsScraper {
                         .cookies(cookies)
                         .method(Connection.Method.GET)
                         .execute();
-                Elements embedElement = assignmentDetailsUrl.parse().select("html > frameset > frame:nth-child(2)");
+                Elements embedElement = document.select("html > frameset > frame:nth-child(2)");
                 attachmentUrl = embedElement.attr("src");
             } catch (UnsupportedMimeTypeException e) {
                 attachmentUrl = e.getUrl();

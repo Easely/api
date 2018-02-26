@@ -5,6 +5,7 @@ import com.shepherdjerred.easely.api.easel.scraper.model.UserAssignmentGrade;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
@@ -28,7 +29,9 @@ public class UserAssignmentGradeScraper {
                     .method(Connection.Method.GET)
                     .execute();
 
-            Element totalPointsElement = classInfoUrl.parse().select("#points").first();
+            Document document = classInfoUrl.parse();
+
+            Element totalPointsElement = document.select("#points").first();
             if (totalPointsElement != null) {
                 String totalPointsText = totalPointsElement.text().replace(" Points", "");
                 int possiblePoints = Integer.parseInt(totalPointsText);
@@ -40,11 +43,11 @@ public class UserAssignmentGradeScraper {
                         .method(Connection.Method.GET)
                         .execute();
 
-                Element earnedPointsElement = classGradesUrl.parse().select("body > div").first();
+                Element earnedPointsElement = document.select("body > div").first();
 
                 Collection<AssignmentSubmission> assignmentSubmissions = new ArrayList<>();
 
-                Element noFilesElement = classGradesUrl.parse().select("body > h1").first();
+                Element noFilesElement = document.select("body > h1").first();
 
                 // TODO go through submissions table
                 if (noFilesElement == null) {

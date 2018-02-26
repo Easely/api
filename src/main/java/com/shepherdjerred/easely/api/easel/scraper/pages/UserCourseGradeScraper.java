@@ -5,6 +5,7 @@ import com.shepherdjerred.easely.api.model.UserCourseGrade;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -30,7 +31,9 @@ public class UserCourseGradeScraper {
                     .header("Referer", "https://cs.harding.edu/easel/cgi-bin/index")
                     .execute();
 
-            Element gradeTable = classGradesUrl.parse().select("#grade-table > tbody").first();
+            Document document = classGradesUrl.parse();
+
+            Element gradeTable = document.select("#grade-table > tbody").first();
             Elements rows = gradeTable.select("tr");
 
             Map<Assignment.Type, Double> assignmentWeights = new EnumMap<>(Assignment.Type.class);
@@ -55,7 +58,7 @@ public class UserCourseGradeScraper {
                 }
             }
 
-            Element averageElement = classGradesUrl.parse().body().select("body > p:nth-child(4) > b > span").first();
+            Element averageElement = document.body().select("body > p:nth-child(4) > b > span").first();
             String averageString = averageElement.text().replace("%", "");
             double average = Double.valueOf(averageString);
 

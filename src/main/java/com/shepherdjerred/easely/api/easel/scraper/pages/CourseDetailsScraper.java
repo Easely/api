@@ -4,6 +4,7 @@ import com.shepherdjerred.easely.api.easel.scraper.model.CourseDetails;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
@@ -25,10 +26,12 @@ public class CourseDetailsScraper {
                     .method(Connection.Method.GET)
                     .execute();
 
-            Element teacherElement = classDetailsUrl.parse().body().select("body > div > table.box.classInfo > tbody > tr:nth-child(2) > td > dl > dd:nth-child(12)").first();
+            Document document = classDetailsUrl.parse();
+
+            Element teacherElement = document.body().select("body > div > table.box.classInfo > tbody > tr:nth-child(2) > td > dl > dd:nth-child(12)").first();
             String teacher = teacherElement.text();
 
-            Element resourcesElement = classDetailsUrl.parse().body().select("body > div > table.classResources.box > tbody > tr:nth-child(2) > td > ul").first();
+            Element resourcesElement = document.body().select("body > div > table.classResources.box > tbody > tr:nth-child(2) > td > ul").first();
 
             Map<String, String> resources = new HashMap<>();
             // Not all classes have resources, check for null first

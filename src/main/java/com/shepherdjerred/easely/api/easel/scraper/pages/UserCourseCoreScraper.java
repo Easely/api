@@ -4,6 +4,7 @@ import com.shepherdjerred.easely.api.easel.scraper.model.CourseCore;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
@@ -29,7 +30,9 @@ public class UserCourseCoreScraper {
                     .method(Connection.Method.GET)
                     .execute();
 
-            Element classList = homePage.parse().select("body > div > table:nth-child(2) > tbody > tr:nth-child(2) > td > ul").first();
+            Document document = homePage.parse();
+
+            Element classList = document.select("body > div > table:nth-child(2) > tbody > tr:nth-child(2) > td > ul").first();
 
             // Parse courses
             for (Element easelClass : classList.children()) {
