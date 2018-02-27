@@ -1,7 +1,7 @@
 package com.shepherdjerred.easely.api.http.router;
 
 import com.shepherdjerred.easely.api.config.EaselyConfig;
-import com.shepherdjerred.easely.api.easel.adapter.EaselAdapter;
+import com.shepherdjerred.easely.api.easel.datasource.EaselDataSource;
 import com.shepherdjerred.easely.api.http.controller.AssignmentController;
 import com.shepherdjerred.easely.api.http.router.filters.AuthenticationFilter;
 import com.shepherdjerred.easely.api.model.User;
@@ -19,9 +19,9 @@ public class AssignmentRouter implements Router {
     private Store store;
     private EaselyConfig easelyConfig;
 
-    public AssignmentRouter(Store store, EaselAdapter easelAdapter, EaselyConfig easelyConfig) {
+    public AssignmentRouter(Store store, EaselDataSource easelDataSource, EaselyConfig easelyConfig) {
         this.store = store;
-        assignmentController = new AssignmentController(easelAdapter);
+        assignmentController = new AssignmentController(easelDataSource);
         this.easelyConfig = easelyConfig;
     }
 

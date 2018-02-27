@@ -2,8 +2,7 @@ package com.shepherdjerred.easely.api;
 
 import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.config.EnvVarEaselyConfig;
-import com.shepherdjerred.easely.api.easel.adapter.EaselAdapter;
-import com.shepherdjerred.easely.api.easel.adapter.ScraperEaselAdapter;
+import com.shepherdjerred.easely.api.easel.datasource.EaselDataSource;
 import com.shepherdjerred.easely.api.easel.scraper.CachedEaselScraper;
 import com.shepherdjerred.easely.api.http.router.AssignmentRouter;
 import com.shepherdjerred.easely.api.http.router.CourseRouter;
@@ -19,12 +18,12 @@ public class Main {
 
     private static EaselyConfig easelyConfig;
     private static com.shepherdjerred.easely.api.storage.Store store;
-    private static EaselAdapter easelAdapter;
+    private static EaselDataSource easelDataSource;
 
     public static void main(String args[]) {
         easelyConfig = new EnvVarEaselyConfig();
         setupMysqlStore();
-        easelAdapter = new ScraperEaselAdapter(new CachedEaselScraper(easelyConfig));
+        easelDataSource = new ScraperEaselDataSource(new CachedEaselScraper(easelyConfig));
         setupRoutes();
     }
 
@@ -39,8 +38,8 @@ public class Main {
 
         enableCors();
 
-        new AssignmentRouter(store, easelAdapter, easelyConfig).setupRoutes();
-        new CourseRouter(store, easelAdapter, easelyConfig).setupRoutes();
+        new AssignmentRouter(store, easelDataSource, easelyConfig).setupRoutes();
+        new CourseRouter(store, easelDataSource, easelyConfig).setupRoutes();
         new UserRouter(store, easelyConfig).setupRoutes();
     }
 
