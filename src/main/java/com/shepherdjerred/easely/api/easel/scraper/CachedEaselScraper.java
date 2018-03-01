@@ -1,17 +1,12 @@
 package com.shepherdjerred.easely.api.easel.scraper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.shepherdjerred.easely.api.config.EaselyConfig;
 import com.shepherdjerred.easely.api.easel.scraper.model.*;
 import com.shepherdjerred.easely.api.easel.scraper.pages.*;
 import com.shepherdjerred.easely.api.model.*;
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.redisson.Redisson;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
-import org.redisson.codec.JsonJacksonCodec;
-import org.redisson.config.Config;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -21,22 +16,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2
+@AllArgsConstructor
 public class CachedEaselScraper implements EaselScraper {
 
     private RedissonClient redisson;
-
-    public CachedEaselScraper(EaselyConfig easelyConfig) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-
-        Config config = easelyConfig.getRedissonConfig();
-        config.useSingleServer()
-                .setConnectionMinimumIdleSize(1)
-                .setConnectionPoolSize(3);
-        config.setCodec(new JsonJacksonCodec(mapper));
-        redisson = Redisson.create(config);
-    }
-
 
     private Map<String, String> login(User user) {
         Map<String, String> cookies;

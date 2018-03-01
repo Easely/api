@@ -15,12 +15,7 @@ public class CourseController {
     private EaselDataSource easelDataSource;
 
     public Collection<Course> getCoursesForUser(User user) {
-        if (easelDataSource.getUserCourses(user).isLoaded()) {
-            return easelDataSource.getUserCourses(user).getContent();
-        } else {
-            // TODO
-            return null;
-        }
+        return easelDataSource.getUserCourses(user);
     }
 
 }

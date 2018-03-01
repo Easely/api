@@ -15,11 +15,6 @@ public class AssignmentController {
     private EaselDataSource easelDataSource;
 
     public Collection<Assignment> getAssignmentsForUser(User user) {
-        if (easelDataSource.getUserAssignments(user).isLoaded()) {
-            return easelDataSource.getUserAssignments(user).getContent();
-        } else {
-            // TODO
-            return null;
-        }
+        return easelDataSource.getUserAssignments(user);
     }
 }

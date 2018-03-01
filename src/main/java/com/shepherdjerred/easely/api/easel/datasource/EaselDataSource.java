@@ -7,7 +7,7 @@ import com.shepherdjerred.easely.api.model.User;
 import java.util.Collection;
 
 public interface EaselDataSource {
-    DataSourceContent<Collection<Course>> getUserCourses(User user);
+    Collection<Course> getUserCourses(User user);
 
-    DataSourceContent<Collection<Assignment>> getUserAssignments(User user);
+    Collection<Assignment> getUserAssignments(User user);
 }
