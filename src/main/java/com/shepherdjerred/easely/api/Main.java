@@ -44,8 +44,8 @@ public class Main {
 
         Config config = easelyConfig.getRedissonConfig();
         config.useSingleServer()
-                .setConnectionMinimumIdleSize(1)
-                .setConnectionPoolSize(3);
+                .setConnectionMinimumIdleSize(5)
+                .setConnectionPoolSize(20);
         config.setCodec(new JsonJacksonCodec(mapper));
         redisson = Redisson.create(config);
     }
