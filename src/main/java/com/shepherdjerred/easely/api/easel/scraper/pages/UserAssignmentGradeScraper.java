@@ -43,6 +43,8 @@ public class UserAssignmentGradeScraper {
                         .method(Connection.Method.GET)
                         .execute();
 
+                document = classGradesUrl.parse();
+
                 Element earnedPointsElement = document.select("body > div").first();
 
                 Collection<AssignmentSubmission> assignmentSubmissions = new ArrayList<>();
