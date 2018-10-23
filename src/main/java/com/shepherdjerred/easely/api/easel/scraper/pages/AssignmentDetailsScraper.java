@@ -48,10 +48,14 @@ public class AssignmentDetailsScraper {
                         .cookies(cookies)
                         .method(Connection.Method.GET)
                         .execute();
+
+                document = assignmentDetailsUrl.parse();
+
                 Elements embedElement = document.select("html > frameset > frame:nth-child(2)");
                 attachmentUrl = embedElement.attr("src");
             } catch (UnsupportedMimeTypeException e) {
                 attachmentUrl = e.getUrl();
+                System.out.println("MIME ERROR");
             } catch (IOException e) {
                 // Too many redirects?
                 // TODO

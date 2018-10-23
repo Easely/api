@@ -120,7 +120,7 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
-            <version>3.6.1</version>
+            <version>3.8.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -198,7 +198,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
+            <version>1.18.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

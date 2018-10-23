@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/java,windows,intellij
 
 ### Intellij ###
@@ -113,3 +112,7 @@ $RECYCLE.BIN/
 *.iml
 .idea/
 dependency-reduced-pom.xml
+.DS_Store
+target/
+hikari.properties
+redissonConfig.json
